@@ -10,6 +10,10 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: [true, "email không được bỏ trống!"],
     },
+    password: {
+      type: String,
+      required: [true, "Mật khẩu không được bỏ trống!"],
+    },
     birthday: {
       type: Date,
     },
@@ -27,7 +31,7 @@ const UserSchema = new mongoose.Schema(
       type: String,
     },
     status: {
-      type: string,
+      type: String,
       enum: ["1", "2"],
       default: "1",
     },
