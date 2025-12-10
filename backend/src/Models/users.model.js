@@ -15,7 +15,7 @@ const UserSchema = new mongoose.Schema(
       required: [true, "Mật khẩu không được bỏ trống!"],
     },
     birthday: {
-      type: Date,
+      type: String,
     },
     numberPhone: {
       type: String,
@@ -26,6 +26,11 @@ const UserSchema = new mongoose.Schema(
     },
     image: {
       type: [String],
+    },
+    gender: {
+      type: String,
+      enum: ["1", "2"],
+      default: "1",
     },
     description: {
       type: String,

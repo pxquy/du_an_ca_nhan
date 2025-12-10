@@ -5,12 +5,13 @@ import jwt from "jsonwebtoken";
 export const signup = async (req, res) => {
   try {
     const checkEmail = await Users.findOne({ email: req.body.email });
-    if (!checkEmail)
+
+    if (checkEmail)
       return res.status(400).json({
         message: "Email này đã tồn tại vui lòng thử email khác",
       });
 
-    const hashPassword = await bcrypt.hash(res.body.password, 10);
+    const hashPassword = await bcrypt.hash(req.body.password, 10);
 
     const user = await Users.create({ ...req.body, password: hashPassword });
     user.password = undefined;
@@ -29,20 +30,20 @@ export const signup = async (req, res) => {
 export const signin = async (req, res) => {
   try {
     const checkEmail = await Users.findOne({ email: req.body.email });
-    if (checkEmail)
+    if (!checkEmail)
       return res.status(400).json({
         message: "Email này chưa tồn tại vui lòng thử email khác",
       });
 
     const comparePassword = await bcrypt.compare(
-      res.body.password,
+      req.body.password,
       checkEmail.password
     );
 
     const token = jwt.sign(
       {
         _id: checkEmail._id,
-        role: checkEmail.role,
+        role: checkEmail.roles,
       },
       process.env.SecretKey,
       { expiresIn: "1h" }
