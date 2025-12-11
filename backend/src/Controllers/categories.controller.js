@@ -71,7 +71,7 @@ export const updateCategory = async (req, res) => {
       });
 
     return res.status(200).json({
-      message: "Sửa thông tin thể loại sách thành công",
+      message: "Cập nhật thông tin thể loại sách thành công",
       data: updateCategory,
     });
   } catch (error) {
