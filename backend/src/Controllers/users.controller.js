@@ -20,3 +20,19 @@ export const getAll = async (req, res) => {
     });
   }
 };
+
+export const information = async (req, res) => {
+  try {
+    const user = await Users.findOne({ _id: req.user._id });
+
+    return res.status(200).json({
+      message: "Chi tiết tài khoản",
+      data: user,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Lấy dữ liệu thông tin lỗi!",
+      error: error.message,
+    });
+  }
+};
