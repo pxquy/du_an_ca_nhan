@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Table } from "antd";
+import { Button, Popconfirm, Table } from "antd";
 import axios from "axios";
 import { useState } from "react";
 import type { IApiResponse, IResponse } from "../../Types/data";
@@ -45,6 +45,21 @@ const CategoriesPage = () => {
       title: "Hành động",
       dataIndex: "_id",
       key: "_id",
+      render: (_id: number) => {
+        return (
+          <div className="flex gap-2">
+            <Button type="primary">Sửa</Button>
+            <Popconfirm
+              title={`Xoá sách`}
+              description="Bạn chắc chắn muốn xoá sách này?"
+              okText="Đồng ý"
+              cancelText="Từ chối"
+            >
+              <Button danger>Delete</Button>
+            </Popconfirm>
+          </div>
+        );
+      },
     },
   ];
   return (
