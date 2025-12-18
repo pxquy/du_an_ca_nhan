@@ -6,6 +6,7 @@ import routerAuthors from "./authors.router";
 import routerBooks from "./books.router";
 import routerDateBorrow from "./dateBorrow.router";
 import routerBorrowItems from "./borrowItems.router";
+import routerComments from "./comments.router";
 
 const router = Router();
 
@@ -16,5 +17,6 @@ router.use("/authors", routerAuthors);
 router.use("/books", routerBooks);
 router.use("/dateBorrow", routerDateBorrow);
 router.use("/borrowItems", routerBorrowItems);
+router.use("/comments", routerComments);
 
 export default router;
