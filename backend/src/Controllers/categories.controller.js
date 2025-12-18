@@ -2,7 +2,7 @@ import Categories from "../Models/categories.model";
 
 export const getAll = async (req, res) => {
   try {
-    const categories = await Categories.find();
+    const categories = await Categories.paginate({});
     if (categories.length == 0)
       return res.status(200).json({
         message: "Hiện tại chưa có thể loại sách nào",

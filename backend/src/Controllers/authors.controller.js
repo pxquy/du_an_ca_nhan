@@ -2,7 +2,7 @@ import Authors from "../Models/authors.model";
 
 export const getAll = async (req, res) => {
   try {
-    const authors = await Authors.find();
+    const authors = await Authors.paginate({});
     if (authors.length == 0)
       return res.status(200).json({
         message: "Hiện tại chưa có tác giả",

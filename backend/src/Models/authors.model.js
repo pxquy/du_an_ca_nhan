@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import mongoosePaginate from "mongoose-paginate-v2";
 
 const authorSchema = new mongoose.Schema(
   {
@@ -25,6 +26,8 @@ const authorSchema = new mongoose.Schema(
     versionKey: false,
   }
 );
+
+authorSchema.plugin(mongoosePaginate);
 
 const Authors = mongoose.model("Authors", authorSchema);
 
