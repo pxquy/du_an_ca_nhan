@@ -3,17 +3,21 @@ import { Button, Popconfirm, Table } from "antd";
 import axios from "axios";
 import { useState } from "react";
 import type { IApiResponse, IResponse } from "../../../Types/data";
-import { Link } from "react-router";
+import { Link, Outlet, useLocation } from "react-router";
 import { API, QueryKey } from "../../../constants/QueryKey";
 import type { IBooks } from "../../../Types/books";
 import { PlusOutlined } from "@ant-design/icons";
+import { useLocale } from "antd/es/locale";
 
 const BooksPage = () => {
+  const location = useLocation();
+  const isLocation = location.pathname === "/admin/books/addBook";
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(5);
   const { data, isLoading } = useQuery({
     queryKey: [QueryKey.BOOKS, page, pageSize],
     queryFn: async () => {
+      9;
       const res = await axios.get<IApiResponse<IResponse<IBooks[]>>>(
         `${API}/books`
       );
@@ -42,6 +46,11 @@ const BooksPage = () => {
       title: "Hình ảnh",
       dataIndex: "image",
       key: "image",
+      render: (image: string) => (
+        <>
+          <img src={image} alt="Hình ảnh sách" />
+        </>
+      ),
     },
     {
       title: "Ngày xuất bản",
@@ -77,31 +86,38 @@ const BooksPage = () => {
 
   return (
     <>
-      <section className="m-6 flex flex-col gap-3 ">
-        <div>
-          <Link
-            to=""
-            className="p-2 bg-blue-400 m-2 rounded-[5px] text-white hover:bg-blue-600 hover:font-bold"
-          >
-            <PlusOutlined className="pr-1" />
-            Thêm sách mới
-          </Link>
-        </div>
-        <Table
-          dataSource={data?.docs}
-          columns={columns}
-          rowKey="_id"
-          pagination={{
-            current: page,
-            pageSize: pageSize,
-            total: data?.docs?.length,
-            onChange(p: number, ps: number) {
-              setPage(p);
-              setPageSize(ps);
-            },
-          }}
-        />
-      </section>
+      <div
+        className={isLocation ? "h-[100vh] bg-black opacity-20" : "bg-white"}
+      >
+        <section className="relative m-6 flex flex-col gap-3">
+          <div>
+            <Link
+              to="/admin/books/addBook"
+              className="p-2 bg-blue-400 m-2 rounded-[5px] text-white hover:bg-blue-600 hover:font-bold"
+            >
+              <PlusOutlined className="pr-1" />
+              Thêm sách mới
+            </Link>
+          </div>
+          <Table
+            dataSource={data?.docs}
+            columns={columns}
+            rowKey="_id"
+            pagination={{
+              current: page,
+              pageSize: pageSize,
+              total: data?.docs?.length,
+              onChange(p: number, ps: number) {
+                setPage(p);
+                setPageSize(ps);
+              },
+            }}
+          />
+        </section>
+      </div>
+      <div className="absolute top-30 left-130">
+        <Outlet />
+      </div>
     </>
   );
 };
