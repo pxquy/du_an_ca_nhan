@@ -1,17 +1,25 @@
-import { useQuery } from "@tanstack/react-query";
-import { Button, Popconfirm, Table } from "antd";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Button, message, Popconfirm, Table } from "antd";
 import axios from "axios";
 import { useState } from "react";
-import type { IApiResponse, IResponse } from "../../../Types/data";
-import { Link, Outlet, useLocation } from "react-router";
+import type {
+  IApiResponse,
+  IErrorMessage,
+  IResponse,
+} from "../../../Types/data";
+import { Link, Outlet, useLocation, useNavigate } from "react-router";
 import { API, QueryKey } from "../../../constants/QueryKey";
 import type { IBooks } from "../../../Types/books";
 import { PlusOutlined } from "@ant-design/icons";
-import { useLocale } from "antd/es/locale";
+import { formatStatus } from "../../../constants/helper";
+import type { ColumnsType } from "antd/es/table";
 
 const BooksPage = () => {
   const location = useLocation();
-  const isLocation = location.pathname === "/admin/books/addBook";
+  const isLocationAdd = location.pathname === "/admin/books/addBook";
+  const isLocationEdit = location.pathname.startsWith("/admin/books/editBook");
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(5);
   const { data, isLoading } = useQuery({
@@ -26,11 +34,35 @@ const BooksPage = () => {
     },
   });
 
+  const mutation = useMutation({
+    mutationFn: async (payload: { _id: string; status: string }) => {
+      const { data } = await axios.patch(
+        `http://localhost:3000/api/books/${payload._id}`,
+        { status: payload.status }
+      );
+      return data;
+    },
+    onSuccess: () => {
+      message.success("Cập nhật thành công");
+      queryClient.invalidateQueries({
+        queryKey: [QueryKey.BOOKS, page, pageSize],
+      });
+    },
+    onError: (error: IErrorMessage) => {
+      const err = error.response?.data as IErrorMessage;
+      message.error(err?.message || "Có lỗi xảy ra");
+    },
+  });
+
+  const handelStatus = (_id: string, status: string) => {
+    mutation.mutate({ _id, status });
+  };
+
   if (isLoading) {
     return <span>Đang tải dữ liệu...</span>;
   }
 
-  const columns = [
+  const columns: ColumnsType<IBooks[]> = [
     {
       title: "STT",
       dataIndex: "index",
@@ -63,13 +95,54 @@ const BooksPage = () => {
       key: "price",
     },
     {
+      title: "Trạng thái",
+      dataIndex: "status",
+      key: "status",
+      render: (status, recode: any) => {
+        let isAvailable = status === "1";
+        return (
+          <div>
+            <select
+              name=""
+              id=""
+              value={status}
+              className={
+                isAvailable
+                  ? "bg-green-400 p-1 rounded-3xl text-white focus:outline-none font-bold"
+                  : "bg-red-500 p-1 rounded-3xl text-white focus:outline-none font-bold"
+              }
+              onChange={(e) => handelStatus(recode._id, e.target.value)}
+            >
+              <option value="" hidden>
+                {isAvailable ? "Còn sách" : "Hết sách"}
+              </option>
+              {isAvailable ? (
+                <option value="2" className="bg-red-500">
+                  Hết sách
+                </option>
+              ) : (
+                <option value="1" className="bg-green-500">
+                  Còn sách
+                </option>
+              )}
+            </select>
+          </div>
+        );
+      },
+    },
+    {
       title: "Hành động",
       dataIndex: "_id",
       key: "_id",
-      render: (_id: number) => {
+      render: (_id) => {
         return (
           <div className="flex gap-2">
-            <Button type="primary">Sửa</Button>
+            <Button
+              type="primary"
+              onClick={() => navigate(`/admin/books/editBook/${_id}`)}
+            >
+              Sửa
+            </Button>
             <Popconfirm
               title={`Xoá sách`}
               description="Bạn chắc chắn muốn xoá sách này?"
@@ -87,9 +160,13 @@ const BooksPage = () => {
   return (
     <>
       <div
-        className={isLocation ? "h-[100vh] bg-black opacity-20" : "bg-white"}
+        className={
+          isLocationAdd || isLocationEdit
+            ? "h-[100vh] bg-black opacity-20"
+            : "bg-white"
+        }
       >
-        <section className="relative m-6 flex flex-col gap-3">
+        <section className="relative p-6 flex flex-col gap-3">
           <div>
             <Link
               to="/admin/books/addBook"

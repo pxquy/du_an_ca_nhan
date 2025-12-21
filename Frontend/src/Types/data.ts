@@ -10,3 +10,9 @@ export interface IResponse<T> {
   page: number;
   totalPages: number;
 }
+
+export interface IErrorMessage {
+  response: any;
+  message: string;
+  error: string;
+}

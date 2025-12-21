@@ -8,6 +8,7 @@ import AuthorsPage from "./Pages/admin/Authors/Authors";
 import AddPage from "./Pages/admin/Books/Add";
 import AddAuthor from "./Pages/admin/Authors/Add";
 import AddCategory from "./Pages/Categories/Add";
+import EditPage from "./Pages/admin/Books/Edit";
 
 function App() {
   const router = useRoutes([
@@ -19,7 +20,10 @@ function App() {
         {
           path: "books",
           Component: BooksPage,
-          children: [{ path: "addBook", Component: AddPage }],
+          children: [
+            { path: "addBook", Component: AddPage },
+            { path: "editBook/:id", Component: EditPage },
+          ],
         },
         {
           path: "categories",
