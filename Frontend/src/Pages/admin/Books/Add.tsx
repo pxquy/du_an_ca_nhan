@@ -1,16 +1,23 @@
 import { useForm } from "react-hook-form";
 import type { IBooks } from "../../../Types/books";
-import { useQueries } from "@tanstack/react-query";
+import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import { API, QueryKey } from "../../../constants/QueryKey";
 import axios from "axios";
-import type { IApiResponse, IResponse } from "../../../Types/data";
+import type {
+  IApiResponse,
+  IErrorMessage,
+  IResponse,
+} from "../../../Types/data";
 import type { ICategories } from "../../../Types/categories";
 import type { IAuthors } from "../../../Types/authors";
 import { useNavigate } from "react-router";
 import { useState } from "react";
+import { message } from "antd";
 
 const AddPage = () => {
   const navigate = useNavigate();
+  const [loadingImage, setLoadingImage] = useState<boolean>(false);
+  const queryClient = useQueryClient();
   const [image, setImage] = useState();
   const { register, handleSubmit, reset } = useForm<IBooks>();
   const result = useQueries({
@@ -38,16 +45,39 @@ const AddPage = () => {
 
   const categories = result[0].data;
   const authors = result[1].data;
-  if (result[0].isLoading) {
-    return <span>Đang tải dữu liệu thể loại sách...</span>;
-  }
-  if (result[1].isLoading) {
-    return <span>Đang tải dữu liệu tác giả sách...</span>;
-  }
+  const isLoading = result.some((r) => r.isLoading);
 
-  const onSubmit = () => {};
+  const mutation = useMutation({
+    mutationFn: async (formDataBook) => {
+      const { data } = await axios.post<IApiResponse<IResponse<IBooks>>>(
+        `${API}/books`,
+        formDataBook,
+        {
+          withCredentials: true,
+        }
+      );
+      return data;
+    },
+    onSuccess: (book) => {
+      navigate("/admin/books");
+      message.success("Thêm mới sách thành công");
+      queryClient.setQueryData([QueryKey.BOOKS], (data: IBooks[]) => {
+        return data && [...data, book];
+      });
+    },
+    onError: (error: IErrorMessage) => {
+      const err = error.response?.data as IErrorMessage;
+      message.error(err.message || "Lỗi khi thêm sách");
+    },
+  });
+
+  const onSubmit = (data: IBooks) => {
+    console.log(data);
+    mutation.mutate(data as any);
+  };
 
   const updateImage = async (files: FileList) => {
+    setLoadingImage(true);
     const formData = new FormData();
     formData.append("file", files[0]);
     formData.append("upload_preset", "Image_libery");
@@ -69,6 +99,7 @@ const AddPage = () => {
 
   return (
     <>
+      <span>{isLoading}</span>
       <section className="w-150 h-125 shadow border border-gray-300 rounded-2xl bg-white overflow-scroll">
         <div>
           <h2 className="text-center p-2 text-2xl font-bold">Thêm sách mới</h2>
@@ -116,8 +147,8 @@ const AddPage = () => {
                   Thể loại sách(*)
                 </label>
                 <select
-                  name=""
                   id=""
+                  {...register("category_id")}
                   className="border border-gray-400 rounded-2xl p-1 focus:outline-none w-40"
                 >
                   <option value="" hidden>
@@ -135,8 +166,8 @@ const AddPage = () => {
                   Tác giả sách(*)
                 </label>
                 <select
-                  name=""
                   id=""
+                  {...register("author_id")}
                   className="border border-gray-400 rounded-2xl p-1 focus:outline-none w-40"
                 >
                   <option value="" hidden>
@@ -166,7 +197,14 @@ const AddPage = () => {
                   }
                 }}
               />
-              {image != "" && <img src={image} width={120} />}
+              {loadingImage ? <span>Đang tải ảnh...</span> : ""}
+              {image != "" && (
+                <img
+                  src={image}
+                  onLoad={() => setLoadingImage(false)}
+                  width={120}
+                />
+              )}
               <input type="hidden" {...register("image")} />
             </div>
             <div className="flex items-center justify-between">
@@ -212,6 +250,7 @@ const AddPage = () => {
           </div>
           <div className="shadow-lg rounded-2xl m-2 pb-5 pt-5 flex gap-3">
             <button
+              type="button"
               onClick={() => navigate("/admin/books")}
               className="border border-gray-300 p-3 rounded-2xl cursor-pointer hover:bg-gray-100 ml-5"
             >

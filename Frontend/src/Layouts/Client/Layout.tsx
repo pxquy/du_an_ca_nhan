@@ -7,7 +7,9 @@ const LayoutClient = () => {
   return (
     <>
       <Header />
-      <Outlet />
+      <main className="lg:max-w-7xl mx-auto mt-5 mb-5">
+        <Outlet />
+      </main>
       <Footer />
     </>
   );

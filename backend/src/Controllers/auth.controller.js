@@ -53,6 +53,7 @@ export const signin = async (req, res) => {
       secure: false,
       sameSite: "lax",
       maxAge: 60 * 60 * 1000,
+      path: "/",
     });
     return res.status(201).json({
       message: "Đăng nhập thành công",
@@ -60,6 +61,24 @@ export const signin = async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       message: "Lỗi dữu liệu khi đăng nhập tài khoản",
+      error: error.message,
+    });
+  }
+};
+
+export const logout = async (req, res) => {
+  try {
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+      path: "/",
+    });
+
+    return res.status(200).json("Đăng Xuất thành công!");
+  } catch (error) {
+    return res.status(500).json({
+      message: "Lỗi dữu liệu khi đăng xuất tài khoản",
       error: error.message,
     });
   }

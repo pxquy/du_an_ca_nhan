@@ -5,3 +5,8 @@ export interface IAuthors {
   birthday: string;
   numberPhone: string;
 }
+
+export interface IAuthor {
+  _id: string;
+  name: string;
+}

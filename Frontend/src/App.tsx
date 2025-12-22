@@ -9,10 +9,19 @@ import AddPage from "./Pages/admin/Books/Add";
 import AddAuthor from "./Pages/admin/Authors/Add";
 import AddCategory from "./Pages/Categories/Add";
 import EditPage from "./Pages/admin/Books/Edit";
+import Login from "./Pages/Client/Login";
+import Register from "./Pages/Client/Register";
 
 function App() {
   const router = useRoutes([
-    { path: "/", Component: LayoutClient },
+    {
+      path: "/",
+      Component: LayoutClient,
+      children: [
+        { path: "login", Component: Login },
+        { path: "register", Component: Register },
+      ],
+    },
     {
       path: "admin",
       Component: LayoutAdmin,

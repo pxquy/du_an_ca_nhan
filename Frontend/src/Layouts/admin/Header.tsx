@@ -1,6 +1,4 @@
 import { BellOutlined, SearchOutlined } from "@ant-design/icons";
-import React from "react";
-
 const Header = () => {
   return (
     <div className="w-full h-18 border border-gray-100 shadow rounded-tr-lg flex items-center justify-between">

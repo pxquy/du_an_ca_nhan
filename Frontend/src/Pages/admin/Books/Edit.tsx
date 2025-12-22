@@ -1,18 +1,25 @@
 import { useForm } from "react-hook-form";
 import type { IBooks } from "../../../Types/books";
-import { useQueries } from "@tanstack/react-query";
+import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import { API, QueryKey } from "../../../constants/QueryKey";
 import axios from "axios";
-import type { IApiResponse, IResponse } from "../../../Types/data";
+import type {
+  IApiResponse,
+  IErrorMessage,
+  IResponse,
+} from "../../../Types/data";
 import type { ICategories } from "../../../Types/categories";
 import type { IAuthors } from "../../../Types/authors";
-import { useNavigate } from "react-router";
-import { useState } from "react";
+import { useNavigate, useParams } from "react-router";
+import { useEffect, useState } from "react";
+import { message } from "antd";
 
 const EditPage = () => {
   const navigate = useNavigate();
-  const [image, setImage] = useState();
-  const { register, handleSubmit, reset } = useForm<IBooks>();
+  const queryClient = useQueryClient();
+  const { id } = useParams();
+  const [image, setImage] = useState<string>();
+  const { register, handleSubmit, reset, setValue } = useForm<IBooks>();
   const result = useQueries({
     queries: [
       {
@@ -33,19 +40,68 @@ const EditPage = () => {
           return res.data.data;
         },
       },
+      {
+        queryKey: [QueryKey.BOOKS, id],
+        queryFn: async () => {
+          const { data } = await axios.get(`${API}/books/${id}`);
+          console.log("api", data.data);
+          return data.data;
+        },
+      },
     ],
   });
 
   const categories = result[0].data;
   const authors = result[1].data;
-  if (result[0].isLoading) {
-    return <span>Đang tải dữu liệu thể loại sách...</span>;
-  }
-  if (result[1].isLoading) {
-    return <span>Đang tải dữu liệu tác giả sách...</span>;
-  }
+  const book = result[2].data;
+  const isLoading = result.some((r) => r.isLoading);
 
-  const onSubmit = () => {};
+  useEffect(() => {
+    console.log("book", book);
+    if (book && categories && authors) {
+      console.log("name", book.name);
+      reset({
+        name: book.name,
+        publish: book.publish,
+        price: book.price,
+        discountPrice: book.discountPrice,
+        description: book.description,
+        status: book.status,
+        image: book.image,
+        category_id: book.category_id,
+        author_id: book.author_id,
+      });
+      setImage(book.image);
+    }
+  }, [book, reset, categories, authors]);
+
+  const mutation = useMutation({
+    mutationFn: async (formDataBook) => {
+      const { data } = await axios.put<IBooks>(
+        `${API}/books/${id}`,
+        formDataBook,
+        {
+          withCredentials: true,
+        }
+      );
+      return data;
+    },
+    onSuccess: (book: IBooks) => {
+      navigate("/admin/books");
+      message.success("Cập nhật sách thành công");
+      queryClient.setQueryData([QueryKey.BOOKS], (data: IBooks[]) => {
+        return data.map((d) => (d._id === book._id ? d : book));
+      });
+    },
+    onError: (error: IErrorMessage) => {
+      const err = error.response?.data as IErrorMessage;
+      message.error(err.message || "Lỗi khi cập nhật sách");
+    },
+  });
+
+  const onSubmit = (data: IBooks) => {
+    mutation.mutate(data as any);
+  };
 
   const updateImage = async (files: FileList) => {
     const formData = new FormData();
@@ -57,9 +113,7 @@ const EditPage = () => {
         "https://api.cloudinary.com/v1_1/djnwxedym/image/upload",
         formData
       );
-      reset({
-        image: data.url,
-      });
+      setValue("image", data.url);
       // console.log(data)
       setImage(data.url);
     } catch (error) {
@@ -69,6 +123,7 @@ const EditPage = () => {
 
   return (
     <>
+      <span>{isLoading}</span>
       <section className="w-150 h-125 shadow border border-gray-300 rounded-2xl bg-white overflow-scroll">
         <div>
           <h2 className="text-center p-2 text-2xl font-bold">Cập nhật sách</h2>
@@ -116,8 +171,8 @@ const EditPage = () => {
                   Thể loại sách(*)
                 </label>
                 <select
-                  name=""
                   id=""
+                  {...register("category_id")}
                   className="border border-gray-400 rounded-2xl p-1 focus:outline-none w-40"
                 >
                   <option value="" hidden>
@@ -135,8 +190,8 @@ const EditPage = () => {
                   Tác giả sách(*)
                 </label>
                 <select
-                  name=""
                   id=""
+                  {...register("author_id")}
                   className="border border-gray-400 rounded-2xl p-1 focus:outline-none w-40"
                 >
                   <option value="" hidden>
@@ -204,7 +259,7 @@ const EditPage = () => {
               Mô tả
             </label>
             <textarea
-              name=""
+              {...register("description")}
               id=""
               rows={4}
               className="border border-gray-200 focus:outline-none rounded-2xl"
@@ -212,6 +267,7 @@ const EditPage = () => {
           </div>
           <div className="shadow-lg rounded-2xl m-2 pb-5 pt-5 flex gap-3">
             <button
+              type="button"
               onClick={() => navigate("/admin/books")}
               className="border border-gray-300 p-3 rounded-2xl cursor-pointer hover:bg-gray-100 ml-5"
             >

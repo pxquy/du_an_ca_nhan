@@ -1,4 +1,9 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueries,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { Button, message, Popconfirm, Table } from "antd";
 import axios from "axios";
 import { useState } from "react";
@@ -11,8 +16,8 @@ import { Link, Outlet, useLocation, useNavigate } from "react-router";
 import { API, QueryKey } from "../../../constants/QueryKey";
 import type { IBooks } from "../../../Types/books";
 import { PlusOutlined } from "@ant-design/icons";
-import { formatStatus } from "../../../constants/helper";
 import type { ColumnsType } from "antd/es/table";
+import type { IAuthors } from "../../../Types/authors";
 
 const BooksPage = () => {
   const location = useLocation();
@@ -22,23 +27,46 @@ const BooksPage = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(5);
-  const { data, isLoading } = useQuery({
-    queryKey: [QueryKey.BOOKS, page, pageSize],
-    queryFn: async () => {
-      9;
-      const res = await axios.get<IApiResponse<IResponse<IBooks[]>>>(
-        `${API}/books`
-      );
-      console.log(res.data.data);
-      return res.data.data;
-    },
+  const result = useQueries({
+    queries: [
+      {
+        queryKey: [QueryKey.BOOKS, page, pageSize],
+        queryFn: async () => {
+          const res = await axios.get<IApiResponse<IResponse<IBooks>>>(
+            `${API}/books`,
+            { withCredentials: true }
+          );
+          console.log(res.data.data);
+          return res.data.data;
+        },
+      },
+      {
+        queryKey: [QueryKey.AUTHORS],
+        queryFn: async () => {
+          const res = await axios.get<IApiResponse<IResponse<IAuthors>>>(
+            `${API}/authors`,
+            { withCredentials: true }
+          );
+          console.log(res.data.data);
+          return res.data.data;
+        },
+      },
+    ],
   });
+
+  const books = result[0].data;
+  const authors = result[1].data;
+  console.log("books", books?.docs[0].author_id);
+  const isLoading = result.some((r) => r.isLoading);
 
   const mutation = useMutation({
     mutationFn: async (payload: { _id: string; status: string }) => {
       const { data } = await axios.patch(
-        `http://localhost:3000/api/books/${payload._id}`,
-        { status: payload.status }
+        `${API}/books/${payload._id}`,
+        {
+          status: payload.status,
+        },
+        { withCredentials: true }
       );
       return data;
     },
@@ -54,15 +82,34 @@ const BooksPage = () => {
     },
   });
 
+  const mutationDelete = useMutation({
+    mutationFn: async (_id: string) => {
+      await axios.delete(`${API}/books/${_id}`, {
+        withCredentials: true,
+      });
+      return _id;
+    },
+    onSuccess: (_id: string) => {
+      message.success("Xoá sách thành công!");
+      queryClient.invalidateQueries({
+        queryKey: [QueryKey.BOOKS, page, pageSize],
+      });
+    },
+    onError: (error: IErrorMessage) => {
+      const err = error.response.data as IErrorMessage;
+      message.error(err.message || "Xoá thất bại");
+    },
+  });
+
   const handelStatus = (_id: string, status: string) => {
     mutation.mutate({ _id, status });
   };
 
-  if (isLoading) {
-    return <span>Đang tải dữ liệu...</span>;
-  }
+  const handleDelete = (_id: string) => {
+    mutationDelete.mutate(_id as any);
+  };
 
-  const columns: ColumnsType<IBooks[]> = [
+  const columns: ColumnsType<IBooks> = [
     {
       title: "STT",
       dataIndex: "index",
@@ -80,7 +127,11 @@ const BooksPage = () => {
       key: "image",
       render: (image: string) => (
         <>
-          <img src={image} alt="Hình ảnh sách" />
+          <img
+            src={image}
+            alt="Hình ảnh sách"
+            className="w-20 rounded-full h-20 object-cover"
+          />
         </>
       ),
     },
@@ -93,6 +144,15 @@ const BooksPage = () => {
       title: "Giá sách",
       dataIndex: "price",
       key: "price",
+    },
+    {
+      title: "Tác giả",
+      dataIndex: "author_id",
+      key: "author_id",
+      render: (author_id) => {
+        const author = authors?.docs?.find((a) => a._id === author_id);
+        return author ? author.name : "";
+      },
     },
     {
       title: "Trạng thái",
@@ -134,7 +194,7 @@ const BooksPage = () => {
       title: "Hành động",
       dataIndex: "_id",
       key: "_id",
-      render: (_id) => {
+      render: (_id: string) => {
         return (
           <div className="flex gap-2">
             <Button
@@ -148,8 +208,9 @@ const BooksPage = () => {
               description="Bạn chắc chắn muốn xoá sách này?"
               okText="Đồng ý"
               cancelText="Từ chối"
+              onConfirm={() => handleDelete(_id)}
             >
-              <Button danger>Delete</Button>
+              <Button danger>Xoá</Button>
             </Popconfirm>
           </div>
         );
@@ -159,6 +220,7 @@ const BooksPage = () => {
 
   return (
     <>
+      {isLoading}
       <div
         className={
           isLocationAdd || isLocationEdit
@@ -177,13 +239,13 @@ const BooksPage = () => {
             </Link>
           </div>
           <Table
-            dataSource={data?.docs}
+            dataSource={books?.docs}
             columns={columns}
             rowKey="_id"
             pagination={{
               current: page,
               pageSize: pageSize,
-              total: data?.docs?.length,
+              total: books?.docs?.length,
               onChange(p: number, ps: number) {
                 setPage(p);
                 setPageSize(ps);
