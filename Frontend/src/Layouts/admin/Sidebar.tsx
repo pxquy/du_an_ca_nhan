@@ -7,10 +7,11 @@ import {
   UsergroupDeleteOutlined,
 } from "@ant-design/icons";
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 
 const Sidebar = () => {
-  const [active, setActive] = useState<string>("");
+  const localPath = useLocation();
+  const [active, setActive] = useState<string>(localPath.pathname);
   return (
     <div className="w-[17%]  border border-gray-100 shadow rounded-tl-lg rounded-bl-lg">
       <div className="flex flex-col">
