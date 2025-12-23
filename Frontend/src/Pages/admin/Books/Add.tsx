@@ -12,7 +12,7 @@ import type { ICategories } from "../../../Types/categories";
 import type { IAuthors } from "../../../Types/authors";
 import { useNavigate } from "react-router";
 import { useState } from "react";
-import { message } from "antd";
+import { Descriptions, message } from "antd";
 
 const AddPage = () => {
   const navigate = useNavigate();
@@ -245,7 +245,7 @@ const AddPage = () => {
               Mô tả
             </label>
             <textarea
-              name=""
+              {...register("description")}
               id=""
               rows={4}
               className="border border-gray-200 focus:outline-none rounded-2xl"

@@ -4,6 +4,7 @@ import {
   ProjectOutlined,
   QrcodeOutlined,
   ReadOutlined,
+  SolutionOutlined,
   UsergroupDeleteOutlined,
 } from "@ant-design/icons";
 import { useState } from "react";
@@ -98,6 +99,18 @@ const Sidebar = () => {
                 <Link to="/admin/dateBorrows">
                   <UsergroupDeleteOutlined className="pr-1" />
                   Quản lý người mượn trả sách
+                </Link>
+              </li>
+              <li
+                onClick={() => setActive("/admin/borrowItems")}
+                className={
+                  active === "/admin/borrowItems"
+                    ? "bg-blue-500 text-white p-4 rounded-2xl"
+                    : "hover:bg-blue-200 text-black p-4 rounded-2xl"
+                }
+              >
+                <Link to="/admin/borrowItems">
+                  <SolutionOutlined className="pr-1" /> Quản lý sách được mượn
                 </Link>
               </li>
             </ul>

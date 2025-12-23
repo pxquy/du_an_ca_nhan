@@ -4,6 +4,7 @@ export const QueryKey = {
   AUTHORS: "AUTHORS",
   USERS: "USERS",
   DATEBORROWS: "DATEBORROWS",
+  BORROWITEMS: "BORROWITEMS",
 };
 
 export const API = `http://localhost:3000/api`;

@@ -12,6 +12,12 @@
 1. Hoạt động,
 2. Bị khoá
 
+#Trạng thái sách được mượn: status
+
+1. Đang mượn
+2. Đã trả
+3. Trễ hạn
+
 #Giới tính: gender
 
 1. Nam,

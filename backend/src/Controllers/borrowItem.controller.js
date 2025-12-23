@@ -100,9 +100,13 @@ export const updateBorrowItem = async (req, res) => {
       return res.status(404).json({
         message: "Thiếu thông tin ID sách hoặc số lượng mượn",
       });
+
+    const book = await Books.findOne({ _id: book_id });
+
+    const totalPrice = book.price * quantity;
     const updateBorrowItem = await BorrowItems.findByIdAndUpdate(
       req.params.id,
-      { ...req.body },
+      { ...req.body, totalPrice: totalPrice },
       { new: true }
     );
 

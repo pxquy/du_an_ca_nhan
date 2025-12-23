@@ -14,9 +14,13 @@ import Register from "./Pages/Client/Register";
 import BookDetail from "./Pages/admin/Books/BookDetail";
 import EditCategory from "./Pages/admin/Categories/Edit";
 import EditAuthor from "./Pages/admin/Authors/Edit";
-import DateBorrow from "./Pages/admin/DateBorrow/DateBorrow";
-import AddDateBorrow from "./Pages/admin/DateBorrow/Add";
-import EditDateBorrow from "./Pages/admin/DateBorrow/Edit";
+import DateBorrow from "./Pages/admin/DateBorrows/DateBorrow";
+import AddDateBorrow from "./Pages/admin/DateBorrows/Add";
+import EditDateBorrow from "./Pages/admin/DateBorrows/Edit";
+import BorrowItems from "./Pages/admin/BorrowItems/BorrowItems";
+import AddBorrowItem from "./Pages/admin/BorrowItems/Add";
+import EditBorrowItem from "./Pages/admin/BorrowItems/Edit";
+import DetailBorrowItem from "./Pages/admin/BorrowItems/Detail";
 
 function App() {
   const router = useRoutes([
@@ -63,6 +67,15 @@ function App() {
           children: [
             { path: "addDateBorrow", Component: AddDateBorrow },
             { path: "editDateBorrow/:id", Component: EditDateBorrow },
+          ],
+        },
+        {
+          path: "borrowItems",
+          Component: BorrowItems,
+          children: [
+            { path: "addBorrowItem", Component: AddBorrowItem },
+            { path: "detailBorrowItem", Component: DetailBorrowItem },
+            { path: "editBorrowItem/:id", Component: EditBorrowItem },
           ],
         },
       ],
