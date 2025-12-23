@@ -1,16 +1,26 @@
-import { useQuery } from "@tanstack/react-query";
-import { Button, Popconfirm, Table } from "antd";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Button, message, Popconfirm, Table } from "antd";
 import { useState } from "react";
-import { Link, Outlet, useLocation } from "react-router";
+import { Link, Outlet, useLocation, useNavigate } from "react-router";
 import { API, QueryKey } from "../../../constants/QueryKey";
 import axios from "axios";
 import type { IApiResponse, IResponse } from "../../../Types/data";
 import type { IAuthors } from "../../../Types/authors";
-import { PlusOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  EyeOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 
 const AuthorsPage = () => {
+  const navigate = useNavigate();
   const location = useLocation();
-  const isLocation = location.pathname === "/admin/books/addAuthor";
+  const queryClient = useQueryClient();
+  const isLocationAdd = location.pathname === "/admin/authors/addAuthor";
+  const isLocationEdit = location.pathname.startsWith(
+    "/admin/authors/editAuthor"
+  );
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(5);
 
@@ -23,6 +33,23 @@ const AuthorsPage = () => {
       return res.data.data;
     },
   });
+
+  const mutationDelete = useMutation({
+    mutationFn: async (_id) => {
+      await axios.delete(`${API}/authors/${_id}`, { withCredentials: true });
+      return _id;
+    },
+    onSuccess: (_id) => {
+      message.success("Xoá tác giả thành công");
+      queryClient.invalidateQueries({
+        queryKey: [QueryKey.AUTHORS],
+      });
+    },
+  });
+
+  const handleDelete = (_id: string) => {
+    mutationDelete.mutate(_id as any);
+  };
 
   if (isLoading) {
     return <span>Đang tải dữu liệu...</span>;
@@ -58,17 +85,32 @@ const AuthorsPage = () => {
       title: "Hành động",
       dataIndex: "_id",
       key: "_id",
-      render: (_id: number) => {
+      render: (_id: string) => {
         return (
           <div className="flex gap-2">
-            <Button type="primary">Sửa</Button>
+            <Button
+              variant="solid"
+              color="cyan"
+              onClick={() => navigate(`/admin/detailAuthor/${_id}`)}
+            >
+              <EyeOutlined />
+            </Button>
+            <Button
+              type="primary"
+              onClick={() => navigate(`/admin/authors/editAuthor/${_id}`)}
+            >
+              <EditOutlined />
+            </Button>
             <Popconfirm
               title={`Xoá tác giả`}
               description="Bạn chắc chắn muốn xoá tác giả này?"
               okText="Đồng ý"
               cancelText="Từ chối"
+              onConfirm={() => handleDelete(_id)}
             >
-              <Button danger>Delete</Button>
+              <Button danger>
+                <DeleteOutlined />
+              </Button>
             </Popconfirm>
           </div>
         );
@@ -78,9 +120,13 @@ const AuthorsPage = () => {
   return (
     <>
       <div
-        className={isLocation ? "h-[100vh] bg-black opacity-20" : "bg-white"}
+        className={
+          isLocationAdd || isLocationEdit
+            ? "h-[100vh] bg-black opacity-20"
+            : "bg-white"
+        }
       >
-        <section className="m-6 flex flex-col gap-3 ">
+        <section className="p-6 flex flex-col gap-3 ">
           <div>
             <Link
               to="/admin/authors/addAuthor"

@@ -2,7 +2,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button, message, Popconfirm, Table } from "antd";
 import axios from "axios";
 import { useState } from "react";
-import type { IApiResponse, IResponse } from "../../../Types/data";
+import type {
+  IApiResponse,
+  IErrorMessage,
+  IResponse,
+} from "../../../Types/data";
 import { API, QueryKey } from "../../../constants/QueryKey";
 import type { ICategories } from "../../../Types/categories";
 import {
@@ -44,7 +48,10 @@ const CategoriesPage = () => {
         queryKey: [QueryKey.CATEGORIES],
       });
     },
-    onError: () => {},
+    onError: (error: IErrorMessage) => {
+      const err = error?.response.data as IErrorMessage;
+      message.error(err.message || "Lỗi khi xoá danh mục!");
+    },
   });
 
   const handleDelete = (_id: string) => {
@@ -92,8 +99,8 @@ const CategoriesPage = () => {
               <EditOutlined />
             </Button>
             <Popconfirm
-              title={`Xoá sách`}
-              description="Bạn chắc chắn muốn xoá sách này?"
+              title={`Xoá danh mục`}
+              description="Bạn chắc chắn muốn xoá danh mục này?"
               okText="Đồng ý"
               cancelText="Từ chối"
               onConfirm={() => handleDelete(_id)}

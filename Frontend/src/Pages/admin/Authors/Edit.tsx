@@ -1,8 +1,8 @@
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import type { IAuthors } from "../../../Types/authors";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import { API, QueryKey } from "../../../constants/QueryKey";
 import type {
   IApiResponse,
@@ -10,35 +10,57 @@ import type {
   IResponse,
 } from "../../../Types/data";
 import { message } from "antd";
+import { useEffect } from "react";
 
-const AddAuthor = () => {
+const EditAuthor = () => {
   const navigate = useNavigate();
-  const { register, handleSubmit } = useForm<IAuthors>();
+  const { id } = useParams();
+  const { register, handleSubmit, reset } = useForm<IAuthors>();
   const queryClient = useQueryClient();
+  const result = useQueries({
+    queries: [
+      {
+        queryKey: [QueryKey.AUTHORS, id],
+        queryFn: async () => {
+          const { data } = await axios.get(`${API}/authors/${id}`);
+          return data.data;
+        },
+      },
+    ],
+  });
+
+  const author = result[0].data;
+
+  useEffect(() => {
+    if (author) {
+      reset({
+        name: author?.name,
+        email: author?.email,
+        birthday: author?.birthday,
+        numberPhone: author?.numberPhone,
+      });
+    }
+  }, [author, reset]);
   const mutation = useMutation({
     mutationFn: async (formDataAuthor) => {
-      const { data } = await axios.post<IApiResponse<IResponse<IAuthors>>>(
-        `${API}/authors`,
-        formDataAuthor,
-        {
-          withCredentials: true,
-        }
-      );
+      const { data } = await axios.put(`${API}/authors/${id}`, formDataAuthor, {
+        withCredentials: true,
+      });
       return data;
     },
     onSuccess: (author) => {
       navigate("/admin/authors");
-      message.success("Thêm tác giả thành công");
+      message.success("Cập nhật tác giả thành công");
       queryClient.invalidateQueries({
         queryKey: [QueryKey.AUTHORS],
       });
       queryClient.setQueryData([QueryKey.AUTHORS], (data: IAuthors[]) => {
-        return data && [...data, author];
+        return data.map((d) => (d._id == author._id ? d : author));
       });
     },
     onError: (error: IErrorMessage) => {
       const err = error?.response.data as IErrorMessage;
-      message.error(err.message || "Lỗi khi thêm tác giả!");
+      message.error(err.message || "Lỗi khi cập nhật tác giả!");
     },
   });
 
@@ -51,7 +73,7 @@ const AddAuthor = () => {
       <section className="w-150 h-125 shadow border border-gray-300 rounded-2xl bg-white overflow-scroll">
         <div>
           <h2 className="text-center p-2 text-2xl font-bold">
-            Thêm tác giả mới
+            Cập nhật tác giả
           </h2>
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -129,7 +151,7 @@ const AddAuthor = () => {
               Đóng
             </button>
             <button className="bg-blue-500 text-white p-3 rounded-2xl cursor-pointer hover:bg-blue-600">
-              Thêm tác giả
+              Cập nhật tác giả
             </button>
           </div>
         </form>
@@ -138,4 +160,4 @@ const AddAuthor = () => {
   );
 };
 
-export default AddAuthor;
+export default EditAuthor;

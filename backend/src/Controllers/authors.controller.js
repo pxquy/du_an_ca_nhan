@@ -23,14 +23,14 @@ export const getAll = async (req, res) => {
 
 export const createAuthor = async (req, res) => {
   try {
-    const authorAdd = await Authors.create({ ...req.body });
-
-    const authorCheck = Authors.findOne({ email: req.body.email });
+    const authorCheck = await Authors.findOne({ email: req.body.email });
 
     if (authorCheck)
       return res.status(400).json({
         message: "email này đã tồn tại vui lòng thử email khác!",
       });
+
+    const authorAdd = await Authors.create({ ...req.body });
 
     return res.status(201).json({
       message: "Thêm tác giả sách thành công",

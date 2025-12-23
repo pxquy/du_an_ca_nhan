@@ -13,6 +13,7 @@ import Login from "./Pages/Client/Login";
 import Register from "./Pages/Client/Register";
 import BookDetail from "./Pages/admin/Books/BookDetail";
 import EditCategory from "./Pages/admin/Categories/Edit";
+import EditAuthor from "./Pages/admin/Authors/Edit";
 
 function App() {
   const router = useRoutes([
@@ -48,7 +49,10 @@ function App() {
         {
           path: "authors",
           Component: AuthorsPage,
-          children: [{ path: "addAuthor", Component: AddAuthor }],
+          children: [
+            { path: "addAuthor", Component: AddAuthor },
+            { path: "editAuthor/:id", Component: EditAuthor },
+          ],
         },
       ],
     },
