@@ -91,6 +91,9 @@ const EditPage = () => {
     onSuccess: (book: IBooks) => {
       navigate("/admin/books");
       message.success("Cập nhật sách thành công");
+      queryClient.invalidateQueries({
+        queryKey: [QueryKey.BOOKS],
+      });
       queryClient.setQueryData([QueryKey.BOOKS], (data: IBooks[]) => {
         return data.map((d) => (d._id === book._id ? d : book));
       });

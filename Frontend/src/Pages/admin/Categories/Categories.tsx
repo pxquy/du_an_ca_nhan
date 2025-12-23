@@ -1,17 +1,27 @@
-import { useQuery } from "@tanstack/react-query";
-import { Button, Popconfirm, Table } from "antd";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Button, message, Popconfirm, Table } from "antd";
 import axios from "axios";
 import { useState } from "react";
-import type { IApiResponse, IResponse } from "../../Types/data";
-import { API, QueryKey } from "../../constants/QueryKey";
-import type { ICategories } from "../../Types/categories";
-import { PlusOutlined } from "@ant-design/icons";
-import { Link, Outlet, useLocation } from "react-router";
+import type { IApiResponse, IResponse } from "../../../Types/data";
+import { API, QueryKey } from "../../../constants/QueryKey";
+import type { ICategories } from "../../../Types/categories";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  EyeOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
+import { Link, Outlet, useLocation, useNavigate } from "react-router";
 const CategoriesPage = () => {
   const location = useLocation();
-  const isLocation = location.pathname === "/admin/categories/addCategory";
+  const isLocationAdd = location.pathname === "/admin/categories/addCategory";
+  const isLocationEdit = location.pathname.startsWith(
+    "/admin/categories/editCategory"
+  );
+  const navigate = useNavigate();
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(5);
+  const queryClient = useQueryClient();
   const { data, isLoading } = useQuery({
     queryKey: [QueryKey.CATEGORIES, page, pageSize],
     queryFn: async () => {
@@ -22,6 +32,24 @@ const CategoriesPage = () => {
       return res.data.data;
     },
   });
+
+  const mutationDelete = useMutation({
+    mutationFn: async (_id) => {
+      await axios.delete(`${API}/categories/${_id}`, { withCredentials: true });
+      return _id;
+    },
+    onSuccess: () => {
+      message.success("Xoá danh mục thành công!");
+      queryClient.invalidateQueries({
+        queryKey: [QueryKey.CATEGORIES],
+      });
+    },
+    onError: () => {},
+  });
+
+  const handleDelete = (_id: string) => {
+    mutationDelete.mutate(_id as any);
+  };
 
   if (isLoading) {
     return <span>Đang tải dữ liệu...</span>;
@@ -47,17 +75,32 @@ const CategoriesPage = () => {
       title: "Hành động",
       dataIndex: "_id",
       key: "_id",
-      render: (_id: number) => {
+      render: (_id: string) => {
         return (
           <div className="flex gap-2">
-            <Button type="primary">Sửa</Button>
+            <Button
+              variant="solid"
+              color="cyan"
+              onClick={() => navigate(`/admin/detailCategory/${_id}`)}
+            >
+              <EyeOutlined />
+            </Button>
+            <Button
+              type="primary"
+              onClick={() => navigate(`/admin/categories/editCategory/${_id}`)}
+            >
+              <EditOutlined />
+            </Button>
             <Popconfirm
-              title={`Xoá thể loại sách`}
-              description="Bạn chắc chắn muốn xoá thể loại sách này?"
+              title={`Xoá sách`}
+              description="Bạn chắc chắn muốn xoá sách này?"
               okText="Đồng ý"
               cancelText="Từ chối"
+              onConfirm={() => handleDelete(_id)}
             >
-              <Button danger>Delete</Button>
+              <Button danger>
+                <DeleteOutlined />
+              </Button>
             </Popconfirm>
           </div>
         );
@@ -67,9 +110,13 @@ const CategoriesPage = () => {
   return (
     <>
       <div
-        className={isLocation ? "h-[100vh] bg-black opacity-20" : "bg-white"}
+        className={
+          isLocationAdd || isLocationEdit
+            ? "h-[100vh] bg-black opacity-20"
+            : "bg-white"
+        }
       >
-        <section className="m-6 flex flex-col gap-3 ">
+        <section className="p-6 flex flex-col gap-3 ">
           <div>
             <Link
               to="/admin/categories/addCategory"

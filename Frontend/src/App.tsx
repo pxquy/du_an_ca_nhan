@@ -2,16 +2,17 @@ import "./App.css";
 import { useRoutes } from "react-router";
 import LayoutAdmin from "./Layouts/admin/Layout";
 import LayoutClient from "./Layouts/Client/Layout";
-import CategoriesPage from "./Pages/Categories/Categories";
+import CategoriesPage from "./Pages/admin/Categories/Categories";
 import BooksPage from "./Pages/admin/Books/Books";
 import AuthorsPage from "./Pages/admin/Authors/Authors";
 import AddPage from "./Pages/admin/Books/Add";
 import AddAuthor from "./Pages/admin/Authors/Add";
-import AddCategory from "./Pages/Categories/Add";
+import AddCategory from "./Pages/admin/Categories/Add";
 import EditPage from "./Pages/admin/Books/Edit";
 import Login from "./Pages/Client/Login";
 import Register from "./Pages/Client/Register";
 import BookDetail from "./Pages/admin/Books/BookDetail";
+import EditCategory from "./Pages/admin/Categories/Edit";
 
 function App() {
   const router = useRoutes([
@@ -39,7 +40,10 @@ function App() {
         {
           path: "categories",
           Component: CategoriesPage,
-          children: [{ path: "addCategory", Component: AddCategory }],
+          children: [
+            { path: "addCategory", Component: AddCategory },
+            { path: "editCategory/:id", Component: EditCategory },
+          ],
         },
         {
           path: "authors",

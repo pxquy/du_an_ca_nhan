@@ -61,6 +61,9 @@ const AddPage = () => {
     onSuccess: (book) => {
       navigate("/admin/books");
       message.success("Thêm mới sách thành công");
+      queryClient.invalidateQueries({
+        queryKey: [QueryKey.BOOKS],
+      });
       queryClient.setQueryData([QueryKey.BOOKS], (data: IBooks[]) => {
         return data && [...data, book];
       });
