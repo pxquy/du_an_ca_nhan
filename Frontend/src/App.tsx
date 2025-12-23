@@ -14,6 +14,9 @@ import Register from "./Pages/Client/Register";
 import BookDetail from "./Pages/admin/Books/BookDetail";
 import EditCategory from "./Pages/admin/Categories/Edit";
 import EditAuthor from "./Pages/admin/Authors/Edit";
+import DateBorrow from "./Pages/admin/DateBorrow/DateBorrow";
+import AddDateBorrow from "./Pages/admin/DateBorrow/Add";
+import EditDateBorrow from "./Pages/admin/DateBorrow/Edit";
 
 function App() {
   const router = useRoutes([
@@ -52,6 +55,14 @@ function App() {
           children: [
             { path: "addAuthor", Component: AddAuthor },
             { path: "editAuthor/:id", Component: EditAuthor },
+          ],
+        },
+        {
+          path: "dateBorrows",
+          Component: DateBorrow,
+          children: [
+            { path: "addDateBorrow", Component: AddDateBorrow },
+            { path: "editDateBorrow/:id", Component: EditDateBorrow },
           ],
         },
       ],

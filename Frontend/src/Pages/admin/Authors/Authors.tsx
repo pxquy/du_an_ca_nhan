@@ -88,13 +88,13 @@ const AuthorsPage = () => {
       render: (_id: string) => {
         return (
           <div className="flex gap-2">
-            <Button
+            {/* <Button
               variant="solid"
               color="cyan"
               onClick={() => navigate(`/admin/detailAuthor/${_id}`)}
             >
               <EyeOutlined />
-            </Button>
+            </Button> */}
             <Button
               type="primary"
               onClick={() => navigate(`/admin/authors/editAuthor/${_id}`)}

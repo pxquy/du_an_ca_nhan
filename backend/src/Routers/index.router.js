@@ -15,7 +15,7 @@ router.use("/auth", routerAuth);
 router.use("/categories", routerCategories);
 router.use("/authors", routerAuthors);
 router.use("/books", routerBooks);
-router.use("/dateBorrow", routerDateBorrow);
+router.use("/dateBorrows", routerDateBorrow);
 router.use("/borrowItems", routerBorrowItems);
 router.use("/comments", routerComments);
 

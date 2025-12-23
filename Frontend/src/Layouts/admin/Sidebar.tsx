@@ -87,6 +87,19 @@ const Sidebar = () => {
                   Quản lý tác giả sách
                 </Link>
               </li>
+              <li
+                onClick={() => setActive("/admin/dateBorrows")}
+                className={
+                  active === "/admin/dateBorrows"
+                    ? "bg-blue-500 text-white p-4 rounded-2xl"
+                    : "hover:bg-blue-200 text-black p-4 rounded-2xl"
+                }
+              >
+                <Link to="/admin/dateBorrows">
+                  <UsergroupDeleteOutlined className="pr-1" />
+                  Quản lý người mượn trả sách
+                </Link>
+              </li>
             </ul>
           </div>
           <div className="m-6">

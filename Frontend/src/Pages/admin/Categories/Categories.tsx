@@ -85,13 +85,13 @@ const CategoriesPage = () => {
       render: (_id: string) => {
         return (
           <div className="flex gap-2">
-            <Button
+            {/* <Button
               variant="solid"
               color="cyan"
               onClick={() => navigate(`/admin/detailCategory/${_id}`)}
             >
               <EyeOutlined />
-            </Button>
+            </Button> */}
             <Button
               type="primary"
               onClick={() => navigate(`/admin/categories/editCategory/${_id}`)}
