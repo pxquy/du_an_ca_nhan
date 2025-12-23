@@ -11,6 +11,7 @@ import AddCategory from "./Pages/Categories/Add";
 import EditPage from "./Pages/admin/Books/Edit";
 import Login from "./Pages/Client/Login";
 import Register from "./Pages/Client/Register";
+import BookDetail from "./Pages/admin/Books/BookDetail";
 
 function App() {
   const router = useRoutes([
@@ -34,6 +35,7 @@ function App() {
             { path: "editBook/:id", Component: EditPage },
           ],
         },
+        { path: "detailBook/:id", Component: BookDetail },
         {
           path: "categories",
           Component: CategoriesPage,

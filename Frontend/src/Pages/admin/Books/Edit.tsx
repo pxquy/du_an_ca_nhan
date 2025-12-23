@@ -54,12 +54,14 @@ const EditPage = () => {
   const categories = result[0].data;
   const authors = result[1].data;
   const book = result[2].data;
+  // console.log("author_id", book?.author_id.name);
   const isLoading = result.some((r) => r.isLoading);
 
   useEffect(() => {
     console.log("book", book);
     if (book && categories && authors) {
       console.log("name", book.name);
+      console.log("author_id", book.author_id.name);
       reset({
         name: book.name,
         publish: book.publish,
@@ -68,8 +70,8 @@ const EditPage = () => {
         description: book.description,
         status: book.status,
         image: book.image,
-        category_id: book.category_id,
-        author_id: book.author_id,
+        category_id: book.category_id._id,
+        author_id: book.author_id._id,
       });
       setImage(book.image);
     }

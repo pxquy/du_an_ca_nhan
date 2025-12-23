@@ -15,9 +15,13 @@ import type {
 import { Link, Outlet, useLocation, useNavigate } from "react-router";
 import { API, QueryKey } from "../../../constants/QueryKey";
 import type { IBooks } from "../../../Types/books";
-import { PlusOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  EyeOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
-import type { IAuthors } from "../../../Types/authors";
 
 const BooksPage = () => {
   const location = useLocation();
@@ -40,23 +44,11 @@ const BooksPage = () => {
           return res.data.data;
         },
       },
-      {
-        queryKey: [QueryKey.AUTHORS],
-        queryFn: async () => {
-          const res = await axios.get<IApiResponse<IResponse<IAuthors>>>(
-            `${API}/authors`,
-            { withCredentials: true }
-          );
-          console.log(res.data.data);
-          return res.data.data;
-        },
-      },
     ],
   });
 
   const books = result[0].data;
-  const authors = result[1].data;
-  console.log("books", books?.docs[0].author_id);
+  // console.log("books", books?.docs[0].author_id._id);
   const isLoading = result.some((r) => r.isLoading);
 
   const mutation = useMutation({
@@ -149,9 +141,8 @@ const BooksPage = () => {
       title: "Tác giả",
       dataIndex: "author_id",
       key: "author_id",
-      render: (author_id) => {
-        const author = authors?.docs?.find((a) => a._id === author_id);
-        return author ? author.name : "";
+      render: (author_id: { name: string }) => {
+        return author_id ? author_id.name : "";
       },
     },
     {
@@ -198,10 +189,17 @@ const BooksPage = () => {
         return (
           <div className="flex gap-2">
             <Button
+              variant="solid"
+              color="cyan"
+              onClick={() => navigate(`/admin/detailBook/${_id}`)}
+            >
+              <EyeOutlined />
+            </Button>
+            <Button
               type="primary"
               onClick={() => navigate(`/admin/books/editBook/${_id}`)}
             >
-              Sửa
+              <EditOutlined />
             </Button>
             <Popconfirm
               title={`Xoá sách`}
@@ -210,7 +208,9 @@ const BooksPage = () => {
               cancelText="Từ chối"
               onConfirm={() => handleDelete(_id)}
             >
-              <Button danger>Xoá</Button>
+              <Button danger>
+                <DeleteOutlined />
+              </Button>
             </Popconfirm>
           </div>
         );

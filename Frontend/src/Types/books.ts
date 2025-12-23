@@ -1,4 +1,5 @@
 import type { IAuthor } from "./authors";
+import type { ICategories } from "./categories";
 
 export interface IBooks {
   _id: string;
@@ -8,7 +9,7 @@ export interface IBooks {
   discountPrice: number;
   image: string;
   description: string;
-  status: IAuthor;
-  category_id: string;
-  author_id: string;
+  status: string;
+  category_id: ICategories;
+  author_id: IAuthor;
 }
