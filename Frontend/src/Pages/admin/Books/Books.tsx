@@ -1,18 +1,11 @@
-import {
-  useMutation,
-  useQueries,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import { Button, message, Popconfirm, Table } from "antd";
 import axios from "axios";
-import { useState } from "react";
 import type {
   IApiResponse,
   IErrorMessage,
   IResponse,
 } from "../../../Types/data";
-import { Link, Outlet, useLocation, useNavigate } from "react-router";
 import { API, QueryKey } from "../../../constants/QueryKey";
 import type { IBooks } from "../../../Types/books";
 import {
@@ -29,11 +22,7 @@ import { EditBookModel } from "../../../Components/BookModel/EditBookModel";
 import DetailBookModel from "../../../Components/BookModel/DetailBookModel";
 
 const BooksPage = () => {
-  const location = useLocation();
-  const isLocationAdd = location.pathname === "/admin/books/addBook";
-  const isLocationEdit = location.pathname.startsWith("/admin/books/editBook");
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
   const { page, pageSize, setPage, setPageSize } = usePageStore();
   const {
     openAdd,

@@ -4,7 +4,6 @@ import type { IBooks } from "../../Types/books";
 import type { TGlobalProps } from "../../Types/React";
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router";
 import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import type { IApiResponse, IErrorMessage, IResponse } from "../../Types/data";
@@ -15,7 +14,6 @@ import { message } from "antd";
 
 export const AddBookModel = ({ children }: TGlobalProps<{ open: boolean }>) => {
   const { openAdd, setOpenAdd } = useOpen();
-  const navigate = useNavigate();
   const [loadingImage, setLoadingImage] = useState<boolean>(false);
   const queryClient = useQueryClient();
   const [image, setImage] = useState();
@@ -116,6 +114,7 @@ export const AddBookModel = ({ children }: TGlobalProps<{ open: boolean }>) => {
           openAdd ? "opacity-100 visited:" : "opacity-0 invisible"
         }`}
       ></div>
+      {isLoading}
       {openAdd && (
         <section className="fixed top-[15%] left-[35%] w-150 h-125 shadow border border-gray-300 rounded-2xl bg-white overflow-scroll z-30">
           <div>

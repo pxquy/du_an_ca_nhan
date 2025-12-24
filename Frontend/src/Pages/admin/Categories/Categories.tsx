@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button, message, Popconfirm, Table } from "antd";
 import axios from "axios";
-import { useState } from "react";
+
 import type {
   IApiResponse,
   IErrorMessage,
@@ -9,22 +9,18 @@ import type {
 } from "../../../Types/data";
 import { API, QueryKey } from "../../../constants/QueryKey";
 import type { ICategories } from "../../../Types/categories";
-import {
-  DeleteOutlined,
-  EditOutlined,
-  EyeOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
-import { Link, Outlet, useLocation, useNavigate } from "react-router";
+import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router";
 import { usePageStore } from "../../../stores/PageStore";
+import {
+  AddCategoryModel,
+  EditCategoryModel,
+} from "../../../Components/Categories/FormCategoryModel";
+import { useOpen } from "../../../stores/openStore";
 const CategoriesPage = () => {
-  const location = useLocation();
-  const isLocationAdd = location.pathname === "/admin/categories/addCategory";
-  const isLocationEdit = location.pathname.startsWith(
-    "/admin/categories/editCategory"
-  );
   const navigate = useNavigate();
   const { page, pageSize, setPage, setPageSize } = usePageStore();
+  const { openAdd, openEdit, setOpenAdd, setOpenEdit } = useOpen();
   const queryClient = useQueryClient();
   const { data, isLoading } = useQuery({
     queryKey: [QueryKey.CATEGORIES, page, pageSize],
@@ -82,7 +78,7 @@ const CategoriesPage = () => {
       title: "Hành động",
       dataIndex: "_id",
       key: "_id",
-      render: (_id: string) => {
+      render: (_id: string, recode: ICategories) => {
         return (
           <div className="flex gap-2">
             {/* <Button
@@ -92,12 +88,11 @@ const CategoriesPage = () => {
             >
               <EyeOutlined />
             </Button> */}
-            <Button
-              type="primary"
-              onClick={() => navigate(`/admin/categories/editCategory/${_id}`)}
-            >
-              <EditOutlined />
-            </Button>
+            <EditCategoryModel open={openEdit} category={recode}>
+              <Button type="primary" onClick={() => setOpenEdit(true)}>
+                <EditOutlined />
+              </Button>
+            </EditCategoryModel>
             <Popconfirm
               title={`Xoá danh mục`}
               description="Bạn chắc chắn muốn xoá danh mục này?"
@@ -116,22 +111,18 @@ const CategoriesPage = () => {
   ];
   return (
     <>
-      <div
-        className={
-          isLocationAdd || isLocationEdit
-            ? "h-[100vh] bg-black opacity-20"
-            : "bg-white"
-        }
-      >
+      <div>
         <section className="p-6 flex flex-col gap-3 ">
           <div>
-            <Link
-              to="/admin/categories/addCategory"
-              className="p-2 bg-blue-400 m-2 rounded-[5px] text-white hover:bg-blue-600 hover:font-bold"
-            >
-              <PlusOutlined className="pr-1" />
-              Thêm thể loại mới
-            </Link>
+            <AddCategoryModel open={openAdd}>
+              <button
+                className="p-2 bg-blue-400 m-2 rounded-[5px] text-white hover:bg-blue-600 hover:font-bold cursor-pointer"
+                onClick={() => setOpenAdd(true)}
+              >
+                <PlusOutlined className="pr-1" />
+                Thêm thể loại mới
+              </button>
+            </AddCategoryModel>
           </div>
           <Table
             dataSource={data?.docs}
@@ -148,9 +139,6 @@ const CategoriesPage = () => {
             }}
           />
         </section>
-      </div>
-      <div className="absolute top-30 left-130">
-        <Outlet />
       </div>
     </>
   );

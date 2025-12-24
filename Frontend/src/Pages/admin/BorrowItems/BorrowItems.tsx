@@ -10,7 +10,7 @@ import type { IApiResponse, IResponse } from "../../../Types/data";
 import type { IBorrowItems } from "../../../Types/borrowItems";
 import { usePageStore } from "../../../stores/PageStore";
 import { useOpen } from "../../../stores/openStore";
-import { DetailBorrowItemModel } from "../../../Components/BorrowModel/detailBorrowItemModel";
+import { DetailBorrowItemModel } from "../../../Components/BorrowModel/DetailBorrowItemModel";
 
 const BorrowItems = () => {
   const navigate = useNavigate();

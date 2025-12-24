@@ -1,7 +1,7 @@
 import React, { useEffect, useState, type ReactElement } from "react";
 import type { TGlobalProps } from "../../Types/React";
 import { useOpen } from "../../stores/openStore";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import type { IBooks } from "../../Types/books";
@@ -72,7 +72,7 @@ export const EditBookModel = ({
   const mutation = useMutation({
     mutationFn: async (formDataBook) => {
       const { data } = await axios.put<IBooks>(
-        `${API}/books/${book}`,
+        `${API}/books/${book._id}`,
         formDataBook,
         {
           withCredentials: true,
@@ -81,7 +81,7 @@ export const EditBookModel = ({
       return data;
     },
     onSuccess: (book: IBooks) => {
-      navigate("/admin/books");
+      setOpenEdit(false);
       message.success("Cập nhật sách thành công");
       queryClient.invalidateQueries({
         queryKey: [QueryKey.BOOKS],
