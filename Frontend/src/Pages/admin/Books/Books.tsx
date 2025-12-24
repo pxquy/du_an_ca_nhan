@@ -16,10 +16,10 @@ import {
 } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import { usePageStore } from "../../../stores/PageStore";
-import { AddBookModel } from "../../../Components/BookModel/AddBookModel";
+import { AddBookModal } from "../../../Components/BookModal/AddBookModal";
 import { useOpen } from "../../../stores/openStore";
-import { EditBookModel } from "../../../Components/BookModel/EditBookModel";
-import DetailBookModel from "../../../Components/BookModel/DetailBookModel";
+import { EditBookModal } from "../../../Components/BookModal/EditBookModal";
+import { DetailBookModal } from "../../../Components/BookModal/DetailBookModal";
 
 const BooksPage = () => {
   const queryClient = useQueryClient();
@@ -189,7 +189,7 @@ const BooksPage = () => {
       render: (_id: string, recode: IBooks) => {
         return (
           <div className="flex gap-2">
-            <DetailBookModel open={openDetail} detailBook={recode}>
+            <DetailBookModal open={openDetail} detailBook={recode}>
               <Button
                 variant="solid"
                 color="cyan"
@@ -197,12 +197,12 @@ const BooksPage = () => {
               >
                 <EyeOutlined />
               </Button>
-            </DetailBookModel>
-            <EditBookModel open={openEdit} book={recode}>
+            </DetailBookModal>
+            <EditBookModal open={openEdit} book={recode}>
               <Button type="primary" onClick={() => setOpenEdit(true)}>
                 <EditOutlined />
               </Button>
-            </EditBookModel>
+            </EditBookModal>
             <Popconfirm
               title={`Xoá sách`}
               description="Bạn chắc chắn muốn xoá sách này?"
@@ -225,7 +225,7 @@ const BooksPage = () => {
       {isLoading}
       <section className="relative p-6 flex flex-col gap-3">
         <div>
-          <AddBookModel open={openAdd}>
+          <AddBookModal open={openAdd}>
             <button
               className="p-2 bg-blue-400 m-2 rounded-[5px] text-white hover:bg-blue-600 hover:font-bold cursor-pointer"
               onClick={() => setOpenAdd(true)}
@@ -233,7 +233,7 @@ const BooksPage = () => {
               <PlusOutlined className="pr-1" />
               Thêm sách mới
             </button>
-          </AddBookModel>
+          </AddBookModal>
         </div>
         <Table
           dataSource={books?.docs}

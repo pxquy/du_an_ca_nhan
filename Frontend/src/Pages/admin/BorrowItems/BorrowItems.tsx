@@ -10,7 +10,7 @@ import type { IApiResponse, IResponse } from "../../../Types/data";
 import type { IBorrowItems } from "../../../Types/borrowItems";
 import { usePageStore } from "../../../stores/PageStore";
 import { useOpen } from "../../../stores/openStore";
-import { DetailBorrowItemModel } from "../../../Components/BorrowModel/DetailBorrowItemModel";
+import { DetailBorrowItemModal } from "../../../Components/BorrowModal/DetailBorrowItemModal";
 
 const BorrowItems = () => {
   const navigate = useNavigate();
@@ -78,7 +78,7 @@ const BorrowItems = () => {
       render: (_id: string, record: IBorrowItems) => {
         return (
           <div className="flex gap-2">
-            <DetailBorrowItemModel borrow={record} open={openDetail}>
+            <DetailBorrowItemModal borrow={record} open={openDetail}>
               <Button
                 variant="solid"
                 color="cyan"
@@ -86,7 +86,7 @@ const BorrowItems = () => {
               >
                 <EyeOutlined />
               </Button>
-            </DetailBorrowItemModel>
+            </DetailBorrowItemModal>
             <Button
               type="primary"
               onClick={() =>

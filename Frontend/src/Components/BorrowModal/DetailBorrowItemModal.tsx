@@ -3,7 +3,7 @@ import type { TGlobalProps } from "../../Types/React";
 import { useOpen } from "../../stores/openStore";
 import type { IBorrowItems } from "../../Types/borrowItems";
 
-export const DetailBorrowItemModel = ({
+export const DetailBorrowItemModal = ({
   children,
   borrow,
 }: TGlobalProps<{ open: boolean; borrow: IBorrowItems }>) => {

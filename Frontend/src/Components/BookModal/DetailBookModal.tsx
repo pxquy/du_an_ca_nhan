@@ -4,7 +4,7 @@ import { useOpen } from "../../stores/openStore";
 import type { IBooks } from "../../Types/books";
 import { formatStatus } from "../../constants/Helper";
 
-const DetailBookModel = ({
+export const DetailBookModal = ({
   children,
   detailBook,
 }: TGlobalProps<{ detailBook: IBooks; open: boolean }>) => {
@@ -101,5 +101,3 @@ const DetailBookModel = ({
     </>
   );
 };
-
-export default DetailBookModel;

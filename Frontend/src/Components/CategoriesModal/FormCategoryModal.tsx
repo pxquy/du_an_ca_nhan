@@ -9,7 +9,7 @@ import axios from "axios";
 import { API, QueryKey } from "../../constants/QueryKey";
 import { message } from "antd";
 
-export const AddCategoryModel = ({
+export const AddCategoryModal = ({
   children,
 }: TGlobalProps<{ open: boolean }>) => {
   const { openAdd, setOpenAdd } = useOpen();
@@ -119,7 +119,7 @@ export const AddCategoryModel = ({
 };
 
 // Edit category
-export const EditCategoryModel = ({
+export const EditCategoryModal = ({
   children,
   category,
 }: TGlobalProps<{ category: ICategories; open: boolean }>) => {

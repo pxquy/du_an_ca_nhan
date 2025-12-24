@@ -12,7 +12,7 @@ import axios from "axios";
 import type { IAuthors } from "../../Types/authors";
 import { message } from "antd";
 
-export const EditBookModel = ({
+export const EditBookModal = ({
   children,
   book,
 }: TGlobalProps<{ open: boolean; book: IBooks }>) => {

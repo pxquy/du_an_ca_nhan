@@ -12,7 +12,7 @@ import { API, QueryKey } from "../../constants/QueryKey";
 import type { IAuthors } from "../../Types/authors";
 import { message } from "antd";
 
-export const AddBookModel = ({ children }: TGlobalProps<{ open: boolean }>) => {
+export const AddBookModal = ({ children }: TGlobalProps<{ open: boolean }>) => {
   const { openAdd, setOpenAdd } = useOpen();
   const [loadingImage, setLoadingImage] = useState<boolean>(false);
   const queryClient = useQueryClient();

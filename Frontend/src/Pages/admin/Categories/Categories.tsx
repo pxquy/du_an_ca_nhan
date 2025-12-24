@@ -10,15 +10,13 @@ import type {
 import { API, QueryKey } from "../../../constants/QueryKey";
 import type { ICategories } from "../../../Types/categories";
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router";
 import { usePageStore } from "../../../stores/PageStore";
 import {
-  AddCategoryModel,
-  EditCategoryModel,
-} from "../../../Components/Categories/FormCategoryModel";
+  AddCategoryModal,
+  EditCategoryModal,
+} from "../../../Components/CategoriesModal/FormCategoryModal";
 import { useOpen } from "../../../stores/openStore";
 const CategoriesPage = () => {
-  const navigate = useNavigate();
   const { page, pageSize, setPage, setPageSize } = usePageStore();
   const { openAdd, openEdit, setOpenAdd, setOpenEdit } = useOpen();
   const queryClient = useQueryClient();
@@ -88,11 +86,11 @@ const CategoriesPage = () => {
             >
               <EyeOutlined />
             </Button> */}
-            <EditCategoryModel open={openEdit} category={recode}>
+            <EditCategoryModal open={openEdit} category={recode}>
               <Button type="primary" onClick={() => setOpenEdit(true)}>
                 <EditOutlined />
               </Button>
-            </EditCategoryModel>
+            </EditCategoryModal>
             <Popconfirm
               title={`Xoá danh mục`}
               description="Bạn chắc chắn muốn xoá danh mục này?"
@@ -114,7 +112,7 @@ const CategoriesPage = () => {
       <div>
         <section className="p-6 flex flex-col gap-3 ">
           <div>
-            <AddCategoryModel open={openAdd}>
+            <AddCategoryModal open={openAdd}>
               <button
                 className="p-2 bg-blue-400 m-2 rounded-[5px] text-white hover:bg-blue-600 hover:font-bold cursor-pointer"
                 onClick={() => setOpenAdd(true)}
@@ -122,7 +120,7 @@ const CategoriesPage = () => {
                 <PlusOutlined className="pr-1" />
                 Thêm thể loại mới
               </button>
-            </AddCategoryModel>
+            </AddCategoryModal>
           </div>
           <Table
             dataSource={data?.docs}
