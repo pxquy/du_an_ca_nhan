@@ -22,6 +22,11 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
+import { usePageStore } from "../../../stores/PageStore";
+import { AddBookModel } from "../../../Components/BookModel/AddBookModel";
+import { useOpen } from "../../../stores/openStore";
+import { EditBookModel } from "../../../Components/BookModel/EditBookModel";
+import DetailBookModel from "../../../Components/BookModel/DetailBookModel";
 
 const BooksPage = () => {
   const location = useLocation();
@@ -29,8 +34,15 @@ const BooksPage = () => {
   const isLocationEdit = location.pathname.startsWith("/admin/books/editBook");
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const [page, setPage] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(5);
+  const { page, pageSize, setPage, setPageSize } = usePageStore();
+  const {
+    openAdd,
+    openEdit,
+    openDetail,
+    setOpenAdd,
+    setOpenEdit,
+    setOpenDetail,
+  } = useOpen();
   const result = useQueries({
     queries: [
       {
@@ -40,7 +52,7 @@ const BooksPage = () => {
             `${API}/books`,
             { withCredentials: true }
           );
-          console.log(res.data.data);
+          // console.log(res.data.data);
           return res.data.data;
         },
       },
@@ -185,22 +197,23 @@ const BooksPage = () => {
       title: "Hành động",
       dataIndex: "_id",
       key: "_id",
-      render: (_id: string) => {
+      render: (_id: string, recode: IBooks) => {
         return (
           <div className="flex gap-2">
-            <Button
-              variant="solid"
-              color="cyan"
-              onClick={() => navigate(`/admin/detailBook/${_id}`)}
-            >
-              <EyeOutlined />
-            </Button>
-            <Button
-              type="primary"
-              onClick={() => navigate(`/admin/books/editBook/${_id}`)}
-            >
-              <EditOutlined />
-            </Button>
+            <DetailBookModel open={openDetail} detailBook={recode}>
+              <Button
+                variant="solid"
+                color="cyan"
+                onClick={() => setOpenDetail(true)}
+              >
+                <EyeOutlined />
+              </Button>
+            </DetailBookModel>
+            <EditBookModel open={openEdit} book={recode}>
+              <Button type="primary" onClick={() => setOpenEdit(true)}>
+                <EditOutlined />
+              </Button>
+            </EditBookModel>
             <Popconfirm
               title={`Xoá sách`}
               description="Bạn chắc chắn muốn xoá sách này?"
@@ -221,42 +234,33 @@ const BooksPage = () => {
   return (
     <>
       {isLoading}
-      <div
-        className={
-          isLocationAdd || isLocationEdit
-            ? "h-[100vh] bg-black opacity-20"
-            : "bg-white"
-        }
-      >
-        <section className="relative p-6 flex flex-col gap-3">
-          <div>
-            <Link
-              to="/admin/books/addBook"
-              className="p-2 bg-blue-400 m-2 rounded-[5px] text-white hover:bg-blue-600 hover:font-bold"
+      <section className="relative p-6 flex flex-col gap-3">
+        <div>
+          <AddBookModel open={openAdd}>
+            <button
+              className="p-2 bg-blue-400 m-2 rounded-[5px] text-white hover:bg-blue-600 hover:font-bold cursor-pointer"
+              onClick={() => setOpenAdd(true)}
             >
               <PlusOutlined className="pr-1" />
               Thêm sách mới
-            </Link>
-          </div>
-          <Table
-            dataSource={books?.docs}
-            columns={columns}
-            rowKey="_id"
-            pagination={{
-              current: page,
-              pageSize: pageSize,
-              total: books?.docs?.length,
-              onChange(p: number, ps: number) {
-                setPage(p);
-                setPageSize(ps);
-              },
-            }}
-          />
-        </section>
-      </div>
-      <div className="absolute top-30 left-130">
-        <Outlet />
-      </div>
+            </button>
+          </AddBookModel>
+        </div>
+        <Table
+          dataSource={books?.docs}
+          columns={columns}
+          rowKey="_id"
+          pagination={{
+            current: page,
+            pageSize: pageSize,
+            total: books?.docs?.length,
+            onChange(p: number, ps: number) {
+              setPage(p);
+              setPageSize(ps);
+            },
+          }}
+        />
+      </section>
     </>
   );
 };

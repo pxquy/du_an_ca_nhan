@@ -113,6 +113,18 @@ const Sidebar = () => {
                   <SolutionOutlined className="pr-1" /> Quản lý sách được mượn
                 </Link>
               </li>
+              <li
+                onClick={() => setActive("/admin/comments")}
+                className={
+                  active === "/admin/comments"
+                    ? "bg-blue-500 text-white p-4 rounded-2xl"
+                    : "hover:bg-blue-200 text-black p-4 rounded-2xl"
+                }
+              >
+                <Link to="/admin/comments">
+                  <SolutionOutlined className="pr-1" /> Quản lý bình luận
+                </Link>
+              </li>
             </ul>
           </div>
           <div className="m-6">

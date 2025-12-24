@@ -8,6 +8,9 @@ import { API, QueryKey } from "../../../constants/QueryKey";
 import axios from "axios";
 import type { IApiResponse, IResponse } from "../../../Types/data";
 import type { IBorrowItems } from "../../../Types/borrowItems";
+import { usePageStore } from "../../../stores/PageStore";
+import { useOpen } from "../../../stores/openStore";
+import { DetailBorrowItemModel } from "../../../Components/BorrowModel/detailBorrowItemModel";
 
 const BorrowItems = () => {
   const navigate = useNavigate();
@@ -17,8 +20,8 @@ const BorrowItems = () => {
   const isLocationEdit = location.pathname.startsWith(
     "/admin/borrowItems/editBorrowItem"
   );
-  const [page, setPage] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(5);
+  const { page, pageSize, setPage, setPageSize } = usePageStore();
+  const { openDetail, setOpenDetail } = useOpen();
   const result = useQueries({
     queries: [
       {
@@ -72,16 +75,18 @@ const BorrowItems = () => {
       title: "Hành động",
       dataIndex: "_id",
       key: "_id",
-      render: (_id: string) => {
+      render: (_id: string, record: IBorrowItems) => {
         return (
           <div className="flex gap-2">
-            <Button
-              variant="solid"
-              color="cyan"
-              onClick={() => navigate(`/admin/detailBorrowItems/${_id}`)}
-            >
-              <EyeOutlined />
-            </Button>
+            <DetailBorrowItemModel borrow={record} open={openDetail}>
+              <Button
+                variant="solid"
+                color="cyan"
+                onClick={() => setOpenDetail(true)}
+              >
+                <EyeOutlined />
+              </Button>
+            </DetailBorrowItemModel>
             <Button
               type="primary"
               onClick={() =>
@@ -99,11 +104,13 @@ const BorrowItems = () => {
   return (
     <>
       <div
-        className={
-          isLocationAdd || isLocationEdit
-            ? "h-[100vh] bg-black opacity-20"
-            : "bg-white"
-        }
+        className={`
+          ${
+            isLocationAdd || isLocationEdit
+              ? "h-[100vh] bg-black opacity-20"
+              : "bg-white"
+          }
+        `}
       >
         <section className="relative p-6 flex flex-col gap-3">
           <div>

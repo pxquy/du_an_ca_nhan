@@ -13,6 +13,7 @@ import { API, QueryKey } from "../../../constants/QueryKey";
 import axios from "axios";
 import type { IApiResponse, IResponse } from "../../../Types/data";
 import type { IDateBorrows } from "../../../Types/dateBorrows";
+import { usePageStore } from "../../../stores/PageStore";
 
 const DateBorrow = () => {
   const navigate = useNavigate();
@@ -22,8 +23,7 @@ const DateBorrow = () => {
   const isLocationEdit = location.pathname.startsWith(
     "/admin/dateBorrows/editDateBorrow"
   );
-  const [page, setPage] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(5);
+  const { page, pageSize, setPage, setPageSize } = usePageStore();
   const result = useQueries({
     queries: [
       {

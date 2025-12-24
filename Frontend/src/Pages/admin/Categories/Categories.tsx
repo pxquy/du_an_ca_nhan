@@ -16,6 +16,7 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 import { Link, Outlet, useLocation, useNavigate } from "react-router";
+import { usePageStore } from "../../../stores/PageStore";
 const CategoriesPage = () => {
   const location = useLocation();
   const isLocationAdd = location.pathname === "/admin/categories/addCategory";
@@ -23,13 +24,12 @@ const CategoriesPage = () => {
     "/admin/categories/editCategory"
   );
   const navigate = useNavigate();
-  const [page, setPage] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(5);
+  const { page, pageSize, setPage, setPageSize } = usePageStore();
   const queryClient = useQueryClient();
   const { data, isLoading } = useQuery({
     queryKey: [QueryKey.CATEGORIES, page, pageSize],
     queryFn: async () => {
-      const res = await axios.get<IApiResponse<IResponse<ICategories[]>>>(
+      const res = await axios.get<IApiResponse<IResponse<ICategories>>>(
         `${API}/categories`
       );
       console.log(res.data.data);

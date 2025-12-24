@@ -4,7 +4,7 @@ import BorrowItems from "../Models/borrowItem.model";
 export const getAll = async (req, res) => {
   const options = {
     populate: [
-      { path: "book_id", select: "name" },
+      { path: "book_id", select: "name image description price" },
       { path: "dateBorrow_id", populate: { path: "user_id", select: "name" } },
     ],
   };
@@ -69,11 +69,11 @@ export const createBorrowItem = async (req, res) => {
 export const getById = async (req, res) => {
   try {
     const getById = await BorrowItems.findById(req.params.id)
-      .populate("book_id", "name")
+      .populate({ path: "book_id", select: "name image description price" })
       .populate({
         path: "dateBorrow_id",
         select: ["borrow_date", "return_date"],
-        populate: { path: "user_id", select: "name" },
+        populate: { path: "user_id", select: "name email numberPhone" },
       });
     if (!getById)
       return res.status(404).json({

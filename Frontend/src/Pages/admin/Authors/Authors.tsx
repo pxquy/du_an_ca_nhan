@@ -12,6 +12,7 @@ import {
   EyeOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
+import { usePageStore } from "../../../stores/PageStore";
 
 const AuthorsPage = () => {
   const navigate = useNavigate();
@@ -21,8 +22,7 @@ const AuthorsPage = () => {
   const isLocationEdit = location.pathname.startsWith(
     "/admin/authors/editAuthor"
   );
-  const [page, setPage] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(5);
+  const { page, pageSize, setPage, setPageSize } = usePageStore();
 
   const { data, isLoading } = useQuery({
     queryKey: [QueryKey.AUTHORS],
