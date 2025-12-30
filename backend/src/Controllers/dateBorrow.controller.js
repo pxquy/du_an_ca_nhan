@@ -42,10 +42,10 @@ export const createDateBorrow = async (req, res) => {
 
 export const getById = async (req, res) => {
   try {
-    const getById = await DateBorrows.findById(req.params.id).populate(
-      "user_id",
-      "name"
-    );
+    const getById = await DateBorrows.findById(req.params.id).populate({
+      path: "user_id",
+      select: "name email numberPhone",
+    });
 
     if (!getById)
       return res.status(404).json({

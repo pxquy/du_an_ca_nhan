@@ -65,11 +65,11 @@ export const DetailBorrowItemModal = ({
                 </p>
                 <p className="pl-10">
                   <span className="text-gray-500">Email:</span>{" "}
-                  {borrow.dateBorrow_id.user_id.name}
+                  {borrow.dateBorrow_id.user_id.email}
                 </p>
                 <p className="pl-10">
                   <span className="text-gray-500">Số điện thoại:</span>{" "}
-                  {borrow.dateBorrow_id.user_id.name}
+                  {borrow.dateBorrow_id.user_id.numberPhone}
                 </p>
               </div>
             </div>

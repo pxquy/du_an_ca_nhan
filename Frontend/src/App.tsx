@@ -5,7 +5,6 @@ import LayoutClient from "./Layouts/Client/Layout";
 import CategoriesPage from "./Pages/admin/Categories/Categories";
 import BooksPage from "./Pages/admin/Books/Books";
 import AuthorsPage from "./Pages/admin/Authors/Authors";
-import AddAuthor from "./Pages/admin/Authors/Add";
 import Login from "./Pages/Client/Login";
 import Register from "./Pages/Client/Register";
 import EditAuthor from "./Pages/admin/Authors/Edit";
@@ -42,10 +41,7 @@ function App() {
         {
           path: "authors",
           Component: AuthorsPage,
-          children: [
-            { path: "addAuthor", Component: AddAuthor },
-            { path: "editAuthor/:id", Component: EditAuthor },
-          ],
+          children: [{ path: "editAuthor/:id", Component: EditAuthor }],
         },
         {
           path: "dateBorrows",
