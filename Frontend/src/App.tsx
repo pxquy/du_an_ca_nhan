@@ -7,7 +7,6 @@ import BooksPage from "./Pages/admin/Books/Books";
 import AuthorsPage from "./Pages/admin/Authors/Authors";
 import Login from "./Pages/Client/Login";
 import Register from "./Pages/Client/Register";
-import EditAuthor from "./Pages/admin/Authors/Edit";
 import DateBorrow from "./Pages/admin/DateBorrows/DateBorrow";
 import AddDateBorrow from "./Pages/admin/DateBorrows/Add";
 import EditDateBorrow from "./Pages/admin/DateBorrows/Edit";
@@ -15,8 +14,20 @@ import BorrowItems from "./Pages/admin/BorrowItems/BorrowItems";
 import AddBorrowItem from "./Pages/admin/BorrowItems/Add";
 import EditBorrowItem from "./Pages/admin/BorrowItems/Edit";
 import Comments from "./Pages/admin/Comments/Comments";
+import { jwtDecode } from "jwt-decode";
+import type { IUsers } from "./Types/user";
+import { message } from "antd";
+import Authorization from "./Components/Auth/authorization";
 
 function App() {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    message.success("Bạn chưa đăng nhập");
+    return null;
+  }
+  const decode = jwtDecode<IUsers>(token);
+  const role = decode.role;
+
   const router = useRoutes([
     {
       path: "/",
@@ -28,7 +39,11 @@ function App() {
     },
     {
       path: "admin",
-      Component: LayoutAdmin,
+      element: (
+        <Authorization role={role} allowRole={["0"]}>
+          <LayoutAdmin />
+        </Authorization>
+      ),
       children: [
         {
           path: "books",
@@ -41,7 +56,6 @@ function App() {
         {
           path: "authors",
           Component: AuthorsPage,
-          children: [{ path: "editAuthor/:id", Component: EditAuthor }],
         },
         {
           path: "dateBorrows",

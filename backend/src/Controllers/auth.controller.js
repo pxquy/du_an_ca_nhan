@@ -1,6 +1,11 @@
 import Users from "../Models/users.model";
+import Sessions from "../Models/sessions.model";
+import crypto from "crypto";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { Session } from "inspector/promises";
+
+const REFRESH_DATE = 14 * 24 * 60 * 60 * 1000;
 
 export const signup = async (req, res) => {
   try {
@@ -29,16 +34,19 @@ export const signup = async (req, res) => {
 
 export const signin = async (req, res) => {
   try {
-    const checkEmail = await Users.findOne({ email: req.body.email });
+    const { email, password } = req.body;
+    const checkEmail = await Users.findOne({ email });
     if (!checkEmail)
       return res.status(400).json({
         message: "Email này chưa tồn tại vui lòng thử email khác",
       });
 
-    const comparePassword = await bcrypt.compare(
-      req.body.password,
-      checkEmail.password
-    );
+    const comparePassword = await bcrypt.compare(password, checkEmail.password);
+
+    if (!comparePassword)
+      res.status(404).json({
+        message: "Sai mật khẩu khi đăng nhập!",
+      });
 
     const token = jwt.sign(
       {
@@ -48,7 +56,16 @@ export const signin = async (req, res) => {
       process.env.SecretKey,
       { expiresIn: "1h" }
     );
-    res.cookie("token", token, {
+
+    const refreshToken = crypto.randomBytes(64).toString("hex");
+
+    await Sessions.create({
+      user_id: checkEmail._id,
+      refreshToken,
+      expires: new Date(Date.now() + REFRESH_DATE),
+    });
+
+    res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: false,
       sameSite: "lax",
@@ -57,6 +74,7 @@ export const signin = async (req, res) => {
     });
     return res.status(201).json({
       message: "Đăng nhập thành công",
+      token,
     });
   } catch (error) {
     return res.status(500).json({
@@ -68,14 +86,18 @@ export const signin = async (req, res) => {
 
 export const logout = async (req, res) => {
   try {
-    res.clearCookie("token", {
-      httpOnly: true,
-      secure: false,
-      sameSite: "lax",
-      path: "/",
-    });
-
-    return res.status(200).json("Đăng Xuất thành công!");
+    const token = req.cookies?.refreshToken;
+    console.log(token);
+    if (token) {
+      await Sessions.deleteOne({ refreshToken: token });
+      res.clearCookie("refreshToken", {
+        httpOnly: true,
+        secure: false,
+        sameSite: "lax",
+        path: "/",
+      });
+    }
+    return res.sendStatus(204);
   } catch (error) {
     return res.status(500).json({
       message: "Lỗi dữu liệu khi đăng xuất tài khoản",

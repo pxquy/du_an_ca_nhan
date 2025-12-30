@@ -1,4 +1,4 @@
-import React from "react";
+import { jwtDecode } from "jwt-decode";
 import { useForm } from "react-hook-form";
 import type { IUsers } from "../../Types/user";
 import { Link, useNavigate } from "react-router";
@@ -17,12 +17,24 @@ const Login = () => {
       const { data } = await axios.post(`${API}/auth/signin`, dataLogin, {
         withCredentials: true,
       });
+      localStorage.setItem("token", data.token);
       return data;
     },
     onSuccess: (login) => {
       message.success("Đăng nhập thành công"),
         queryClient.setQueryData([QueryKey.USERS], () => login);
-      navigate("/");
+
+      const token = localStorage.getItem("token");
+      if (!token) {
+        return null;
+      }
+      const user = jwtDecode<IUsers>(token);
+      if (user.role === "0") {
+        return navigate("/admin");
+      }
+      {
+        return navigate("/");
+      }
     },
     onError: (error: IErrorMessage) => {
       const err = error.response?.message as IErrorMessage;

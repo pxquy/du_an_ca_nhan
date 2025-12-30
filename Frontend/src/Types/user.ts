@@ -6,6 +6,7 @@ export interface IUsers {
   birthday: string;
   numberPhone: string;
   address: string;
+  role: string;
   image?: string;
   gender: string;
 }

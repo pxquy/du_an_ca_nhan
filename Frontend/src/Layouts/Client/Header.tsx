@@ -3,7 +3,7 @@ import { API, QueryKey } from "../../constants/QueryKey";
 import axios from "axios";
 import type { IApiResponse, IResponse } from "../../Types/data";
 import type { ICategories } from "../../Types/categories";
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { SearchOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { message } from "antd";
 import { useEffect, useState } from "react";
@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 const Header = () => {
   const [isLogin, setIsLogin] = useState<boolean>(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { data: categories, isLoading } = useQuery({
     queryKey: [QueryKey.CATEGORIES],
     queryFn: async () => {
@@ -21,19 +22,23 @@ const Header = () => {
     },
   });
 
+  const token = localStorage.getItem("token");
+  // console.log("token", token);
   useEffect(() => {
     const checkLogin = async () => {
       try {
         await axios.get(`${API}/users/information`, {
-          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
         setIsLogin(true);
       } catch (error) {
-        setIsLogin(false);
+        console.log(error);
       }
     };
     checkLogin();
-  }, []);
+  }, [location.pathname]);
 
   const handleClickLogout = async () => {
     try {
