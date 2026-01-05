@@ -28,9 +28,11 @@ const BooksPage = () => {
     openAdd,
     openEdit,
     openDetail,
+    openId,
     setOpenAdd,
     setOpenEdit,
     setOpenDetail,
+    setOpenId,
   } = useOpen();
   const result = useQueries({
     queries: [
@@ -154,8 +156,8 @@ const BooksPage = () => {
               value={status}
               className={
                 isAvailable
-                  ? "bg-green-400 p-1 rounded-3xl text-white focus:outline-none font-bold"
-                  : "bg-red-500 p-1 rounded-3xl text-white focus:outline-none font-bold"
+                  ? "bg-green-400 p-1 rounded-3xl text-white focus:outline-none font-bold text-shadow-2xs"
+                  : "bg-red-500 p-1 rounded-3xl text-white focus:outline-none font-bold text-shadow-2xs"
               }
               onChange={(e) => handelStatus(recode._id, e.target.value)}
             >
@@ -180,19 +182,22 @@ const BooksPage = () => {
       title: "Hành động",
       dataIndex: "_id",
       key: "_id",
-      render: (_id: string, recode: IBooks) => {
+      render: (_id: string, record: IBooks) => {
         return (
           <div className="flex gap-2">
-            <DetailBookModal open={openDetail} detailBook={recode}>
+            <DetailBookModal open={openDetail} detailBook={record}>
               <Button
                 variant="solid"
                 color="cyan"
-                onClick={() => setOpenDetail(true)}
+                onClick={() => {
+                  setOpenId(record._id);
+                  setOpenDetail(true);
+                }}
               >
                 <EyeOutlined />
               </Button>
             </DetailBookModal>
-            <EditBookModal open={openEdit} book={recode}>
+            <EditBookModal open={openEdit} book={record}>
               <Button type="primary" onClick={() => setOpenEdit(true)}>
                 <EditOutlined />
               </Button>

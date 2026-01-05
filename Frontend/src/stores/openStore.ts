@@ -5,6 +5,7 @@ export const useOpen = create<IOpen>((set) => ({
   openAdd: false,
   openEdit: false,
   openDetail: false,
+  openId: null,
   setOpenAdd: (openAdd) =>
     set(() => ({
       openAdd,
@@ -17,4 +18,5 @@ export const useOpen = create<IOpen>((set) => ({
     set(() => ({
       openDetail,
     })),
+  setOpenId: (openId) => set({ openId }),
 }));

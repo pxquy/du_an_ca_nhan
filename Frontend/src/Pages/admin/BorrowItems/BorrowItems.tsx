@@ -13,6 +13,7 @@ import {
   EditBorrowItem,
 } from "../../../Components/BorrowItem/FormBorrowItemModal";
 import { Api } from "../../../Api/api";
+import { formatStatusBorrow } from "../../../constants/Helper";
 
 const BorrowItems = () => {
   const { page, pageSize, setPage, setPageSize } = usePageStore();
@@ -65,6 +66,23 @@ const BorrowItems = () => {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
+      render: (status: string) => {
+        return (
+          <>
+            <div
+              className={`${
+                status === "1"
+                  ? "bg-amber-300"
+                  : status === "2"
+                  ? "bg-green-500"
+                  : "bg-red-500"
+              } w-25 rounded-2xl p-1 text-white text-center font-semibold text-shadow-2xs`}
+            >
+              {formatStatusBorrow(status)}
+            </div>
+          </>
+        );
+      },
     },
 
     {
@@ -72,6 +90,7 @@ const BorrowItems = () => {
       dataIndex: "_id",
       key: "_id",
       render: (_id: string, record: IBorrowItems) => {
+        console.log("record", record);
         return (
           <div className="flex gap-2">
             <DetailBorrowItemModal borrow={record} open={openDetail}>

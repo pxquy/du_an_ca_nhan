@@ -8,6 +8,7 @@ export const DetailBorrowItemModal = ({
   borrow,
 }: TGlobalProps<{ open: boolean; borrow: IBorrowItems }>) => {
   const { openDetail, setOpenDetail } = useOpen();
+  console.log(borrow?.dateBorrow_id?.user_id);
   return (
     <>
       {React.cloneElement(
@@ -69,7 +70,7 @@ export const DetailBorrowItemModal = ({
                 </p>
                 <p className="pl-10">
                   <span className="text-gray-500">Số điện thoại:</span>{" "}
-                  {borrow.dateBorrow_id.user_id.numberPhone}
+                  {borrow.dateBorrow_id?.user_id?.numberPhone}
                 </p>
               </div>
             </div>

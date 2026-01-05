@@ -2,7 +2,7 @@ import DateBorrows from "../Models/dateBorrow.model";
 
 export const getAll = async (req, res) => {
   const options = {
-    populate: [{ path: "user_id", select: "name" }],
+    populate: [{ path: "user_id", select: "name email numberPhone" }],
   };
   try {
     const dateBorrows = await DateBorrows.paginate({}, options);

@@ -3,7 +3,7 @@ import type { IPageStore } from "../Types/page";
 
 export const usePageStore = create<IPageStore>((set) => ({
   page: 1,
-  pageSize: 1,
+  pageSize: 5,
   setPage: (page) =>
     set(() => ({
       page,

@@ -8,7 +8,8 @@ export const DetailBookModal = ({
   children,
   detailBook,
 }: TGlobalProps<{ detailBook: IBooks; open: boolean }>) => {
-  const { openDetail, setOpenDetail } = useOpen();
+  const { openDetail, openId, setOpenDetail, setOpenId } = useOpen();
+  const isOpen = openDetail && openId === detailBook._id;
   return (
     <>
       {React.cloneElement(
@@ -16,6 +17,7 @@ export const DetailBookModal = ({
         {
           onclick: () => {
             setOpenDetail(true);
+            setOpenId(detailBook._id);
           },
         } as { onclick: () => void }
       )}
@@ -23,11 +25,11 @@ export const DetailBookModal = ({
       <div
         onClick={() => setOpenDetail(false)}
         className={`fixed w-screen h-screen bg-black/50 duration-300 z-20 top-0 left-0 ${
-          openDetail ? "opacity-100 visited:" : "opacity-0 invisible"
+          isOpen ? "opacity-100 visited:" : "opacity-0 invisible"
         }`}
       ></div>
 
-      {openDetail && (
+      {isOpen && (
         <section className="fixed top-[7%] left-[19%] z-30 bg-white w-250 h-155">
           <div>
             <div className="p-5 font-bold text-2xl">

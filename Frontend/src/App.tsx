@@ -8,8 +8,6 @@ import AuthorsPage from "./Pages/admin/Authors/Authors";
 import Login from "./Pages/Client/Login";
 import Register from "./Pages/Client/Register";
 import DateBorrow from "./Pages/admin/DateBorrows/DateBorrow";
-import AddDateBorrow from "./Pages/admin/DateBorrows/Add";
-import EditDateBorrow from "./Pages/admin/DateBorrows/Edit";
 import BorrowItems from "./Pages/admin/BorrowItems/BorrowItems";
 import Comments from "./Pages/admin/Comments/Comments";
 import { jwtDecode } from "jwt-decode";
@@ -60,10 +58,6 @@ function App() {
         {
           path: "dateBorrows",
           Component: DateBorrow,
-          children: [
-            { path: "addDateBorrow", Component: AddDateBorrow },
-            { path: "editDateBorrow/:id", Component: EditDateBorrow },
-          ],
         },
         {
           path: "borrowItems",
