@@ -1,13 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import { API, QueryKey } from "../../constants/QueryKey";
-import axios from "axios";
+import { QueryKey } from "../../constants/QueryKey";
 import type { IApiResponse, IResponse } from "../../Types/data";
 import type { ICategories } from "../../Types/categories";
 import { Link, useLocation, useNavigate } from "react-router";
 import { SearchOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { message } from "antd";
 import { useEffect, useState } from "react";
-import { jwtDecode } from "jwt-decode";
+import { Api } from "../../Api/api";
 
 const Header = () => {
   const [isLogin, setIsLogin] = useState<boolean>(false);
@@ -16,8 +15,8 @@ const Header = () => {
   const { data: categories, isLoading } = useQuery({
     queryKey: [QueryKey.CATEGORIES],
     queryFn: async () => {
-      const { data } = await axios.get<IApiResponse<IResponse<ICategories>>>(
-        `${API}/categories`
+      const { data } = await Api.get<IApiResponse<IResponse<ICategories>>>(
+        `categories`
       );
       return data.data;
     },
@@ -28,7 +27,7 @@ const Header = () => {
   useEffect(() => {
     const checkLogin = async () => {
       try {
-        await axios.get(`${API}/users/information`, {
+        await Api.get(`users/information`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -43,7 +42,7 @@ const Header = () => {
 
   const handleClickLogout = async () => {
     try {
-      await axios.post(`${API}/auth/logout`, {}, { withCredentials: true });
+      await Api.post(`auth/logout`, {}, { withCredentials: true });
       message.success("Đăng Xuất thành công!");
       setIsLogin(false);
       navigate("/login");

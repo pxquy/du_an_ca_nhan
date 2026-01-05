@@ -1,9 +1,8 @@
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router";
-import type { IAuthors } from "../../../Types/authors";
 import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
-import { API, QueryKey } from "../../../constants/QueryKey";
+import { QueryKey } from "../../../constants/QueryKey";
 import type {
   IApiResponse,
   IErrorMessage,
@@ -13,6 +12,7 @@ import { message } from "antd";
 import type { IDateBorrows } from "../../../Types/dateBorrows";
 import type { IUsers } from "../../../Types/user";
 import { useEffect } from "react";
+import { Api } from "../../../Api/api";
 
 const EditDateBorrow = () => {
   const navigate = useNavigate();
@@ -24,8 +24,8 @@ const EditDateBorrow = () => {
       {
         queryKey: [QueryKey.USERS],
         queryFn: async () => {
-          const { data } = await axios.get<IApiResponse<IResponse<IUsers>>>(
-            `${API}/users`
+          const { data } = await Api.get<IApiResponse<IResponse<IUsers>>>(
+            `users`
           );
           return data.data;
         },
@@ -33,7 +33,7 @@ const EditDateBorrow = () => {
       {
         queryKey: [QueryKey.DATEBORROWS, id],
         queryFn: async () => {
-          const { data } = await axios.get(`${API}/dateBorrows/${id}`);
+          const { data } = await Api.get(`dateBorrows/${id}`);
           //   console.log("data", data.data.user_id?.name);
           return data.data;
         },
@@ -55,12 +55,9 @@ const EditDateBorrow = () => {
   }, [dateBorrow, users, reset]);
   const mutation = useMutation({
     mutationFn: async (formDataAuthor) => {
-      const { data } = await axios.put<IApiResponse<IResponse<IDateBorrows>>>(
-        `${API}/dateBorrows/${id}`,
-        formDataAuthor,
-        {
-          withCredentials: true,
-        }
+      const { data } = await Api.put<IApiResponse<IResponse<IDateBorrows>>>(
+        `dateBorrows/${id}`,
+        formDataAuthor
       );
       return data;
     },

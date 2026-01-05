@@ -1,13 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button, message, Popconfirm, Table } from "antd";
-import axios from "axios";
 
 import type {
   IApiResponse,
   IErrorMessage,
   IResponse,
 } from "../../../Types/data";
-import { API, QueryKey } from "../../../constants/QueryKey";
+import { QueryKey } from "../../../constants/QueryKey";
 import type { ICategories } from "../../../Types/categories";
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import { usePageStore } from "../../../stores/PageStore";
@@ -16,6 +15,7 @@ import {
   EditCategoryModal,
 } from "../../../Components/CategoriesModal/FormCategoryModal";
 import { useOpen } from "../../../stores/openStore";
+import { Api } from "../../../Api/api";
 const CategoriesPage = () => {
   const { page, pageSize, setPage, setPageSize } = usePageStore();
   const { openAdd, openEdit, setOpenAdd, setOpenEdit } = useOpen();
@@ -23,8 +23,8 @@ const CategoriesPage = () => {
   const { data, isLoading } = useQuery({
     queryKey: [QueryKey.CATEGORIES, page, pageSize],
     queryFn: async () => {
-      const res = await axios.get<IApiResponse<IResponse<ICategories>>>(
-        `${API}/categories`
+      const res = await Api.get<IApiResponse<IResponse<ICategories>>>(
+        `categories`
       );
       console.log(res.data.data);
       return res.data.data;
@@ -33,7 +33,7 @@ const CategoriesPage = () => {
 
   const mutationDelete = useMutation({
     mutationFn: async (_id) => {
-      await axios.delete(`${API}/categories/${_id}`, { withCredentials: true });
+      await Api.delete(`categories/${_id}`);
       return _id;
     },
     onSuccess: () => {

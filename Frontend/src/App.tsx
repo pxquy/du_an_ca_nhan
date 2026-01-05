@@ -11,14 +11,12 @@ import DateBorrow from "./Pages/admin/DateBorrows/DateBorrow";
 import AddDateBorrow from "./Pages/admin/DateBorrows/Add";
 import EditDateBorrow from "./Pages/admin/DateBorrows/Edit";
 import BorrowItems from "./Pages/admin/BorrowItems/BorrowItems";
-import AddBorrowItem from "./Pages/admin/BorrowItems/Add";
-import EditBorrowItem from "./Pages/admin/BorrowItems/Edit";
 import Comments from "./Pages/admin/Comments/Comments";
 import { jwtDecode } from "jwt-decode";
 import type { IUsers } from "./Types/user";
 import { message } from "antd";
-import Authorization from "./Components/Auth/authorization";
 import Home from "./Pages/Client/Home";
+import Authorization from "./Components/Auth/Authorization";
 
 function App() {
   const token = localStorage.getItem("token");
@@ -70,10 +68,6 @@ function App() {
         {
           path: "borrowItems",
           Component: BorrowItems,
-          children: [
-            { path: "addBorrowItem", Component: AddBorrowItem },
-            { path: "editBorrowItem/:id", Component: EditBorrowItem },
-          ],
         },
         {
           path: "comments",

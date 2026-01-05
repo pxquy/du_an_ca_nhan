@@ -4,9 +4,10 @@ import type { IUsers } from "../../Types/user";
 import { Link, useNavigate } from "react-router";
 import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { API, QueryKey } from "../../constants/QueryKey";
+import { QueryKey } from "../../constants/QueryKey";
 import { message } from "antd";
 import type { IErrorMessage } from "../../Types/data";
+import { Api } from "../../Api/api";
 
 const Login = () => {
   const queryClient = useQueryClient();
@@ -14,7 +15,7 @@ const Login = () => {
   const { register, handleSubmit } = useForm<IUsers>();
   const mutation = useMutation({
     mutationFn: async (dataLogin) => {
-      const { data } = await axios.post(`${API}/auth/signin`, dataLogin, {
+      const { data } = await Api.post(`auth/signin`, dataLogin, {
         withCredentials: true,
       });
       localStorage.setItem("token", data.token);

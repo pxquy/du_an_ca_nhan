@@ -1,7 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button, message, Popconfirm, Table } from "antd";
-import { API, QueryKey } from "../../../constants/QueryKey";
-import axios from "axios";
+import { QueryKey } from "../../../constants/QueryKey";
 import type { IApiResponse, IResponse } from "../../../Types/data";
 import type { IAuthors } from "../../../Types/authors";
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
@@ -11,6 +10,7 @@ import {
   AddAuthorModal,
   EditAuthorModal,
 } from "../../../Components/AuthorModal/FormAuthorModal";
+import { Api } from "../../../Api/api";
 
 const AuthorsPage = () => {
   const { openEdit, setOpenEdit } = useOpen();
@@ -21,16 +21,14 @@ const AuthorsPage = () => {
   const { data, isLoading } = useQuery({
     queryKey: [QueryKey.AUTHORS],
     queryFn: async () => {
-      const res = await axios.get<IApiResponse<IResponse<IAuthors>>>(
-        `${API}/authors`
-      );
+      const res = await Api.get<IApiResponse<IResponse<IAuthors>>>(`authors`);
       return res.data.data;
     },
   });
 
   const mutationDelete = useMutation({
     mutationFn: async (_id) => {
-      await axios.delete(`${API}/authors/${_id}`, { withCredentials: true });
+      await Api.delete(`authors/${_id}`);
       return _id;
     },
     onSuccess: (_id) => {

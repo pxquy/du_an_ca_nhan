@@ -2,14 +2,13 @@ import type { ReactElement } from "react";
 import { useOpen } from "../../stores/openStore";
 import type { TGlobalProps } from "../../Types/React";
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router";
 import type { IAuthors } from "../../Types/authors";
 import { useForm } from "react-hook-form";
-import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { IApiResponse, IErrorMessage, IResponse } from "../../Types/data";
-import axios from "axios";
-import { API, QueryKey } from "../../constants/QueryKey";
+import { QueryKey } from "../../constants/QueryKey";
 import { message } from "antd";
+import { Api } from "../../Api/api";
 
 export const AddAuthorModal = ({
   children,
@@ -19,12 +18,9 @@ export const AddAuthorModal = ({
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: async (formDataAuthor) => {
-      const { data } = await axios.post<IApiResponse<IResponse<IAuthors>>>(
-        `${API}/authors`,
-        formDataAuthor,
-        {
-          withCredentials: true,
-        }
+      const { data } = await Api.post<IApiResponse<IResponse<IAuthors>>>(
+        `authors`,
+        formDataAuthor
       );
       return data;
     },
@@ -151,7 +147,6 @@ export const EditAuthorModal = ({
   author,
 }: TGlobalProps<{ open: boolean; author: IAuthors }>) => {
   const { openEdit, setOpenEdit } = useOpen();
-  const navigate = useNavigate();
   const { register, handleSubmit, reset } = useForm<IAuthors>();
   const queryClient = useQueryClient();
 
@@ -167,13 +162,7 @@ export const EditAuthorModal = ({
   }, [author, reset]);
   const mutation = useMutation({
     mutationFn: async (formDataAuthor) => {
-      const { data } = await axios.put(
-        `${API}/authors/${author._id}`,
-        formDataAuthor,
-        {
-          withCredentials: true,
-        }
-      );
+      const { data } = await Api.put(`authors/${author._id}`, formDataAuthor);
       return data;
     },
     onSuccess: (author) => {

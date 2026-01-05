@@ -121,10 +121,10 @@ export const refreshToken = async (req, res) => {
         message: "Không tìm thấy session hợp lệ!",
       });
 
-    if (session.expires < Date.now) return;
-    res.status(403).json({
-      message: "Token đã hết hạn!",
-    });
+    if (session.expires < Date.now())
+      res.status(403).json({
+        message: "Token đã hêt hạn",
+      });
 
     const user = await Users.findById({ _id: session.user_id }).select("roles");
     const token = jwt.sign(

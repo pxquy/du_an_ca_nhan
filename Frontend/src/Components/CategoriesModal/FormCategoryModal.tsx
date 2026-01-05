@@ -5,9 +5,9 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import type { ICategories } from "../../Types/categories";
 import type { IApiResponse, IErrorMessage, IResponse } from "../../Types/data";
-import axios from "axios";
-import { API, QueryKey } from "../../constants/QueryKey";
+import { QueryKey } from "../../constants/QueryKey";
 import { message } from "antd";
+import { Api } from "../../Api/api";
 
 export const AddCategoryModal = ({
   children,
@@ -17,12 +17,9 @@ export const AddCategoryModal = ({
   const { register, handleSubmit, reset } = useForm<ICategories>();
   const mutation = useMutation({
     mutationFn: async (formDataCategory) => {
-      const { data } = await axios.post<IApiResponse<IResponse<ICategories>>>(
-        `${API}/categories`,
-        formDataCategory,
-        {
-          withCredentials: true,
-        }
+      const { data } = await Api.post<IApiResponse<IResponse<ICategories>>>(
+        `categories`,
+        formDataCategory
       );
       return data;
     },
@@ -139,12 +136,9 @@ export const EditCategoryModal = ({
   }, [category, reset]);
   const mutation = useMutation({
     mutationFn: async (formDataCategory) => {
-      const { data } = await axios.put(
-        `${API}/categories/${category._id}`,
-        formDataCategory,
-        {
-          withCredentials: true,
-        }
+      const { data } = await Api.put(
+        `categories/${category._id}`,
+        formDataCategory
       );
       return data;
     },

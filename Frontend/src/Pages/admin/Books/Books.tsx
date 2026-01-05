@@ -1,12 +1,11 @@
 import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import { Button, message, Popconfirm, Table } from "antd";
-import axios from "axios";
 import type {
   IApiResponse,
   IErrorMessage,
   IResponse,
 } from "../../../Types/data";
-import { API, QueryKey } from "../../../constants/QueryKey";
+import { QueryKey } from "../../../constants/QueryKey";
 import type { IBooks } from "../../../Types/books";
 import {
   DeleteOutlined,
@@ -20,6 +19,7 @@ import { AddBookModal } from "../../../Components/BookModal/AddBookModal";
 import { useOpen } from "../../../stores/openStore";
 import { EditBookModal } from "../../../Components/BookModal/EditBookModal";
 import { DetailBookModal } from "../../../Components/BookModal/DetailBookModal";
+import { Api } from "../../../Api/api";
 
 const BooksPage = () => {
   const queryClient = useQueryClient();
@@ -37,10 +37,7 @@ const BooksPage = () => {
       {
         queryKey: [QueryKey.BOOKS, page, pageSize],
         queryFn: async () => {
-          const res = await axios.get<IApiResponse<IResponse<IBooks>>>(
-            `${API}/books`,
-            { withCredentials: true }
-          );
+          const res = await Api.get<IApiResponse<IResponse<IBooks>>>(`books`);
           // console.log(res.data.data);
           return res.data.data;
         },
@@ -54,13 +51,10 @@ const BooksPage = () => {
 
   const mutation = useMutation({
     mutationFn: async (payload: { _id: string; status: string }) => {
-      const { data } = await axios.patch(
-        `${API}/books/${payload._id}`,
-        {
-          status: payload.status,
-        },
-        { withCredentials: true }
-      );
+      await Api.post("auth/refresh-token");
+      const { data } = await Api.patch(`books/${payload._id}`, {
+        status: payload.status,
+      });
       return data;
     },
     onSuccess: () => {
@@ -77,7 +71,7 @@ const BooksPage = () => {
 
   const mutationDelete = useMutation({
     mutationFn: async (_id: string) => {
-      await axios.delete(`${API}/books/${_id}`, {
+      await Api.delete(`books/${_id}`, {
         withCredentials: true,
       });
       return _id;

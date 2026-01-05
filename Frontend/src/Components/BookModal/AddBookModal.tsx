@@ -8,11 +8,13 @@ import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import type { IApiResponse, IErrorMessage, IResponse } from "../../Types/data";
 import type { ICategories } from "../../Types/categories";
-import { API, QueryKey } from "../../constants/QueryKey";
+import { QueryKey } from "../../constants/QueryKey";
 import type { IAuthors } from "../../Types/authors";
 import { message } from "antd";
+import { Api } from "../../Api/api";
 
 export const AddBookModal = ({ children }: TGlobalProps<{ open: boolean }>) => {
+  console.log();
   const { openAdd, setOpenAdd } = useOpen();
   const [loadingImage, setLoadingImage] = useState<boolean>(false);
   const queryClient = useQueryClient();
@@ -23,8 +25,8 @@ export const AddBookModal = ({ children }: TGlobalProps<{ open: boolean }>) => {
       {
         queryKey: [QueryKey.CATEGORIES],
         queryFn: async () => {
-          const res = await axios.get<IApiResponse<IResponse<ICategories>>>(
-            `${API}/categories`
+          const res = await Api.get<IApiResponse<IResponse<ICategories>>>(
+            `categories`
           );
           return res.data.data;
         },
@@ -32,8 +34,8 @@ export const AddBookModal = ({ children }: TGlobalProps<{ open: boolean }>) => {
       {
         queryKey: [QueryKey.AUTHORS],
         queryFn: async () => {
-          const res = await axios.get<IApiResponse<IResponse<IAuthors>>>(
-            `${API}/authors`
+          const res = await Api.get<IApiResponse<IResponse<IAuthors>>>(
+            `authors`
           );
           return res.data.data;
         },
@@ -47,8 +49,8 @@ export const AddBookModal = ({ children }: TGlobalProps<{ open: boolean }>) => {
 
   const mutation = useMutation({
     mutationFn: async (formDataBook) => {
-      const { data } = await axios.post<IApiResponse<IResponse<IBooks>>>(
-        `${API}/books`,
+      const { data } = await Api.post<IApiResponse<IResponse<IBooks>>>(
+        `books`,
         formDataBook,
         {
           withCredentials: true,

@@ -9,11 +9,12 @@ import { Button, Popconfirm, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { useState } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router";
-import { API, QueryKey } from "../../../constants/QueryKey";
+import { QueryKey } from "../../../constants/QueryKey";
 import axios from "axios";
 import type { IApiResponse, IResponse } from "../../../Types/data";
 import type { IDateBorrows } from "../../../Types/dateBorrows";
 import { usePageStore } from "../../../stores/PageStore";
+import { Api } from "../../../Api/api";
 
 const DateBorrow = () => {
   const navigate = useNavigate();
@@ -29,9 +30,9 @@ const DateBorrow = () => {
       {
         queryKey: [QueryKey.DATEBORROWS, page, pageSize],
         queryFn: async () => {
-          const { data } = await axios.get<
-            IApiResponse<IResponse<IDateBorrows>>
-          >(`${API}/dateBorrows`);
+          const { data } = await Api.get<IApiResponse<IResponse<IDateBorrows>>>(
+            `dateBorrows`
+          );
           return data.data;
         },
       },

@@ -2,11 +2,12 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
-import { API, QueryKey } from "../../constants/QueryKey";
+import { QueryKey } from "../../constants/QueryKey";
 import { message } from "antd";
 import type { IErrorMessage } from "../../Types/data";
 import type { IUsers } from "../../Types/user";
 import { useState } from "react";
+import { Api } from "../../Api/api";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ const Register = () => {
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: async (dataRegister) => {
-      const { data } = await axios.post(`${API}/auth/signup`, dataRegister);
+      const { data } = await Api.post(`auth/signup`, dataRegister);
       return data;
     },
     onSuccess: (register) => {

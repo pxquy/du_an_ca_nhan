@@ -2,34 +2,30 @@ import { EditOutlined, EyeOutlined, PlusOutlined } from "@ant-design/icons";
 import { useQueries } from "@tanstack/react-query";
 import { Button, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import { useState } from "react";
-import { Link, Outlet, useLocation, useNavigate } from "react-router";
-import { API, QueryKey } from "../../../constants/QueryKey";
-import axios from "axios";
+import { QueryKey } from "../../../constants/QueryKey";
 import type { IApiResponse, IResponse } from "../../../Types/data";
 import type { IBorrowItems } from "../../../Types/borrowItems";
 import { usePageStore } from "../../../stores/PageStore";
 import { useOpen } from "../../../stores/openStore";
-import { DetailBorrowItemModal } from "../../../Components/BorrowModal/DetailBorrowItemModal";
+import { DetailBorrowItemModal } from "../../../Components/BorrowItem/DetailBorrowItemModal";
+import {
+  AddBorrowItem,
+  EditBorrowItem,
+} from "../../../Components/BorrowItem/FormBorrowItemModal";
+import { Api } from "../../../Api/api";
 
 const BorrowItems = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const isLocationAdd =
-    location.pathname === "/admin/borrowItems/addBorrowItem";
-  const isLocationEdit = location.pathname.startsWith(
-    "/admin/borrowItems/editBorrowItem"
-  );
   const { page, pageSize, setPage, setPageSize } = usePageStore();
   const { openDetail, setOpenDetail } = useOpen();
+  const { openAdd, openEdit, setOpenAdd, setOpenEdit } = useOpen();
   const result = useQueries({
     queries: [
       {
         queryKey: [QueryKey.BORROWITEMS, page, pageSize],
         queryFn: async () => {
-          const { data } = await axios.get<
-            IApiResponse<IResponse<IBorrowItems>>
-          >(`${API}/borrowItems`);
+          const { data } = await Api.get<IApiResponse<IResponse<IBorrowItems>>>(
+            `borrowItems`
+          );
           return data.data;
         },
       },
@@ -87,14 +83,11 @@ const BorrowItems = () => {
                 <EyeOutlined />
               </Button>
             </DetailBorrowItemModal>
-            <Button
-              type="primary"
-              onClick={() =>
-                navigate(`/admin/borrowItems/editBorrowItem/${_id}`)
-              }
-            >
-              <EditOutlined />
-            </Button>
+            <EditBorrowItem open={openEdit} borrowItem={record}>
+              <Button type="primary" onClick={() => setOpenEdit(true)}>
+                <EditOutlined />
+              </Button>
+            </EditBorrowItem>
           </div>
         );
       },
@@ -103,44 +96,33 @@ const BorrowItems = () => {
 
   return (
     <>
-      <div
-        className={`
-          ${
-            isLocationAdd || isLocationEdit
-              ? "h-[100vh] bg-black opacity-20"
-              : "bg-white"
-          }
-        `}
-      >
-        <section className="relative p-6 flex flex-col gap-3">
-          <div>
-            <Link
-              to="/admin/borrowItems/addBorrowItem"
-              className="p-2 bg-blue-400 m-2 rounded-[5px] text-white hover:bg-blue-600 hover:font-bold"
+      <section className="relative p-6 flex flex-col gap-3">
+        <div>
+          <AddBorrowItem open={openAdd}>
+            <button
+              className="p-2 bg-blue-400 m-2 rounded-[5px] text-white hover:bg-blue-600 hover:font-bold cursor-pointer"
+              onClick={() => setOpenAdd(true)}
             >
               <PlusOutlined className="pr-1" />
               Thêm sách được mượn
-            </Link>
-          </div>
-          <Table
-            rowKey="_id"
-            dataSource={borrowItems?.docs}
-            columns={columns}
-            pagination={{
-              current: page,
-              pageSize: pageSize,
-              total: borrowItems?.docs.length,
-              onChange(p, ps) {
-                setPage(p);
-                setPageSize(ps);
-              },
-            }}
-          />
-        </section>
-      </div>
-      <div className="absolute top-30 left-130">
-        <Outlet />
-      </div>
+            </button>
+          </AddBorrowItem>
+        </div>
+        <Table
+          rowKey="_id"
+          dataSource={borrowItems?.docs}
+          columns={columns}
+          pagination={{
+            current: page,
+            pageSize: pageSize,
+            total: borrowItems?.docs.length,
+            onChange(p, ps) {
+              setPage(p);
+              setPageSize(ps);
+            },
+          }}
+        />
+      </section>
     </>
   );
 };

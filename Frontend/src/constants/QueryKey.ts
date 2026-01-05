@@ -6,5 +6,3 @@ export const QueryKey = {
   DATEBORROWS: "DATEBORROWS",
   BORROWITEMS: "BORROWITEMS",
 };
-
-export const API = `http://localhost:3000/api`;

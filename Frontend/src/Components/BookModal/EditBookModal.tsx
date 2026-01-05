@@ -7,17 +7,16 @@ import { useForm } from "react-hook-form";
 import type { IBooks } from "../../Types/books";
 import type { IApiResponse, IErrorMessage, IResponse } from "../../Types/data";
 import type { ICategories } from "../../Types/categories";
-import { API, QueryKey } from "../../constants/QueryKey";
-import axios from "axios";
+import { QueryKey } from "../../constants/QueryKey";
 import type { IAuthors } from "../../Types/authors";
 import { message } from "antd";
+import { Api } from "../../Api/api";
 
 export const EditBookModal = ({
   children,
   book,
 }: TGlobalProps<{ open: boolean; book: IBooks }>) => {
   const { openEdit, setOpenEdit } = useOpen();
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [image, setImage] = useState<string>();
   const { register, handleSubmit, reset, setValue } = useForm<IBooks>();
@@ -26,8 +25,8 @@ export const EditBookModal = ({
       {
         queryKey: [QueryKey.CATEGORIES],
         queryFn: async () => {
-          const res = await axios.get<IApiResponse<IResponse<ICategories>>>(
-            `${API}/categories`
+          const res = await Api.get<IApiResponse<IResponse<ICategories>>>(
+            `categories`
           );
           return res.data.data;
         },
@@ -35,8 +34,8 @@ export const EditBookModal = ({
       {
         queryKey: [QueryKey.AUTHORS],
         queryFn: async () => {
-          const res = await axios.get<IApiResponse<IResponse<IAuthors>>>(
-            `${API}/authors`
+          const res = await Api.get<IApiResponse<IResponse<IAuthors>>>(
+            `authors`
           );
           return res.data.data;
         },
@@ -71,8 +70,8 @@ export const EditBookModal = ({
 
   const mutation = useMutation({
     mutationFn: async (formDataBook) => {
-      const { data } = await axios.put<IBooks>(
-        `${API}/books/${book._id}`,
+      const { data } = await Api.put<IBooks>(
+        `books/${book._id}`,
         formDataBook,
         {
           withCredentials: true,
@@ -106,7 +105,7 @@ export const EditBookModal = ({
     formData.append("upload_preset", "Image_libery");
 
     try {
-      const { data } = await axios.post(
+      const { data } = await Api.post(
         "https://api.cloudinary.com/v1_1/djnwxedym/image/upload",
         formData
       );

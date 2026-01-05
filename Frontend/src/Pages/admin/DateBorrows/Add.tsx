@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router";
 import type { IAuthors } from "../../../Types/authors";
 import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
-import { API, QueryKey } from "../../../constants/QueryKey";
+import { QueryKey } from "../../../constants/QueryKey";
 import type {
   IApiResponse,
   IErrorMessage,
@@ -12,6 +12,7 @@ import type {
 import { message } from "antd";
 import type { IDateBorrows } from "../../../Types/dateBorrows";
 import type { IUsers } from "../../../Types/user";
+import { Api } from "../../../Api/api";
 
 const AddDateBorrow = () => {
   const navigate = useNavigate();
@@ -22,8 +23,8 @@ const AddDateBorrow = () => {
       {
         queryKey: [QueryKey.USERS],
         queryFn: async () => {
-          const { data } = await axios.get<IApiResponse<IResponse<IUsers>>>(
-            `${API}/users`
+          const { data } = await Api.get<IApiResponse<IResponse<IUsers>>>(
+            `users`
           );
           return data.data;
         },
@@ -34,12 +35,9 @@ const AddDateBorrow = () => {
   const users = result[0].data;
   const mutation = useMutation({
     mutationFn: async (formDataAuthor) => {
-      const { data } = await axios.post<IApiResponse<IResponse<IDateBorrows>>>(
-        `${API}/dateBorrows`,
-        formDataAuthor,
-        {
-          withCredentials: true,
-        }
+      const { data } = await Api.post<IApiResponse<IResponse<IDateBorrows>>>(
+        `dateBorrows`,
+        formDataAuthor
       );
       return data;
     },
