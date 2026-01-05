@@ -1,11 +1,5 @@
 import { create } from "zustand";
-
-interface IPageStore {
-  page: number;
-  pageSize: number;
-  setPage: (page: number) => void;
-  setPageSize: (pageSize: number) => void;
-}
+import type { IPageStore } from "../Types/page";
 
 export const usePageStore = create<IPageStore>((set) => ({
   page: 1,

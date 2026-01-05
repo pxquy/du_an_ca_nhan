@@ -1,13 +1,5 @@
 import { create } from "zustand";
-
-interface IOpen {
-  openAdd: boolean;
-  openEdit: boolean;
-  openDetail: boolean;
-  setOpenAdd: (openAdd: boolean) => void;
-  setOpenEdit: (openEdit: boolean) => void;
-  setOpenDetail: (openDetail: boolean) => void;
-}
+import type { IOpen } from "../Types/open";
 
 export const useOpen = create<IOpen>((set) => ({
   openAdd: false,

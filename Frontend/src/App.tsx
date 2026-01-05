@@ -18,6 +18,7 @@ import { jwtDecode } from "jwt-decode";
 import type { IUsers } from "./Types/user";
 import { message } from "antd";
 import Authorization from "./Components/Auth/authorization";
+import Home from "./Pages/Client/Home";
 
 function App() {
   const token = localStorage.getItem("token");
@@ -33,6 +34,7 @@ function App() {
       path: "/",
       Component: LayoutClient,
       children: [
+        { path: "/", Component: Home },
         { path: "login", Component: Login },
         { path: "register", Component: Register },
       ],

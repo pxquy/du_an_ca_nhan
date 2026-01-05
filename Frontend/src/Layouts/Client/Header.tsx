@@ -7,6 +7,7 @@ import { Link, useLocation, useNavigate } from "react-router";
 import { SearchOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { message } from "antd";
 import { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
 
 const Header = () => {
   const [isLogin, setIsLogin] = useState<boolean>(false);

@@ -54,7 +54,7 @@ export const signin = async (req, res) => {
         role: checkEmail.roles,
       },
       process.env.SecretKey,
-      { expiresIn: "1h" }
+      { expiresIn: "15m" }
     );
 
     const refreshToken = crypto.randomBytes(64).toString("hex");
@@ -101,6 +101,44 @@ export const logout = async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       message: "Lỗi dữu liệu khi đăng xuất tài khoản",
+      error: error.message,
+    });
+  }
+};
+
+export const refreshToken = async (req, res) => {
+  try {
+    const checkToken = req.cookies?.refreshToken;
+    if (!checkToken)
+      return res.status(403).json({
+        message: "Không tìm thấy token yêu cầu đăng nhập lại!",
+      });
+
+    const session = await Sessions.findOne({ refreshToken: checkToken });
+
+    if (!session)
+      return res.status(403).json({
+        message: "Không tìm thấy session hợp lệ!",
+      });
+
+    if (session.expires < Date.now) return;
+    res.status(403).json({
+      message: "Token đã hết hạn!",
+    });
+
+    const user = await Users.findById({ _id: session.user_id }).select("roles");
+    const token = jwt.sign(
+      { _id: user._id, role: user.roles },
+      process.env.SecretKey,
+      {
+        expiresIn: "15m",
+      }
+    );
+
+    return res.status(200).json(token);
+  } catch (error) {
+    return res.status(500).json({
+      message: "Lỗi dữu liệu khi yêu cầu lại token!",
       error: error.message,
     });
   }
