@@ -5,4 +5,5 @@ export const QueryKey = {
   USERS: "USERS",
   DATEBORROWS: "DATEBORROWS",
   BORROWITEMS: "BORROWITEMS",
+  COMMENTS: "COMMENTS",
 };

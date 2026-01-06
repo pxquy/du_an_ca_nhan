@@ -3,6 +3,11 @@ import type { TGlobalProps } from "../../Types/React";
 import { useOpen } from "../../stores/openStore";
 import type { IBooks } from "../../Types/books";
 import { formatStatus } from "../../constants/Helper";
+import { useQuery } from "@tanstack/react-query";
+import { QueryKey } from "../../constants/QueryKey";
+import { Api } from "../../Api/api";
+import type { IApiResponse, IResponse } from "../../Types/data";
+import type { IComments } from "../../Types/comment";
 
 export const DetailBookModal = ({
   children,
@@ -10,6 +15,17 @@ export const DetailBookModal = ({
 }: TGlobalProps<{ detailBook: IBooks; open: boolean }>) => {
   const { openDetail, openId, setOpenDetail, setOpenId } = useOpen();
   const isOpen = openDetail && openId === detailBook._id;
+  const { data: comments } = useQuery({
+    queryKey: [QueryKey.COMMENTS, detailBook._id],
+    queryFn: async () => {
+      const { data } = await Api.get<IApiResponse<IResponse<IComments>>>(
+        `comments`
+      );
+      console.log(data.data.docs.map((c) => c.book_id === detailBook._id));
+      return data.data;
+    },
+    enabled: isOpen,
+  });
   return (
     <>
       {React.cloneElement(
@@ -40,7 +56,7 @@ export const DetailBookModal = ({
                 <img
                   src={detailBook?.image}
                   alt={detailBook?.name}
-                  className="w-150 h-120 object-cover rounded-4xl p-4"
+                  className="w-150 h-80 object-cover rounded-4xl p-4"
                 />
               </div>
               <div className="flex flex-col gap-2 flex-1">
@@ -89,6 +105,28 @@ export const DetailBookModal = ({
                 </div>
               </div>
             </div>
+          </div>
+          <div className="ml-5 h-40 overflow-scroll">
+            <h2 className="text-center font-bold">Những bình luận về sách</h2>
+            {comments?.docs &&
+            comments?.docs.filter((c) => c.book_id === detailBook._id).length >
+              0 ? (
+              comments.docs
+                .filter((c) => c.book_id === detailBook._id)
+                .map((c, index) => (
+                  <div key={index} className="border border-gray-300 p-2">
+                    <p className="font-semibold">
+                      Tên người bình luận: {c.user_id.name}
+                    </p>
+                    <p className="m-2">
+                      <span className="font-semibold">Nội dung: </span>{" "}
+                      {c.content}
+                    </p>
+                  </div>
+                ))
+            ) : (
+              <p className="text-center mt-10">Hiện chưa có bình luận nào!</p>
+            )}
           </div>
           <div className="text-end mr-5">
             <button

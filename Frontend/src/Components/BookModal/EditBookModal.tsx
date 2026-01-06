@@ -49,10 +49,10 @@ export const EditBookModal = ({
   const isLoading = result.some((r) => r.isLoading);
 
   useEffect(() => {
-    console.log("book", book);
+    // console.log("book", book);
     if (book && categories && authors) {
-      console.log("name", book.name);
-      console.log("author_id", book.author_id.name);
+      // console.log("name", book.name);
+      // console.log("author_id", book.author_id.name);
       reset({
         name: book.name,
         publish: book.publish,

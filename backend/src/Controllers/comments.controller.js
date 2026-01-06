@@ -1,4 +1,5 @@
 import Comments from "../Models/comments.model";
+import Users from "../Models/users.model";
 
 export const getAll = async (req, res) => {
   const options = {
@@ -27,7 +28,14 @@ export const getAll = async (req, res) => {
 
 export const createComment = async (req, res) => {
   try {
-    const createComment = await Comments.create({ ...req.body });
+    const user = await Users.findOne({ _id: req.user._id });
+
+    if (!user)
+      res.status(403).json({
+        message: "Bạn cần đăng nhập vào để có thể bình luận",
+      });
+
+    const createComment = await Comments.create({ ...req.body, user_id: user });
 
     return res.status(201).json({
       message: "Bình luận thành công",

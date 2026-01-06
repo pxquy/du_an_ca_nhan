@@ -1,4 +1,5 @@
 import {
+  CommentOutlined,
   GroupOutlined,
   LogoutOutlined,
   ProjectOutlined,
@@ -14,9 +15,9 @@ const Sidebar = () => {
   const localPath = useLocation();
   const [active, setActive] = useState<string>(localPath.pathname);
   return (
-    <div className="w-[17%]  border border-gray-100 shadow rounded-tl-lg rounded-bl-lg">
+    <div className="w-[17%]  border border-gray-100 shadow rounded-tl-lg rounded-bl-lg bg-[url(/bg.jpg)] bg-cover bg-no-repeat">
       <div className="flex flex-col">
-        <div className="p-5 text-start font-bold text-3xl text-blue-700">
+        <div className="p-5 text-start font-bold text-3xl text-blue-900">
           Logo
         </div>
         <div className="flex flex-col h-screen">
@@ -37,14 +38,14 @@ const Sidebar = () => {
                 </Link>
               </li>
               <li
-                onClick={() => setActive("/admin/statistical")}
+                onClick={() => setActive("/admin")}
                 className={
-                  active === "/admin/statistical"
+                  active === "/admin"
                     ? "bg-blue-500 text-white p-4 rounded-2xl"
                     : "hover:bg-blue-200 text-black p-4 rounded-2xl"
                 }
               >
-                <Link to="/admin/statistical">
+                <Link to="/admin">
                   <ProjectOutlined className="pr-1" />
                   Thống kê
                 </Link>
@@ -122,7 +123,7 @@ const Sidebar = () => {
                 }
               >
                 <Link to="/admin/comments">
-                  <SolutionOutlined className="pr-1" /> Quản lý bình luận
+                  <CommentOutlined className="pr-1" /> Quản lý bình luận
                 </Link>
               </li>
             </ul>
