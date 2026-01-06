@@ -7,6 +7,7 @@ import {
   ReadOutlined,
   SolutionOutlined,
   UsergroupDeleteOutlined,
+  UserSwitchOutlined,
 } from "@ant-design/icons";
 import { useState } from "react";
 import { Link, useLocation } from "react-router";
@@ -87,6 +88,19 @@ const Sidebar = () => {
                 <Link to="/admin/authors">
                   <UsergroupDeleteOutlined className="pr-1" />
                   Quản lý tác giả sách
+                </Link>
+              </li>
+              <li
+                onClick={() => setActive("/admin/users")}
+                className={
+                  active === "/admin/users"
+                    ? "bg-blue-500 text-white p-4 rounded-2xl"
+                    : "hover:bg-blue-200 text-black p-4 rounded-2xl"
+                }
+              >
+                <Link to="/admin/users">
+                  <UserSwitchOutlined className="pr-1" />
+                  Quản lý người dùng
                 </Link>
               </li>
               <li

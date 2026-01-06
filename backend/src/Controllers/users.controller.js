@@ -31,7 +31,34 @@ export const information = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({
-      message: "Lấy dữ liệu thông tin lỗi!",
+      message: "Lấy dữ liệu thông tin người dùng lỗi!",
+      error: error.message,
+    });
+  }
+};
+
+export const lockUser = async (req, res) => {
+  try {
+    const lockUser = await Users.findByIdAndUpdate(
+      req.params.id,
+      { ...req.body },
+      {
+        new: true,
+      }
+    );
+
+    if (!lockUser)
+      res.status(404).json({
+        message: "Không tìm thấy ID người dùng muốn khoá!",
+      });
+
+    return res.status(200).json({
+      message: "Khoá người dùng thành công",
+      data: lockUser,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Khoá người dùng lỗi!",
       error: error.message,
     });
   }

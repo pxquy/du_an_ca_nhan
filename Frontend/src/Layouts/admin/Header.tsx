@@ -7,7 +7,7 @@ const Header = () => {
     queryKey: [QueryKey.USERS],
     queryFn: async () => {
       const { data } = await Api.get("users/information");
-      console.log("data", data.data);
+      // console.log("data", data.data);
       return data.data;
     },
   });
@@ -21,7 +21,11 @@ const Header = () => {
           <SearchOutlined />
         </p>
         <p className="bg-blue-500 w-10 h-10 rounded-full text-center leading-9 overflow-hidden">
-          <img src={user?.image} alt={user?.name} />
+          {user?.image != "" ? (
+            <img src={user?.image} alt={user?.name} />
+          ) : (
+            <img src={"/avt.jpg"} alt={user?.name} />
+          )}
         </p>
         <p className="text-center w-10 h-10 p-2 border border-gray-400 rounded-full cursor-pointer">
           <BellOutlined />

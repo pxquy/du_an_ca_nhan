@@ -121,7 +121,7 @@ export const refreshToken = async (req, res) => {
         message: "Không tìm thấy session hợp lệ!",
       });
 
-    if (session.expires < Date.now())
+    if (session.expires < new Date())
       res.status(403).json({
         message: "Token đã hêt hạn",
       });

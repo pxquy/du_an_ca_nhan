@@ -13,9 +13,9 @@ import {
 import { Api } from "../../../Api/api";
 
 const AuthorsPage = () => {
-  const { openId, openEdit, setOpenId, setOpenEdit } = useOpen();
+  const { openId, openAdd, openEdit, setOpenId, setOpenEdit, setOpenAdd } =
+    useOpen();
   const queryClient = useQueryClient();
-  const { openAdd, setOpenAdd } = useOpen();
   const { page, pageSize, setPage, setPageSize } = usePageStore();
 
   const { data, isLoading } = useQuery({

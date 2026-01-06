@@ -15,6 +15,7 @@ import type { IUsers } from "./Types/user";
 import { message } from "antd";
 import Home from "./Pages/Client/Home";
 import Authorization from "./Components/Auth/Authorization";
+import Users from "./Pages/admin/Users/Users";
 
 function App() {
   const token = localStorage.getItem("token");
@@ -54,6 +55,10 @@ function App() {
         {
           path: "authors",
           Component: AuthorsPage,
+        },
+        {
+          path: "users",
+          Component: Users,
         },
         {
           path: "dateBorrows",
