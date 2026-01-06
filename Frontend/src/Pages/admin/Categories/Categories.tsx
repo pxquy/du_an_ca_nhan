@@ -18,7 +18,8 @@ import { useOpen } from "../../../stores/openStore";
 import { Api } from "../../../Api/api";
 const CategoriesPage = () => {
   const { page, pageSize, setPage, setPageSize } = usePageStore();
-  const { openAdd, openEdit, setOpenAdd, setOpenEdit } = useOpen();
+  const { openId, openAdd, openEdit, setOpenId, setOpenAdd, setOpenEdit } =
+    useOpen();
   const queryClient = useQueryClient();
   const { data, isLoading } = useQuery({
     queryKey: [QueryKey.CATEGORIES, page, pageSize],
@@ -76,7 +77,7 @@ const CategoriesPage = () => {
       title: "Hành động",
       dataIndex: "_id",
       key: "_id",
-      render: (_id: string, recode: ICategories) => {
+      render: (_id: string, record: ICategories) => {
         return (
           <div className="flex gap-2">
             {/* <Button
@@ -86,8 +87,13 @@ const CategoriesPage = () => {
             >
               <EyeOutlined />
             </Button> */}
-            <EditCategoryModal open={openEdit} category={recode}>
-              <Button type="primary" onClick={() => setOpenEdit(true)}>
+            <EditCategoryModal open={openEdit} category={record}>
+              <Button
+                type="primary"
+                onClick={() => {
+                  setOpenId(record._id), setOpenEdit(true);
+                }}
+              >
                 <EditOutlined />
               </Button>
             </EditCategoryModal>

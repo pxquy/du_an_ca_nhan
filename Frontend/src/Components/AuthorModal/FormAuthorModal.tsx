@@ -146,9 +146,11 @@ export const EditAuthorModal = ({
   children,
   author,
 }: TGlobalProps<{ open: boolean; author: IAuthors }>) => {
-  const { openEdit, setOpenEdit } = useOpen();
+  const { openId, openEdit, setOpenId, setOpenEdit } = useOpen();
   const { register, handleSubmit, reset } = useForm<IAuthors>();
   const queryClient = useQueryClient();
+
+  const isOpen = openEdit && openId === author._id;
 
   useEffect(() => {
     if (author) {
@@ -196,13 +198,15 @@ export const EditAuthorModal = ({
         } as { onclick: () => void }
       )}
       <div
-        onClick={() => setOpenEdit(false)}
+        onClick={() => {
+          setOpenId(null), setOpenEdit(false);
+        }}
         className={`fixed w-screen h-screen bg-black/50 duration-300 z-20 top-0 left-0 ${
-          openEdit ? "opacity-100 visited:" : "opacity-0 invisible"
+          isOpen ? "opacity-100 visited:" : "opacity-0 invisible"
         }`}
       ></div>
 
-      {openEdit && (
+      {isOpen && (
         <section className="fixed top-[15%] left-[35%] w-150 h-125 z-30 shadow border border-gray-300 rounded-2xl bg-white overflow-scroll">
           <div>
             <h2 className="text-center p-2 text-2xl font-bold">

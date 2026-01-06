@@ -198,7 +198,12 @@ const BooksPage = () => {
               </Button>
             </DetailBookModal>
             <EditBookModal open={openEdit} book={record}>
-              <Button type="primary" onClick={() => setOpenEdit(true)}>
+              <Button
+                type="primary"
+                onClick={() => {
+                  setOpenId(record._id), setOpenEdit(true);
+                }}
+              >
                 <EditOutlined />
               </Button>
             </EditBookModal>

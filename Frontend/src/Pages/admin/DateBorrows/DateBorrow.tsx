@@ -1,13 +1,8 @@
-import {
-  DeleteOutlined,
-  EditOutlined,
-  EyeOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
+import { EditOutlined, EyeOutlined, PlusOutlined } from "@ant-design/icons";
 import { useQueries } from "@tanstack/react-query";
-import { Button, Popconfirm, Table } from "antd";
+import { Button, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import { Link, useLocation, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { QueryKey } from "../../../constants/QueryKey";
 import type { IApiResponse, IResponse } from "../../../Types/data";
 import type { IDateBorrows } from "../../../Types/dateBorrows";
@@ -21,7 +16,8 @@ import {
 
 const DateBorrow = () => {
   const navigate = useNavigate();
-  const { openAdd, openEdit, setOpenAdd, setOpenEdit } = useOpen();
+  const { openId, openAdd, openEdit, setOpenId, setOpenAdd, setOpenEdit } =
+    useOpen();
   const { page, pageSize, setPage, setPageSize } = usePageStore();
   const result = useQueries({
     queries: [
@@ -80,7 +76,12 @@ const DateBorrow = () => {
               <EyeOutlined />
             </Button>
             <EditDateBorrow open={openEdit} dateBorrow={record}>
-              <Button type="primary" onClick={() => setOpenEdit(true)}>
+              <Button
+                type="primary"
+                onClick={() => {
+                  setOpenId(record._id), setOpenEdit(true);
+                }}
+              >
                 <EditOutlined />
               </Button>
             </EditDateBorrow>

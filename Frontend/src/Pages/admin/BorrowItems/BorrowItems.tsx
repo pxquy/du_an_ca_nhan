@@ -17,7 +17,7 @@ import { formatStatusBorrow } from "../../../constants/Helper";
 
 const BorrowItems = () => {
   const { page, pageSize, setPage, setPageSize } = usePageStore();
-  const { openDetail, setOpenDetail } = useOpen();
+  const { openId, openDetail, setOpenId, setOpenDetail } = useOpen();
   const { openAdd, openEdit, setOpenAdd, setOpenEdit } = useOpen();
   const result = useQueries({
     queries: [
@@ -103,7 +103,12 @@ const BorrowItems = () => {
               </Button>
             </DetailBorrowItemModal>
             <EditBorrowItem open={openEdit} borrowItem={record}>
-              <Button type="primary" onClick={() => setOpenEdit(true)}>
+              <Button
+                type="primary"
+                onClick={() => {
+                  setOpenId(record._id), setOpenEdit(true);
+                }}
+              >
                 <EditOutlined />
               </Button>
             </EditBorrowItem>

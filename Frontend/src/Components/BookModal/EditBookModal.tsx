@@ -1,7 +1,6 @@
 import React, { useEffect, useState, type ReactElement } from "react";
 import type { TGlobalProps } from "../../Types/React";
 import { useOpen } from "../../stores/openStore";
-import { useNavigate } from "react-router";
 import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import type { IBooks } from "../../Types/books";
@@ -11,12 +10,13 @@ import { QueryKey } from "../../constants/QueryKey";
 import type { IAuthors } from "../../Types/authors";
 import { message } from "antd";
 import { Api } from "../../Api/api";
+import axios from "axios";
 
 export const EditBookModal = ({
   children,
   book,
 }: TGlobalProps<{ open: boolean; book: IBooks }>) => {
-  const { openEdit, setOpenEdit } = useOpen();
+  const { openId, openEdit, setOpenId, setOpenEdit } = useOpen();
   const queryClient = useQueryClient();
   const [image, setImage] = useState<string>();
   const { register, handleSubmit, reset, setValue } = useForm<IBooks>();
@@ -105,7 +105,7 @@ export const EditBookModal = ({
     formData.append("upload_preset", "Image_libery");
 
     try {
-      const { data } = await Api.post(
+      const { data } = await axios.post(
         "https://api.cloudinary.com/v1_1/djnwxedym/image/upload",
         formData
       );
@@ -116,6 +116,7 @@ export const EditBookModal = ({
       console.error(error);
     }
   };
+  const isOpen = openEdit && openId === book._id;
   return (
     <>
       {React.cloneElement(
@@ -127,12 +128,14 @@ export const EditBookModal = ({
         } as { onclick: () => void }
       )}
       <div
-        onClick={() => setOpenEdit(false)}
+        onClick={() => {
+          setOpenId(null), setOpenEdit(false);
+        }}
         className={`fixed w-screen h-screen bg-black/50 duration-300 z-20 top-0 left-0 ${
-          openEdit ? "opacity-100 visited:" : "opacity-0 invisible"
+          isOpen ? "opacity-100 visited:" : "opacity-0 invisible"
         }`}
       ></div>
-      {openEdit && (
+      {isOpen && (
         <>
           {isLoading}
           <section className="fixed top-[15%] left-[35%] w-150 h-125 shadow border z-30 border-gray-300 rounded-2xl bg-white overflow-scroll">

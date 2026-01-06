@@ -120,9 +120,10 @@ export const EditCategoryModal = ({
   children,
   category,
 }: TGlobalProps<{ category: ICategories; open: boolean }>) => {
-  const { openEdit, setOpenEdit } = useOpen();
+  const { openId, openEdit, setOpenId, setOpenEdit } = useOpen();
   const queryClient = useQueryClient();
   const { register, handleSubmit, reset } = useForm<ICategories>();
+  const isOpen = openEdit && openId === category._id;
 
   console.log(category);
 
@@ -171,13 +172,15 @@ export const EditCategoryModal = ({
       )}
 
       <div
-        onClick={() => setOpenEdit(false)}
+        onClick={() => {
+          setOpenId(null), setOpenEdit(false);
+        }}
         className={`fixed w-screen h-screen bg-black/50 duration-300 z-20 top-0 left-0 ${
-          openEdit ? "opacity-100 visited:" : "opacity-0 invisible"
+          isOpen ? "opacity-100 visited:" : "opacity-0 invisible"
         }`}
       ></div>
 
-      {openEdit && (
+      {isOpen && (
         <section className="fixed top-[15%] left-[31%] w-150 h-125 shadow border border-gray-300 z-30 rounded-2xl bg-white overflow-scroll">
           <div>
             <h2 className="text-center p-2 text-2xl font-bold">

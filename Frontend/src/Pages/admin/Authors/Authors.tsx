@@ -13,7 +13,7 @@ import {
 import { Api } from "../../../Api/api";
 
 const AuthorsPage = () => {
-  const { openEdit, setOpenEdit } = useOpen();
+  const { openId, openEdit, setOpenId, setOpenEdit } = useOpen();
   const queryClient = useQueryClient();
   const { openAdd, setOpenAdd } = useOpen();
   const { page, pageSize, setPage, setPageSize } = usePageStore();
@@ -77,7 +77,7 @@ const AuthorsPage = () => {
       title: "Hành động",
       dataIndex: "_id",
       key: "_id",
-      render: (_id: string, recode: IAuthors) => {
+      render: (_id: string, record: IAuthors) => {
         return (
           <>
             <div className="flex gap-2">
@@ -88,8 +88,13 @@ const AuthorsPage = () => {
             >
               <EyeOutlined />
             </Button> */}
-              <EditAuthorModal open={openEdit} author={recode}>
-                <Button type="primary" onClick={() => setOpenEdit(true)}>
+              <EditAuthorModal open={openEdit} author={record}>
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    setOpenId(record._id), setOpenEdit(true);
+                  }}
+                >
                   <EditOutlined />
                 </Button>
               </EditAuthorModal>
