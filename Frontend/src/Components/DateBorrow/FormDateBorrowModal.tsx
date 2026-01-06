@@ -221,6 +221,7 @@ export const EditDateBorrow = ({
         {
           onclick: () => {
             setOpenEdit(true);
+            setOpenId(dateBorrow._id);
           },
         } as { onclick: () => void }
       )}

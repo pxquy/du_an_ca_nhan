@@ -97,7 +97,9 @@ const BorrowItems = () => {
               <Button
                 variant="solid"
                 color="cyan"
-                onClick={() => setOpenDetail(true)}
+                onClick={() => {
+                  setOpenId(record._id), setOpenDetail(true);
+                }}
               >
                 <EyeOutlined />
               </Button>

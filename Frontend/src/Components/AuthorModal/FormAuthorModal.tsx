@@ -194,6 +194,7 @@ export const EditAuthorModal = ({
         {
           onclick: () => {
             setOpenEdit(true);
+            setOpenId(author._id);
           },
         } as { onclick: () => void }
       )}

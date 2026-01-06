@@ -167,7 +167,10 @@ export const EditCategoryModal = ({
       {React.cloneElement(
         children as ReactElement,
         {
-          onclick: () => {},
+          onclick: () => {
+            setOpenEdit(true);
+            setOpenId(category._id);
+          },
         } as { onclick: () => void }
       )}
 

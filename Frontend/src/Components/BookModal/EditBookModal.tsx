@@ -124,6 +124,7 @@ export const EditBookModal = ({
         {
           onclick: () => {
             setOpenEdit(true);
+            setOpenId(book._id);
           },
         } as { onclick: () => void }
       )}

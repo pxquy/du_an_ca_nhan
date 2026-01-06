@@ -294,6 +294,7 @@ export const EditBorrowItem = ({
         {
           onclick: () => {
             setOpenEdit(true);
+            setOpenId(borrowItem._id);
           },
         } as { onclick: () => void }
       )}
