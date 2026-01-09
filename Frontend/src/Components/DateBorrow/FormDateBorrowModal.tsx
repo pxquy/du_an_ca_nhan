@@ -66,10 +66,10 @@ export const AddDateBorrow = ({
       {React.cloneElement(
         children as ReactElement,
         {
-          onclick: () => {
+          onClick: () => {
             setOpenAdd(true);
           },
-        } as { onclick: () => void }
+        } as { onClick: () => void }
       )}
 
       <div
@@ -219,11 +219,11 @@ export const EditDateBorrow = ({
       {React.cloneElement(
         children as ReactElement,
         {
-          onclick: () => {
+          onClick: () => {
             setOpenEdit(true);
             setOpenId(dateBorrow._id);
           },
-        } as { onclick: () => void }
+        } as { onClick: () => void }
       )}
 
       <div

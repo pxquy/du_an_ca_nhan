@@ -7,11 +7,11 @@ import type { IApiResponse, IResponse } from "../../../Types/data";
 import type { IBorrowItems } from "../../../Types/borrowItems";
 import { usePageStore } from "../../../stores/PageStore";
 import { useOpen } from "../../../stores/openStore";
-import { DetailBorrowItemModal } from "../../../Components/BorrowItem/DetailBorrowItemModal";
+import { DetailBorrowItemModal } from "../../../Components/BorrowItemModal/DetailBorrowItemModal";
 import {
   AddBorrowItem,
   EditBorrowItem,
-} from "../../../Components/BorrowItem/FormBorrowItemModal";
+} from "../../../Components/BorrowItemModal/FormBorrowItemModal";
 import { Api } from "../../../Api/api";
 import { formatStatusBorrow } from "../../../constants/Helper";
 

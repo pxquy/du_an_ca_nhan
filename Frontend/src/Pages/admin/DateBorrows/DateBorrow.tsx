@@ -2,7 +2,6 @@ import { EditOutlined, EyeOutlined, PlusOutlined } from "@ant-design/icons";
 import { useQueries } from "@tanstack/react-query";
 import { Button, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import { useNavigate } from "react-router";
 import { QueryKey } from "../../../constants/QueryKey";
 import type { IApiResponse, IResponse } from "../../../Types/data";
 import type { IDateBorrows } from "../../../Types/dateBorrows";
@@ -13,11 +12,19 @@ import {
   AddDateBorrow,
   EditDateBorrow,
 } from "../../../Components/DateBorrow/FormDateBorrowModal";
+import { DateBorrowDetailModal } from "../../../Components/DateBorrow/DateBorrowDetailModal";
 
 const DateBorrow = () => {
-  const navigate = useNavigate();
-  const { openId, openAdd, openEdit, setOpenId, setOpenAdd, setOpenEdit } =
-    useOpen();
+  const {
+    openId,
+    openAdd,
+    openEdit,
+    openDetail,
+    setOpenId,
+    setOpenAdd,
+    setOpenEdit,
+    setOpenDetail,
+  } = useOpen();
   const { page, pageSize, setPage, setPageSize } = usePageStore();
   const result = useQueries({
     queries: [
@@ -68,18 +75,22 @@ const DateBorrow = () => {
       render: (_id: string, record: IDateBorrows) => {
         return (
           <div className="flex gap-2">
-            <Button
-              variant="solid"
-              color="cyan"
-              onClick={() => navigate(`/admin/detailDateBorrow/${_id}`)}
-            >
-              <EyeOutlined />
-            </Button>
+            <DateBorrowDetailModal dateBorrow={record} open={openDetail}>
+              <Button
+                variant="solid"
+                color="cyan"
+                onClick={() => {
+                  setOpenDetail(true), setOpenId(record._id);
+                }}
+              >
+                <EyeOutlined />
+              </Button>
+            </DateBorrowDetailModal>
             <EditDateBorrow open={openEdit} dateBorrow={record}>
               <Button
                 type="primary"
                 onClick={() => {
-                  setOpenId(record._id), setOpenEdit(true);
+                  setOpenId(record?._id), setOpenEdit(true);
                 }}
               >
                 <EditOutlined />

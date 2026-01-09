@@ -2,7 +2,9 @@ import DateBorrows from "../Models/dateBorrow.model";
 
 export const getAll = async (req, res) => {
   const options = {
-    populate: [{ path: "user_id", select: "name email numberPhone" }],
+    populate: [
+      { path: "user_id", select: "name email numberPhone image address" },
+    ],
   };
   try {
     const dateBorrows = await DateBorrows.paginate({}, options);
@@ -44,7 +46,7 @@ export const getById = async (req, res) => {
   try {
     const getById = await DateBorrows.findById(req.params.id).populate({
       path: "user_id",
-      select: "name email numberPhone",
+      select: "name email numberPhone image address",
     });
 
     if (!getById)

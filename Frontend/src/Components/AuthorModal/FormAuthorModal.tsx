@@ -48,10 +48,10 @@ export const AddAuthorModal = ({
       {React.cloneElement(
         children as ReactElement,
         {
-          onclick: () => {
+          onClick: () => {
             setOpenAdd(true);
           },
-        } as { onclick: () => void }
+        } as { onClick: () => void }
       )}
 
       <div
@@ -192,11 +192,11 @@ export const EditAuthorModal = ({
       {React.cloneElement(
         children as ReactElement,
         {
-          onclick: () => {
+          onClick: () => {
             setOpenEdit(true);
             setOpenId(author._id);
           },
-        } as { onclick: () => void }
+        } as { onClick: () => void }
       )}
       <div
         onClick={() => {

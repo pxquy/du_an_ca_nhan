@@ -8,10 +8,13 @@ import Table from "antd/es/table";
 import { usePageStore } from "../../../stores/PageStore";
 import { Button, message, Popconfirm } from "antd";
 import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
+import { CommentModal } from "../../../Components/CommentsModal/CommentModal";
+import { useOpen } from "../../../stores/openStore";
 
 const Comments = () => {
   const queryClient = useQueryClient();
   const { page, pageSize, setPage, setPageSize } = usePageStore();
+  const { openId, openEdit, setOpenId, setOpenEdit } = useOpen();
   const { data: comments, isLoading } = useQuery({
     queryKey: [QueryKey.COMMENTS, page, pageSize],
     queryFn: async () => {
@@ -76,15 +79,22 @@ const Comments = () => {
       title: "Hành động",
       dataIndex: "_id",
       key: "_id",
-      render: (_id: string) => {
+      render: (_id: string, record: IComments) => {
         return (
           <div className="flex gap-2">
             <Button variant="solid" color="cyan" onClick={() => {}}>
               <EyeOutlined />
             </Button>
-            <Button type="primary" onClick={() => {}}>
-              <EditOutlined />
-            </Button>
+            <CommentModal open={openEdit} comment={record}>
+              <Button
+                type="primary"
+                onClick={() => {
+                  setOpenId(record._id), setOpenEdit(true);
+                }}
+              >
+                <EditOutlined />
+              </Button>
+            </CommentModal>
             <Popconfirm
               title={`Xoá bình luận`}
               description="Bạn chắc chắn muốn xoá bình luận này?"

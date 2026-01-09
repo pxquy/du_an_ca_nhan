@@ -31,11 +31,11 @@ export const DetailBookModal = ({
       {React.cloneElement(
         children as ReactElement,
         {
-          onclick: () => {
+          onClick: () => {
             setOpenDetail(true);
             setOpenId(detailBook._id);
           },
-        } as { onclick: () => void }
+        } as { onClick: () => void }
       )}
 
       <div

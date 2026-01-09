@@ -44,7 +44,7 @@ export const signin = async (req, res) => {
     const comparePassword = await bcrypt.compare(password, checkEmail.password);
 
     if (!comparePassword)
-      res.status(404).json({
+      return res.status(404).json({
         message: "Sai mật khẩu khi đăng nhập!",
       });
 
@@ -122,7 +122,7 @@ export const refreshToken = async (req, res) => {
       });
 
     if (session.expires < new Date())
-      res.status(403).json({
+      return res.status(403).json({
         message: "Token đã hêt hạn",
       });
 

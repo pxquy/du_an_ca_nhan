@@ -4,7 +4,7 @@ import { QueryKey } from "../../constants/QueryKey";
 import { Api } from "../../Api/api";
 const Header = () => {
   const { data: user } = useQuery({
-    queryKey: [QueryKey.USERS],
+    queryKey: [QueryKey.ME],
     queryFn: async () => {
       const { data } = await Api.get("users/information");
       // console.log("data", data.data);

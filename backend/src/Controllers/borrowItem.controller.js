@@ -5,7 +5,10 @@ export const getAll = async (req, res) => {
   const options = {
     populate: [
       { path: "book_id", select: "name image description price" },
-      { path: "dateBorrow_id", populate: { path: "user_id", select: "name" } },
+      {
+        path: "dateBorrow_id",
+        populate: { path: "user_id", select: "name email numberPhone" },
+      },
     ],
   };
   try {
@@ -46,8 +49,9 @@ export const createBorrowItem = async (req, res) => {
       });
 
     const price = book.price;
+    const discountPrice = book.discountPrice;
 
-    const totalPrice = price * quantity;
+    const totalPrice = (price - discountPrice) * quantity;
 
     const createBorrowItem = await BorrowItems.create({
       ...req.body,

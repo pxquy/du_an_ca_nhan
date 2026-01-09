@@ -50,10 +50,10 @@ export const AddCategoryModal = ({
       {React.cloneElement(
         children as ReactElement,
         {
-          onclick: () => {
+          onClick: () => {
             setOpenAdd(true);
           },
-        } as { onclick: () => void }
+        } as { onClick: () => void }
       )}
 
       <div
@@ -93,7 +93,7 @@ export const AddCategoryModal = ({
                 {...register("description")}
                 id=""
                 rows={4}
-                className="border border-gray-200 focus:outline-none rounded-2xl"
+                className="p-1 border border-gray-200 focus:outline-none rounded-2xl"
               ></textarea>
             </div>
             <div className="shadow-lg rounded-2xl m-2 pb-5 pt-5 flex gap-3">
@@ -167,11 +167,11 @@ export const EditCategoryModal = ({
       {React.cloneElement(
         children as ReactElement,
         {
-          onclick: () => {
+          onClick: () => {
             setOpenEdit(true);
             setOpenId(category._id);
           },
-        } as { onclick: () => void }
+        } as { onClick: () => void }
       )}
 
       <div
@@ -213,7 +213,7 @@ export const EditCategoryModal = ({
                 {...register("description")}
                 id=""
                 rows={4}
-                className="border border-gray-200 focus:outline-none rounded-2xl"
+                className="p-1 border border-gray-200 focus:outline-none rounded-2xl"
               ></textarea>
             </div>
             <div className="shadow-lg rounded-2xl m-2 pb-5 pt-5 flex gap-3">

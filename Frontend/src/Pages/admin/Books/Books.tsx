@@ -15,9 +15,11 @@ import {
 } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import { usePageStore } from "../../../stores/PageStore";
-import { AddBookModal } from "../../../Components/BookModal/AddBookModal";
+import {
+  AddBookModal,
+  EditBookModal,
+} from "../../../Components/BookModal/FormBookModal";
 import { useOpen } from "../../../stores/openStore";
-import { EditBookModal } from "../../../Components/BookModal/EditBookModal";
 import { DetailBookModal } from "../../../Components/BookModal/DetailBookModal";
 import { Api } from "../../../Api/api";
 
