@@ -29,7 +29,7 @@ const DateBorrow = () => {
   const result = useQueries({
     queries: [
       {
-        queryKey: [QueryKey.DATEBORROWS, page, pageSize],
+        queryKey: [QueryKey.DATE_BORROWS, page, pageSize],
         queryFn: async () => {
           const { data } = await Api.get<IApiResponse<IResponse<IDateBorrows>>>(
             `dateBorrows`

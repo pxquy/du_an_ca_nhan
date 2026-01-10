@@ -14,7 +14,7 @@ export const AddAuthorModal = ({
   children,
 }: TGlobalProps<{ open: boolean }>) => {
   const { openAdd, setOpenAdd } = useOpen();
-  const { register, handleSubmit } = useForm<IAuthors>();
+  const { register, handleSubmit, reset } = useForm<IAuthors>();
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: async (formDataAuthor) => {
@@ -33,6 +33,7 @@ export const AddAuthorModal = ({
       queryClient.setQueryData([QueryKey.AUTHORS], (data: IAuthors[]) => {
         return data && [...data, author];
       });
+      reset({});
     },
     onError: (error: IErrorMessage) => {
       const err = error?.response.data as IErrorMessage;

@@ -46,7 +46,7 @@ export const DetailBookModal = ({
       ></div>
 
       {isOpen && (
-        <section className="fixed top-[7%] left-[19%] z-30 bg-white w-250 h-155">
+        <section className="fixed top-[7%] left-[19%] z-30 bg-white w-250">
           <div>
             <div className="p-5 font-bold text-2xl">
               <h2>Thông tin chi tiết sách</h2>

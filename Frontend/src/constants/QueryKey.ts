@@ -1,10 +1,10 @@
 export const QueryKey = {
-  BOOKS: "BOOKS",
-  CATEGORIES: "CATEGORIES",
-  AUTHORS: "AUTHORS",
-  USERS: "USERS",
-  DATEBORROWS: "DATEBORROWS",
-  BORROWITEMS: "BORROWITEMS",
-  COMMENTS: "COMMENTS",
+  BOOKS: "books",
+  CATEGORIES: "categories",
+  AUTHORS: "authors",
+  USERS: "users",
+  DATE_BORROWS: "date_borrows",
+  BORROW_ITEMS: "borrow_items",
+  COMMENTS: "comments",
   ME: "ME",
 };

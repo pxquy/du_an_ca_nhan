@@ -14,7 +14,7 @@ export const AddDateBorrow = ({
   children,
 }: TGlobalProps<{ open: boolean }>) => {
   const { openAdd, setOpenAdd } = useOpen();
-  const { register, handleSubmit } = useForm<IDateBorrows>();
+  const { register, handleSubmit, reset } = useForm<IDateBorrows>();
   const queryClient = useQueryClient();
   const result = useQueries({
     queries: [
@@ -43,14 +43,15 @@ export const AddDateBorrow = ({
       setOpenAdd(false);
       message.success("Thêm người mượn mới thành công");
       queryClient.invalidateQueries({
-        queryKey: [QueryKey.DATEBORROWS],
+        queryKey: [QueryKey.DATE_BORROWS],
       });
       queryClient.setQueryData(
-        [QueryKey.DATEBORROWS],
+        [QueryKey.DATE_BORROWS],
         (data: IDateBorrows[]) => {
           return data && [...data, dateBorrow];
         }
       );
+      reset({});
     },
     onError: (error: IErrorMessage) => {
       const err = error?.response.data as IErrorMessage;
@@ -196,10 +197,10 @@ export const EditDateBorrow = ({
       setOpenEdit(false);
       message.success("Cập nhật người mượn thành công");
       queryClient.invalidateQueries({
-        queryKey: [QueryKey.DATEBORROWS],
+        queryKey: [QueryKey.DATE_BORROWS],
       });
       queryClient.setQueryData(
-        [QueryKey.DATEBORROWS],
+        [QueryKey.DATE_BORROWS],
         (data: IDateBorrows[]) => {
           return data && [...data, dateBorrow];
         }

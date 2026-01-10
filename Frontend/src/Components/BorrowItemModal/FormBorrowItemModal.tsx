@@ -15,7 +15,7 @@ export const AddBorrowItem = ({
   children,
 }: TGlobalProps<{ open: boolean }>) => {
   const { openAdd, setOpenAdd } = useOpen();
-  const { register, handleSubmit } = useForm<IBorrowItems>();
+  const { register, handleSubmit, reset } = useForm<IBorrowItems>();
   const queryClient = useQueryClient();
   const result = useQueries({
     queries: [
@@ -29,7 +29,7 @@ export const AddBorrowItem = ({
         },
       },
       {
-        queryKey: [QueryKey.DATEBORROWS],
+        queryKey: [QueryKey.DATE_BORROWS],
         queryFn: async () => {
           const { data } = await Api.get<IApiResponse<IResponse<IDateBorrows>>>(
             `dateBorrows`
@@ -55,14 +55,15 @@ export const AddBorrowItem = ({
       setOpenAdd(false);
       message.success("Thêm sách mượn mới thành công");
       queryClient.invalidateQueries({
-        queryKey: [QueryKey.BORROWITEMS],
+        queryKey: [QueryKey.BORROW_ITEMS],
       });
       queryClient.setQueryData(
-        [QueryKey.BORROWITEMS],
+        [QueryKey.BORROW_ITEMS],
         (data: IBorrowItems[]) => {
           return data && [...data, borrowItem];
         }
       );
+      reset({});
     },
     onError: (error: IErrorMessage) => {
       const err = error?.response.data as IErrorMessage;
@@ -185,7 +186,7 @@ export const AddBorrowItem = ({
                   {...register("description")}
                   id=""
                   rows={4}
-                  className="border border-gray-200 focus:outline-none rounded-2xl"
+                  className="p-1 border border-gray-200 focus:outline-none rounded-2xl"
                 ></textarea>
               </div>
               <div className="shadow-lg rounded-2xl m-2 pb-5 pt-5 flex gap-3">
@@ -227,7 +228,7 @@ export const EditBorrowItem = ({
         },
       },
       {
-        queryKey: [QueryKey.DATEBORROWS],
+        queryKey: [QueryKey.DATE_BORROWS],
         queryFn: async () => {
           const { data } = await Api.get<IApiResponse<IResponse<IDateBorrows>>>(
             `dateBorrows`
@@ -269,10 +270,10 @@ export const EditBorrowItem = ({
       setOpenEdit(false);
       message.success("Cập nhật sách mượn thành công");
       queryClient.invalidateQueries({
-        queryKey: [QueryKey.BORROWITEMS],
+        queryKey: [QueryKey.BORROW_ITEMS],
       });
       queryClient.setQueryData(
-        [QueryKey.BORROWITEMS],
+        [QueryKey.BORROW_ITEMS],
         (data: IBorrowItems[]) => {
           return data.map((d) => (d._id == borrowItem._id ? d : borrowItem));
         }
@@ -401,7 +402,7 @@ export const EditBorrowItem = ({
                   {...register("description")}
                   id=""
                   rows={4}
-                  className="border border-gray-200 focus:outline-none rounded-2xl"
+                  className="p-1 border border-gray-200 focus:outline-none rounded-2xl"
                 ></textarea>
               </div>
               <div className="shadow-lg rounded-2xl m-2 pb-5 pt-5 flex gap-3">

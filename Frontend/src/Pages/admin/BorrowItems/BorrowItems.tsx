@@ -22,7 +22,7 @@ const BorrowItems = () => {
   const result = useQueries({
     queries: [
       {
-        queryKey: [QueryKey.BORROWITEMS, page, pageSize],
+        queryKey: [QueryKey.BORROW_ITEMS, page, pageSize],
         queryFn: async () => {
           const { data } = await Api.get<IApiResponse<IResponse<IBorrowItems>>>(
             `borrowItems`
