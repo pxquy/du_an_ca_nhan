@@ -9,12 +9,24 @@ import type { IApiResponse, IErrorMessage, IResponse } from "../../Types/data";
 import { QueryKey } from "../../constants/QueryKey";
 import { message } from "antd";
 import { Api } from "../../Api/api";
+import {
+  validateAuthors,
+  type AuthorsValidate,
+} from "../../libs/validations/validateAuthors";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export const AddAuthorModal = ({
   children,
 }: TGlobalProps<{ open: boolean }>) => {
   const { openAdd, setOpenAdd } = useOpen();
-  const { register, handleSubmit, reset } = useForm<IAuthors>();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<AuthorsValidate>({
+    resolver: zodResolver(validateAuthors),
+  });
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: async (formDataAuthor) => {
@@ -41,7 +53,7 @@ export const AddAuthorModal = ({
     },
   });
 
-  const onSubmit = (data: IAuthors) => {
+  const onSubmit = (data: AuthorsValidate) => {
     mutation.mutate(data as any);
   };
   return (
@@ -82,6 +94,11 @@ export const AddAuthorModal = ({
                   placeholder="Nhập tên tác giả..."
                   className="border border-gray-400 rounded-2xl p-1 focus:outline-none"
                 />
+                {errors.name && (
+                  <p className="text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                    {errors?.name.message}
+                  </p>
+                )}
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex flex-col m-2 gap-1">
@@ -94,6 +111,11 @@ export const AddAuthorModal = ({
                     placeholder="Nhập email tác giả..."
                     className="border border-gray-400 rounded-2xl p-1 focus:outline-none w-40"
                   />
+                  {errors.email && (
+                    <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                      {errors?.email.message}
+                    </p>
+                  )}
                 </div>
                 <div className="flex flex-col m-2 gap-1">
                   <label htmlFor="" className="ml-2">
@@ -104,6 +126,11 @@ export const AddAuthorModal = ({
                     {...register("birthday")}
                     className="border border-gray-400 rounded-2xl p-1 focus:outline-none w-40"
                   />
+                  {errors.birthday && (
+                    <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                      {errors?.birthday.message}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -116,11 +143,16 @@ export const AddAuthorModal = ({
                     Số điện thoại
                   </label>
                   <input
-                    type="number"
+                    type="string"
                     {...register("numberPhone")}
                     placeholder="0303030311"
                     className="border border-gray-400 rounded-2xl p-1 focus:outline-none w-40"
                   />
+                  {errors.numberPhone && (
+                    <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                      {errors?.numberPhone.message}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -148,7 +180,14 @@ export const EditAuthorModal = ({
   author,
 }: TGlobalProps<{ open: boolean; author: IAuthors }>) => {
   const { openId, openEdit, setOpenId, setOpenEdit } = useOpen();
-  const { register, handleSubmit, reset } = useForm<IAuthors>();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<AuthorsValidate>({
+    resolver: zodResolver(validateAuthors),
+  });
   const queryClient = useQueryClient();
 
   const isOpen = openEdit && openId === author._id;
@@ -184,7 +223,7 @@ export const EditAuthorModal = ({
     },
   });
 
-  const onSubmit = (data: IAuthors) => {
+  const onSubmit = (data: AuthorsValidate) => {
     mutation.mutate(data as any);
   };
 
@@ -228,6 +267,11 @@ export const EditAuthorModal = ({
                   placeholder="Nhập tên tác giả..."
                   className="border border-gray-400 rounded-2xl p-1 focus:outline-none"
                 />
+                {errors.name && (
+                  <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                    {errors?.name.message}
+                  </p>
+                )}
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex flex-col m-2 gap-1">
@@ -240,6 +284,11 @@ export const EditAuthorModal = ({
                     placeholder="Nhập email tác giả..."
                     className="border border-gray-400 rounded-2xl p-1 focus:outline-none w-40"
                   />
+                  {errors.email && (
+                    <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                      {errors?.email.message}
+                    </p>
+                  )}
                 </div>
                 <div className="flex flex-col m-2 gap-1">
                   <label htmlFor="" className="ml-2">
@@ -250,6 +299,11 @@ export const EditAuthorModal = ({
                     {...register("birthday")}
                     className="border border-gray-400 rounded-2xl p-1 focus:outline-none w-40"
                   />
+                  {errors.birthday && (
+                    <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                      {errors?.birthday.message}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -262,11 +316,16 @@ export const EditAuthorModal = ({
                     Số điện thoại
                   </label>
                   <input
-                    type="number"
+                    type="string"
                     {...register("numberPhone")}
                     placeholder="0303030311"
                     className="border border-gray-400 rounded-2xl p-1 focus:outline-none w-40"
                   />
+                  {errors.numberPhone && (
+                    <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                      {errors?.numberPhone.message}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>

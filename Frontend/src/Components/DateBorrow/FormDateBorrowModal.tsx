@@ -9,12 +9,24 @@ import { useForm } from "react-hook-form";
 import type { IUsers } from "../../Types/user";
 import { Api } from "../../Api/api";
 import React, { useEffect, type ReactElement } from "react";
+import {
+  validateDateBorrows,
+  type DateBorrowsValidate,
+} from "../../libs/validations/validateDateBorrows";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export const AddDateBorrow = ({
   children,
 }: TGlobalProps<{ open: boolean }>) => {
   const { openAdd, setOpenAdd } = useOpen();
-  const { register, handleSubmit, reset } = useForm<IDateBorrows>();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<DateBorrowsValidate>({
+    resolver: zodResolver(validateDateBorrows),
+  });
   const queryClient = useQueryClient();
   const result = useQueries({
     queries: [
@@ -59,7 +71,7 @@ export const AddDateBorrow = ({
     },
   });
 
-  const onSubmit = (data: IDateBorrows) => {
+  const onSubmit = (data: DateBorrowsValidate) => {
     mutation.mutate(data as any);
   };
   return (
@@ -108,6 +120,11 @@ export const AddDateBorrow = ({
                     </option>
                   ))}
                 </select>
+                {errors.user_id && (
+                  <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                    {errors?.user_id.message}
+                  </p>
+                )}
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex flex-col m-2 gap-1">
@@ -119,6 +136,11 @@ export const AddDateBorrow = ({
                     {...register("borrow_date")}
                     className="border border-gray-400 rounded-2xl p-1 focus:outline-none w-40"
                   />
+                  {errors.borrow_date && (
+                    <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                      {errors?.borrow_date.message}
+                    </p>
+                  )}
                 </div>
                 <div className="flex flex-col m-2 gap-1">
                   <label htmlFor="" className="ml-2">
@@ -129,6 +151,11 @@ export const AddDateBorrow = ({
                     {...register("return_date")}
                     className="border border-gray-400 rounded-2xl p-1 focus:outline-none w-40"
                   />
+                  {errors.return_date && (
+                    <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                      {errors?.return_date.message}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -136,7 +163,9 @@ export const AddDateBorrow = ({
             <div className="shadow-lg rounded-2xl m-2 pb-5 pt-5 flex gap-3">
               <button
                 type="button"
-                onClick={() => setOpenAdd(false)}
+                onClick={() => {
+                  reset({}), setOpenAdd(false);
+                }}
                 className="border border-gray-300 p-3 rounded-2xl cursor-pointer hover:bg-gray-100 ml-5"
               >
                 Đóng
@@ -157,7 +186,14 @@ export const EditDateBorrow = ({
   dateBorrow,
 }: TGlobalProps<{ dateBorrow: IDateBorrows; open: boolean }>) => {
   const { openId, openEdit, setOpenId, setOpenEdit } = useOpen();
-  const { register, handleSubmit, reset } = useForm<IDateBorrows>();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<DateBorrowsValidate>({
+    resolver: zodResolver(validateDateBorrows),
+  });
   const queryClient = useQueryClient();
   const result = useQueries({
     queries: [
@@ -212,7 +248,7 @@ export const EditDateBorrow = ({
     },
   });
 
-  const onSubmit = (data: IDateBorrows) => {
+  const onSubmit = (data: DateBorrowsValidate) => {
     mutation.mutate(data as any);
   };
   return (
@@ -264,6 +300,11 @@ export const EditDateBorrow = ({
                     </option>
                   ))}
                 </select>
+                {errors.user_id && (
+                  <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                    {errors?.user_id.message}
+                  </p>
+                )}
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex flex-col m-2 gap-1">
@@ -275,6 +316,11 @@ export const EditDateBorrow = ({
                     {...register("borrow_date")}
                     className="border border-gray-400 rounded-2xl p-1 focus:outline-none w-40"
                   />
+                  {errors.borrow_date && (
+                    <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                      {errors?.borrow_date.message}
+                    </p>
+                  )}
                 </div>
                 <div className="flex flex-col m-2 gap-1">
                   <label htmlFor="" className="ml-2">
@@ -285,6 +331,11 @@ export const EditDateBorrow = ({
                     {...register("return_date")}
                     className="border border-gray-400 rounded-2xl p-1 focus:outline-none w-40"
                   />
+                  {errors.return_date && (
+                    <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                      {errors?.return_date.message}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>

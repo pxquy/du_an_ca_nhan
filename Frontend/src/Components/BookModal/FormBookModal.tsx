@@ -2,7 +2,7 @@ import type { ReactElement } from "react";
 import { useOpen } from "../../stores/openStore";
 import type { IBooks } from "../../Types/books";
 import type { TGlobalProps } from "../../Types/React";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
@@ -13,13 +13,28 @@ import type { IAuthors } from "../../Types/authors";
 import { message } from "antd";
 import { Api } from "../../Api/api";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  createBook,
+  updateBook,
+  type CreateBook,
+  type UpdateBook,
+} from "../../libs/validations/validateBooks";
+
 export const AddBookModal = ({ children }: TGlobalProps<{ open: boolean }>) => {
   console.log();
   const { openAdd, setOpenAdd } = useOpen();
   const [loadingImage, setLoadingImage] = useState<boolean>(false);
   const queryClient = useQueryClient();
   const [image, setImage] = useState();
-  const { register, handleSubmit, reset } = useForm<IBooks>();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<CreateBook>({
+    resolver: zodResolver(createBook),
+  });
   const result = useQueries({
     queries: [
       {
@@ -75,7 +90,7 @@ export const AddBookModal = ({ children }: TGlobalProps<{ open: boolean }>) => {
     },
   });
 
-  const onSubmit = (data: IBooks) => {
+  const onSubmit = (data: CreateBook) => {
     console.log(data);
     mutation.mutate(data as any);
   };
@@ -137,6 +152,11 @@ export const AddBookModal = ({ children }: TGlobalProps<{ open: boolean }>) => {
                   placeholder="Nhập tên sách..."
                   className="border border-gray-400 rounded-2xl p-1 focus:outline-none"
                 />
+                {errors.name && (
+                  <p className="text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                    {errors?.name.message}
+                  </p>
+                )}
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex flex-col m-2 gap-1">
@@ -145,10 +165,15 @@ export const AddBookModal = ({ children }: TGlobalProps<{ open: boolean }>) => {
                   </label>
                   <input
                     type="number"
-                    {...register("price")}
+                    {...register("price", { valueAsNumber: true })}
                     placeholder="1000"
                     className="border border-gray-400 rounded-2xl p-1 focus:outline-none w-40"
                   />
+                  {errors.price && (
+                    <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                      {errors?.price.message}
+                    </p>
+                  )}
                 </div>
                 <div className="flex flex-col m-2 gap-1">
                   <label htmlFor="" className="ml-2">
@@ -159,6 +184,11 @@ export const AddBookModal = ({ children }: TGlobalProps<{ open: boolean }>) => {
                     {...register("publish")}
                     className="border border-gray-400 rounded-2xl p-1 focus:outline-none w-40"
                   />
+                  {errors.publish && (
+                    <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                      {errors?.publish.message}
+                    </p>
+                  )}
                 </div>
               </div>
               <div className="flex items-center justify-between">
@@ -180,6 +210,11 @@ export const AddBookModal = ({ children }: TGlobalProps<{ open: boolean }>) => {
                       </option>
                     ))}
                   </select>
+                  {errors.category_id && (
+                    <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                      {errors?.category_id.message}
+                    </p>
+                  )}
                 </div>
                 <div className="flex flex-col m-2 gap-1">
                   <label htmlFor="" className="ml-2">
@@ -199,6 +234,11 @@ export const AddBookModal = ({ children }: TGlobalProps<{ open: boolean }>) => {
                       </option>
                     ))}
                   </select>
+                  {errors.author_id && (
+                    <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                      {errors?.author_id.message}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -222,10 +262,15 @@ export const AddBookModal = ({ children }: TGlobalProps<{ open: boolean }>) => {
                   <img
                     src={image}
                     onLoad={() => setLoadingImage(false)}
-                    width={120}
+                    className="w-30 rounded-2xl m-2"
                   />
                 )}
                 <input type="hidden" {...register("image")} />
+                {errors.image && (
+                  <p className="text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                    {errors?.image.message?.toString()}
+                  </p>
+                )}
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex flex-col m-2 gap-1">
@@ -234,14 +279,19 @@ export const AddBookModal = ({ children }: TGlobalProps<{ open: boolean }>) => {
                   </label>
                   <input
                     type="number"
-                    {...register("discountPrice")}
+                    {...register("discountPrice", { valueAsNumber: true })}
                     placeholder="1000"
                     className="border border-gray-400 rounded-2xl p-1 focus:outline-none w-40"
                   />
+                  {errors.discountPrice && (
+                    <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                      {errors?.discountPrice.message}
+                    </p>
+                  )}
                 </div>
                 <div className="flex flex-col m-2 gap-1">
                   <label htmlFor="" className="ml-2">
-                    Trạng thái
+                    Trạng thái(*)
                   </label>
                   <select
                     id=""
@@ -254,6 +304,11 @@ export const AddBookModal = ({ children }: TGlobalProps<{ open: boolean }>) => {
                     <option value="1">Còn sách</option>
                     <option value="2">Hết sách</option>
                   </select>
+                  {errors.status && (
+                    <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                      {errors?.status.message}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -267,11 +322,18 @@ export const AddBookModal = ({ children }: TGlobalProps<{ open: boolean }>) => {
                 rows={4}
                 className="p-1 border border-gray-200 focus:outline-none rounded-2xl"
               ></textarea>
+              {errors.description && (
+                <p className="text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                  {errors?.description.message}
+                </p>
+              )}
             </div>
             <div className="shadow-lg rounded-2xl m-2 pb-5 pt-5 flex gap-3">
               <button
                 type="button"
-                onClick={() => setOpenAdd(false)}
+                onClick={() => {
+                  reset({}), setOpenAdd(false);
+                }}
                 className="border border-gray-300 p-3 rounded-2xl cursor-pointer hover:bg-gray-100 ml-5"
               >
                 Đóng
@@ -294,7 +356,15 @@ export const EditBookModal = ({
   const { openId, openEdit, setOpenId, setOpenEdit } = useOpen();
   const queryClient = useQueryClient();
   const [image, setImage] = useState<string>();
-  const { register, handleSubmit, reset, setValue } = useForm<IBooks>();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm<UpdateBook>({
+    resolver: zodResolver(updateBook),
+  });
   const result = useQueries({
     queries: [
       {
@@ -370,7 +440,7 @@ export const EditBookModal = ({
     },
   });
 
-  const onSubmit = (data: IBooks) => {
+  const onSubmit = (data: UpdateBook) => {
     mutation.mutate(data as any);
   };
 
@@ -433,6 +503,11 @@ export const EditBookModal = ({
                     placeholder="Nhập tên sách..."
                     className="border border-gray-400 rounded-2xl p-1 focus:outline-none"
                   />
+                  {errors.name && (
+                    <p className="text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                      {errors?.name.message}
+                    </p>
+                  )}
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex flex-col m-2 gap-1">
@@ -445,6 +520,11 @@ export const EditBookModal = ({
                       placeholder="1000"
                       className="border border-gray-400 rounded-2xl p-1 focus:outline-none w-40"
                     />
+                    {errors.price && (
+                      <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                        {errors?.price.message}
+                      </p>
+                    )}
                   </div>
                   <div className="flex flex-col m-2 gap-1">
                     <label htmlFor="" className="ml-2">
@@ -455,6 +535,11 @@ export const EditBookModal = ({
                       {...register("publish")}
                       className="border border-gray-400 rounded-2xl p-1 focus:outline-none w-40"
                     />
+                    {errors.publish && (
+                      <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                        {errors?.publish.message}
+                      </p>
+                    )}
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
@@ -476,6 +561,11 @@ export const EditBookModal = ({
                         </option>
                       ))}
                     </select>
+                    {errors.category_id && (
+                      <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                        {errors?.category_id.message}
+                      </p>
+                    )}
                   </div>
                   <div className="flex flex-col m-2 gap-1">
                     <label htmlFor="" className="ml-2">
@@ -495,6 +585,11 @@ export const EditBookModal = ({
                         </option>
                       ))}
                     </select>
+                    {errors.author_id && (
+                      <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                        {errors?.author_id.message}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -515,6 +610,11 @@ export const EditBookModal = ({
                   />
                   {image != "" && <img src={image} width={120} />}
                   <input type="hidden" {...register("image")} />
+                  {errors.image && (
+                    <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                      {errors?.image.message?.toString()}
+                    </p>
+                  )}
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex flex-col m-2 gap-1">
@@ -527,6 +627,11 @@ export const EditBookModal = ({
                       placeholder="1000"
                       className="border border-gray-400 rounded-2xl p-1 focus:outline-none w-40"
                     />
+                    {errors.discountPrice && (
+                      <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                        {errors?.discountPrice.message}
+                      </p>
+                    )}
                   </div>
                   <div className="flex flex-col m-2 gap-1">
                     <label htmlFor="" className="ml-2">
@@ -543,6 +648,11 @@ export const EditBookModal = ({
                       <option value="1">Còn sách</option>
                       <option value="2">Hết sách</option>
                     </select>
+                    {errors.status && (
+                      <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                        {errors?.status.message}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -556,6 +666,11 @@ export const EditBookModal = ({
                   rows={4}
                   className="p-1 border border-gray-200 focus:outline-none rounded-2xl"
                 ></textarea>
+                {errors.description && (
+                  <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                    {errors?.description.message}
+                  </p>
+                )}
               </div>
               <div className="shadow-lg rounded-2xl m-2 pb-5 pt-5 flex gap-3">
                 <button

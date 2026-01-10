@@ -8,13 +8,25 @@ import type { IApiResponse, IErrorMessage, IResponse } from "../../Types/data";
 import { QueryKey } from "../../constants/QueryKey";
 import { message } from "antd";
 import { Api } from "../../Api/api";
+import {
+  validateCategories,
+  type CategoriesValidate,
+} from "../../libs/validations/validateCategories";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export const AddCategoryModal = ({
   children,
 }: TGlobalProps<{ open: boolean }>) => {
   const { openAdd, setOpenAdd } = useOpen();
   const queryClient = useQueryClient();
-  const { register, handleSubmit, reset } = useForm<ICategories>();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<CategoriesValidate>({
+    resolver: zodResolver(validateCategories),
+  });
   const mutation = useMutation({
     mutationFn: async (formDataCategory) => {
       const { data } = await Api.post<IApiResponse<IResponse<ICategories>>>(
@@ -41,7 +53,7 @@ export const AddCategoryModal = ({
     },
   });
 
-  const onSubmit = (data: ICategories) => {
+  const onSubmit = (data: CategoriesValidate) => {
     mutation.mutate(data as any);
   };
 
@@ -83,6 +95,11 @@ export const AddCategoryModal = ({
                   placeholder="Nhập tên danh mục..."
                   className="border border-gray-400 rounded-2xl p-1 focus:outline-none mt-2 mb-2"
                 />
+                {errors.name && (
+                  <p className="text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                    {errors?.name.message}
+                  </p>
+                )}
               </div>
             </div>
             <div className="shadow-lg rounded-2xl flex flex-col m-2 gap-1">
@@ -95,6 +112,11 @@ export const AddCategoryModal = ({
                 rows={4}
                 className="p-1 border border-gray-200 focus:outline-none rounded-2xl"
               ></textarea>
+              {errors.description && (
+                <p className="text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                  {errors?.description.message}
+                </p>
+              )}
             </div>
             <div className="shadow-lg rounded-2xl m-2 pb-5 pt-5 flex gap-3">
               <button
@@ -122,7 +144,14 @@ export const EditCategoryModal = ({
 }: TGlobalProps<{ category: ICategories; open: boolean }>) => {
   const { openId, openEdit, setOpenId, setOpenEdit } = useOpen();
   const queryClient = useQueryClient();
-  const { register, handleSubmit, reset } = useForm<ICategories>();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<CategoriesValidate>({
+    resolver: zodResolver(validateCategories),
+  });
   const isOpen = openEdit && openId === category._id;
 
   console.log(category);
@@ -159,7 +188,7 @@ export const EditCategoryModal = ({
     },
   });
 
-  const onSubmit = (data: ICategories) => {
+  const onSubmit = (data: CategoriesValidate) => {
     mutation.mutate(data as any);
   };
   return (
@@ -203,6 +232,11 @@ export const EditCategoryModal = ({
                   placeholder="Nhập tên danh mục..."
                   className="border border-gray-400 rounded-2xl p-1 focus:outline-none mt-2 mb-2"
                 />
+                {errors.name && (
+                  <p className="text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                    {errors?.name.message}
+                  </p>
+                )}
               </div>
             </div>
             <div className="shadow-lg rounded-2xl flex flex-col m-2 gap-1">
@@ -215,6 +249,11 @@ export const EditCategoryModal = ({
                 rows={4}
                 className="p-1 border border-gray-200 focus:outline-none rounded-2xl"
               ></textarea>
+              {errors.description && (
+                <p className="text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                  {errors?.description.message}
+                </p>
+              )}
             </div>
             <div className="shadow-lg rounded-2xl m-2 pb-5 pt-5 flex gap-3">
               <button

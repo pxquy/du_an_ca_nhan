@@ -107,7 +107,8 @@ export const updateBorrowItem = async (req, res) => {
 
     const book = await Books.findOne({ _id: book_id });
 
-    const totalPrice = book.price * quantity;
+    const totalPrice = (book.price - book.discountPrice) * quantity;
+
     const updateBorrowItem = await BorrowItems.findByIdAndUpdate(
       req.params.id,
       { ...req.body, totalPrice: totalPrice },

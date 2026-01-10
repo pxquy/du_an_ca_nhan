@@ -10,12 +10,24 @@ import { message } from "antd";
 import { useOpen } from "../../stores/openStore";
 import React, { useEffect, type ReactElement } from "react";
 import { Api } from "../../Api/api";
+import {
+  validateBorrowItems,
+  type BorrowItemsValidate,
+} from "../../libs/validations/validateBorrowItems";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export const AddBorrowItem = ({
   children,
 }: TGlobalProps<{ open: boolean }>) => {
   const { openAdd, setOpenAdd } = useOpen();
-  const { register, handleSubmit, reset } = useForm<IBorrowItems>();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<BorrowItemsValidate>({
+    resolver: zodResolver(validateBorrowItems),
+  });
   const queryClient = useQueryClient();
   const result = useQueries({
     queries: [
@@ -71,7 +83,7 @@ export const AddBorrowItem = ({
     },
   });
 
-  const onSubmit = (data: IBorrowItems) => {
+  const onSubmit = (data: BorrowItemsValidate) => {
     mutation.mutate(data as any);
   };
   return (
@@ -123,6 +135,11 @@ export const AddBorrowItem = ({
                         </option>
                       ))}
                     </select>
+                    {errors.book_id && (
+                      <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                        {errors?.book_id.message}
+                      </p>
+                    )}
                   </div>
                   <div className="flex flex-col m-2 gap-1">
                     <label htmlFor="" className="ml-2">
@@ -142,6 +159,11 @@ export const AddBorrowItem = ({
                         </option>
                       ))}
                     </select>
+                    {errors.dateBorrow_id && (
+                      <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                        {errors?.dateBorrow_id.message}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -154,10 +176,15 @@ export const AddBorrowItem = ({
                     </label>
                     <input
                       type="number"
-                      {...register("quantity")}
+                      {...register("quantity", { valueAsNumber: true })}
                       placeholder="1"
                       className="border border-gray-400 rounded-2xl p-1 focus:outline-none w-40"
                     />
+                    {errors.quantity && (
+                      <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                        {errors?.quantity.message}
+                      </p>
+                    )}
                   </div>
                   <div className="flex flex-col m-2 gap-1">
                     <label htmlFor="" className="ml-2">
@@ -175,6 +202,11 @@ export const AddBorrowItem = ({
                       <option value="2">Đã trả</option>
                       <option value="3">Trễ hạn</option>
                     </select>
+                    {errors.status && (
+                      <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                        {errors?.status.message}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -188,11 +220,18 @@ export const AddBorrowItem = ({
                   rows={4}
                   className="p-1 border border-gray-200 focus:outline-none rounded-2xl"
                 ></textarea>
+                {errors.description && (
+                  <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                    {errors?.description.message}
+                  </p>
+                )}
               </div>
               <div className="shadow-lg rounded-2xl m-2 pb-5 pt-5 flex gap-3">
                 <button
                   type="button"
-                  onClick={() => setOpenAdd(false)}
+                  onClick={() => {
+                    reset({}), setOpenAdd(false);
+                  }}
                   className="border border-gray-300 p-3 rounded-2xl cursor-pointer hover:bg-gray-100 ml-5"
                 >
                   Đóng
@@ -214,7 +253,14 @@ export const EditBorrowItem = ({
   borrowItem,
 }: TGlobalProps<{ open: boolean; borrowItem: IBorrowItems }>) => {
   const { openId, openEdit, setOpenId, setOpenEdit } = useOpen();
-  const { register, handleSubmit, reset } = useForm<IBorrowItems>();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<BorrowItemsValidate>({
+    resolver: zodResolver(validateBorrowItems),
+  });
   const queryClient = useQueryClient();
   const result = useQueries({
     queries: [
@@ -285,7 +331,7 @@ export const EditBorrowItem = ({
     },
   });
 
-  const onSubmit = (data: IBorrowItems) => {
+  const onSubmit = (data: BorrowItemsValidate) => {
     mutation.mutate(data as any);
   };
   return (
@@ -339,6 +385,11 @@ export const EditBorrowItem = ({
                         </option>
                       ))}
                     </select>
+                    {errors.book_id && (
+                      <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                        {errors?.book_id.message}
+                      </p>
+                    )}
                   </div>
                   <div className="flex flex-col m-2 gap-1">
                     <label htmlFor="" className="ml-2">
@@ -358,6 +409,11 @@ export const EditBorrowItem = ({
                         </option>
                       ))}
                     </select>
+                    {errors.dateBorrow_id && (
+                      <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                        {errors?.dateBorrow_id.message}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -370,10 +426,15 @@ export const EditBorrowItem = ({
                     </label>
                     <input
                       type="number"
-                      {...register("quantity")}
+                      {...register("quantity", { valueAsNumber: true })}
                       placeholder="1"
                       className="border border-gray-400 rounded-2xl p-1 focus:outline-none w-40"
                     />
+                    {errors.quantity && (
+                      <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                        {errors?.quantity.message}
+                      </p>
+                    )}
                   </div>
                   <div className="flex flex-col m-2 gap-1">
                     <label htmlFor="" className="ml-2">
@@ -391,6 +452,11 @@ export const EditBorrowItem = ({
                       <option value="2">Đã trả</option>
                       <option value="3">Trễ hạn</option>
                     </select>
+                    {errors.status && (
+                      <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                        {errors?.status.message}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -404,6 +470,11 @@ export const EditBorrowItem = ({
                   rows={4}
                   className="p-1 border border-gray-200 focus:outline-none rounded-2xl"
                 ></textarea>
+                {errors.description && (
+                  <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">
+                    {errors?.description.message}
+                  </p>
+                )}
               </div>
               <div className="shadow-lg rounded-2xl m-2 pb-5 pt-5 flex gap-3">
                 <button

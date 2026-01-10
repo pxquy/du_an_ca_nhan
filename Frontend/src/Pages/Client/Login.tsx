@@ -2,7 +2,6 @@ import { jwtDecode } from "jwt-decode";
 import { useForm } from "react-hook-form";
 import type { IUsers } from "../../Types/user";
 import { Link, useNavigate } from "react-router";
-import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { QueryKey } from "../../constants/QueryKey";
 import { message } from "antd";
@@ -38,7 +37,7 @@ const Login = () => {
       }
     },
     onError: (error: IErrorMessage) => {
-      const err = error.response?.message as IErrorMessage;
+      const err = error.response?.data as IErrorMessage;
       message.error(err.message || "Có lỗi khi đăng nhập!");
     },
   });
