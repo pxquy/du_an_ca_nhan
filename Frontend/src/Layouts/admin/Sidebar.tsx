@@ -1,22 +1,37 @@
 import {
   CommentOutlined,
   GroupOutlined,
+  LeftCircleOutlined,
   LogoutOutlined,
   ProjectOutlined,
   QrcodeOutlined,
   ReadOutlined,
+  RightCircleOutlined,
   SolutionOutlined,
   UsergroupDeleteOutlined,
   UserSwitchOutlined,
 } from "@ant-design/icons";
 import { useState } from "react";
 import { Link, useLocation } from "react-router";
+import { useEyeStore } from "../../stores/eyeOpen";
 
 const Sidebar = () => {
+  const { eye, setEye } = useEyeStore();
   const localPath = useLocation();
   const [active, setActive] = useState<string>(localPath.pathname);
   return (
-    <div className="w-[17%]  border border-gray-100 shadow rounded-tl-lg rounded-bl-lg bg-[url(/bg.jpg)] bg-cover bg-no-repeat">
+    <div
+      className={`${
+        eye === false ? "w-[17%] overflow-hidden" : "w-[5%] overflow-hidden"
+      }  relative border border-gray-100 shadow rounded-tl-lg rounded-bl-lg bg-[url(/bg.jpg)] bg-cover bg-no-repeat`}
+    >
+      <div className="absolute top-15 right-[5%] font-bold text-3xl text-blue-900">
+        {eye == false ? (
+          <LeftCircleOutlined onClick={() => setEye(true)} />
+        ) : (
+          <RightCircleOutlined onClick={() => setEye(false)} />
+        )}
+      </div>
       <div className="flex flex-col">
         <div className="p-5 text-start font-bold text-3xl text-blue-900">
           Logo

@@ -8,6 +8,8 @@ import type { IErrorMessage } from "../../Types/data";
 import type { IUsers } from "../../Types/user";
 import { useState } from "react";
 import { Api } from "../../Api/api";
+import { useEyeStore } from "../../stores/eyeOpen";
+import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -15,6 +17,7 @@ const Register = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const { register, handleSubmit, reset } = useForm<IUsers>();
   const queryClient = useQueryClient();
+  const { eye, eyeConfirm, setEye, setEyeConfirm } = useEyeStore();
   const mutation = useMutation({
     mutationFn: async (dataRegister) => {
       const { data } = await Api.post(`auth/signup`, dataRegister);
@@ -56,6 +59,7 @@ const Register = () => {
       console.error("Lỗi khi thêm ảnh!");
     }
   };
+
   return (
     <>
       <section>
@@ -94,11 +98,38 @@ const Register = () => {
                     Mật khẩu(*)
                   </label>
                   <input
-                    type="password"
+                    type={eye == false ? "password" : "text"}
                     {...register("password")}
                     placeholder="Nhập email người dùng..."
-                    className="border border-gray-300 focus:outline-none rounded-3xl p-1"
+                    className="relative border border-gray-300 focus:outline-none rounded-3xl p-1"
                   />
+                  <div className="absolute top-90 left-[50%]">
+                    {eye == false ? (
+                      <EyeInvisibleOutlined onClick={() => setEye(true)} />
+                    ) : (
+                      <EyeOutlined onClick={() => setEye(false)} />
+                    )}
+                  </div>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label htmlFor="" className="pl-2">
+                    Nhập lại mật khẩu(*)
+                  </label>
+                  <input
+                    type={eyeConfirm === false ? "password" : "text"}
+                    {...register("confirm_password")}
+                    placeholder="Nhập email người dùng..."
+                    className="relative border border-gray-300 focus:outline-none rounded-3xl p-1"
+                  />
+                  <div className="absolute top-109 left-[50%]">
+                    {eyeConfirm == false ? (
+                      <EyeInvisibleOutlined
+                        onClick={() => setEyeConfirm(true)}
+                      />
+                    ) : (
+                      <EyeOutlined onClick={() => setEyeConfirm(false)} />
+                    )}
+                  </div>
                 </div>
                 <div className="flex flex-col gap-1">
                   <label htmlFor="" className="pl-2">

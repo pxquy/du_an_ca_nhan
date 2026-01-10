@@ -3,6 +3,7 @@ export interface IUsers {
   name: string;
   email: string;
   password: string;
+  confirm_password: string;
   birthday: string;
   numberPhone: string;
   address: string;

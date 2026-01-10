@@ -2,6 +2,7 @@ import { BellOutlined, SearchOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import { QueryKey } from "../../constants/QueryKey";
 import { Api } from "../../Api/api";
+import { useEffect } from "react";
 const Header = () => {
   const { data: user } = useQuery({
     queryKey: [QueryKey.ME],
@@ -11,6 +12,10 @@ const Header = () => {
       return data.data;
     },
   });
+
+  useEffect(() => {
+    user;
+  }, []);
   return (
     <div className="w-full h-18 border border-gray-100 shadow rounded-tr-lg flex items-center justify-between">
       <p className="text-[18px] ml-3 text-blue-900 font-bold">
