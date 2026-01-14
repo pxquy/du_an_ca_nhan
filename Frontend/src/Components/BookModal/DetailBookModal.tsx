@@ -46,7 +46,7 @@ export const DetailBookModal = ({
       ></div>
 
       {isOpen && (
-        <section className="fixed top-[7%] left-[19%] z-30 bg-white w-250">
+        <section className="fixed top-[4%] left-[19%] z-30 bg-white w-250 rounded-2xl">
           <div>
             <div className="p-5 font-bold text-2xl">
               <h2>Thông tin chi tiết sách</h2>
@@ -106,7 +106,7 @@ export const DetailBookModal = ({
               </div>
             </div>
           </div>
-          <div className="ml-5 h-40 overflow-scroll">
+          <div className="m-5 h-40 overflow-scroll">
             <h2 className="text-center font-bold">Những bình luận về sách</h2>
             {comments?.docs &&
             comments?.docs.filter((c) => c.book_id === detailBook._id).length >

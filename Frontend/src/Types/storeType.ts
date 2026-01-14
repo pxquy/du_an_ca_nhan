@@ -8,10 +8,14 @@ export interface IEyeOpen {
 }
 
 export interface IOpen {
+  openMenu1: boolean;
+  openMenu2: boolean;
   openAdd: boolean;
   openEdit: boolean;
   openDetail: boolean;
   openId: string | null;
+  setOpenMenu1: (openMenu1: boolean) => void;
+  setOpenMenu2: (openMenu2: boolean) => void;
   setOpenAdd: (openAdd: boolean) => void;
   setOpenEdit: (openEdit: boolean) => void;
   setOpenDetail: (openDetail: boolean) => void;

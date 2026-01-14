@@ -6,7 +6,7 @@ import Sidebar from "./Sidebar";
 const LayoutAdmin = () => {
   return (
     <>
-      <div className="flex m-2 bg-[url(/bg.jpg)] bg-no-repeat bg-cover">
+      <div className="flex m-2 bg-[url(/bg2.jpg)] bg-no-repeat bg-cover object-cover">
         <Sidebar />
         <div className="flex-1">
           <div>
