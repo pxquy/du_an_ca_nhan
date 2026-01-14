@@ -2,20 +2,20 @@ import { BellOutlined, SearchOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import { QueryKey } from "../../constants/QueryKey";
 import { Api } from "../../Api/api";
-import { useEffect } from "react";
+import type { IUsers } from "../../Types/user";
+import type { IApiResponse } from "../../Types/data";
 const Header = () => {
   const { data: user } = useQuery({
-    queryKey: [QueryKey.ME],
+    queryKey: [QueryKey.USERS],
     queryFn: async () => {
       const { data } = await Api.get("users/information");
       // console.log("data", data.data);
       return data.data;
     },
+
+    enabled: !!localStorage.getItem("token"),
   });
 
-  useEffect(() => {
-    user;
-  }, []);
   return (
     <div className="w-full h-18 border border-gray-100 shadow rounded-tr-lg flex items-center justify-between">
       <p className="text-[18px] ml-3 text-blue-900 font-bold">

@@ -1,7 +1,7 @@
 import type { ReactElement } from "react";
 import { useOpen } from "../../stores/openStore";
 import type { IBooks } from "../../Types/books";
-import type { TGlobalProps } from "../../Types/React";
+import type { TGlobalProps } from "../../Types/storeType";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";

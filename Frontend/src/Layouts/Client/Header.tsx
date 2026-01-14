@@ -27,11 +27,7 @@ const Header = () => {
   useEffect(() => {
     const checkLogin = async () => {
       try {
-        await Api.get(`users/information`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        await Api.get(`users/information`);
         setIsLogin(true);
       } catch (error) {
         console.log(error);
@@ -44,6 +40,7 @@ const Header = () => {
     try {
       await Api.post(`auth/logout`, {}, { withCredentials: true });
       message.success("Đăng Xuất thành công!");
+      localStorage.removeItem("token");
       setIsLogin(false);
       navigate("/login");
     } catch (error: any) {

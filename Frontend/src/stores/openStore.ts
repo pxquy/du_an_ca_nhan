@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { IOpen } from "../Types/open";
+import type { IOpen } from "../Types/storeType";
 
 export const useOpen = create<IOpen>((set) => ({
   openAdd: false,

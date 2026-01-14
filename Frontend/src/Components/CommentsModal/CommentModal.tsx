@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useOpen } from "../../stores/openStore";
-import type { TGlobalProps } from "../../Types/React";
+import type { TGlobalProps } from "../../Types/storeType";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Api } from "../../Api/api";
 import type { IComments } from "../../Types/comment";

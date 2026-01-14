@@ -12,13 +12,27 @@ import {
   UserSwitchOutlined,
 } from "@ant-design/icons";
 import { useState } from "react";
-import { Link, useLocation } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { useEyeStore } from "../../stores/eyeOpen";
+import { Api } from "../../Api/api";
+import { message } from "antd";
 
 const Sidebar = () => {
   const { eye, setEye } = useEyeStore();
+  const navigate = useNavigate();
   const localPath = useLocation();
   const [active, setActive] = useState<string>(localPath.pathname);
+
+  const handleClickLogout = async () => {
+    try {
+      await Api.post(`auth/logout`, {}, { withCredentials: true });
+      message.success("Đăng Xuất thành công!");
+      localStorage.removeItem("token");
+      navigate("/login");
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  };
   return (
     <div
       className={`${
@@ -158,10 +172,13 @@ const Sidebar = () => {
             </ul>
           </div>
           <div className="m-6">
-            <Link to="" className="flex items-center justify-between">
+            <div
+              className="flex items-center justify-between cursor-pointer"
+              onClick={() => handleClickLogout()}
+            >
               {" "}
               logout <LogoutOutlined />
-            </Link>
+            </div>
           </div>
         </div>
       </div>

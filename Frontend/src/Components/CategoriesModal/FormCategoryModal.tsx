@@ -1,5 +1,5 @@
 import React, { useEffect, type ReactElement } from "react";
-import type { TGlobalProps } from "../../Types/React";
+import type { TGlobalProps } from "../../Types/storeType";
 import { useOpen } from "../../stores/openStore";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";

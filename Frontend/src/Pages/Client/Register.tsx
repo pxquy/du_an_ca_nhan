@@ -10,12 +10,24 @@ import { useState } from "react";
 import { Api } from "../../Api/api";
 import { useEyeStore } from "../../stores/eyeOpen";
 import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  validateRegister,
+  type RegisterValidate,
+} from "../../libs/validations/validateAuth";
 
 const Register = () => {
   const navigate = useNavigate();
   const [image, setImage] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
-  const { register, handleSubmit, reset } = useForm<IUsers>();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<RegisterValidate>({
+    resolver: zodResolver(validateRegister),
+  });
   const queryClient = useQueryClient();
   const { eye, eyeConfirm, setEye, setEyeConfirm } = useEyeStore();
   const mutation = useMutation({
@@ -34,7 +46,7 @@ const Register = () => {
     },
   });
 
-  const onSubmit = (data: unknown) => {
+  const onSubmit = (data: RegisterValidate) => {
     // console.log(data);
     mutation.mutate(data as any);
   };
@@ -81,6 +93,11 @@ const Register = () => {
                     placeholder="Nhập tên người dùng..."
                     className="border border-gray-300 focus:outline-none rounded-3xl p-1"
                   />
+                  {errors.name && (
+                    <p className="text-red-500  text-[14px] pl-2">
+                      {errors?.name.message}
+                    </p>
+                  )}
                 </div>
                 <div className="flex flex-col gap-1">
                   <label htmlFor="" className="pl-2">
@@ -92,55 +109,66 @@ const Register = () => {
                     placeholder="Nhập email người dùng..."
                     className="border border-gray-300 focus:outline-none rounded-3xl p-1"
                   />
+                  {errors.email && (
+                    <p className="text-red-500 text-[14px]  pl-2">
+                      {errors?.email.message}
+                    </p>
+                  )}
                 </div>
                 <div className="flex flex-col gap-1">
-                  <label htmlFor="" className="pl-2">
-                    Mật khẩu(*)
-                  </label>
-                  <input
-                    type={eye == false ? "password" : "text"}
-                    {...register("password")}
-                    placeholder="Nhập email người dùng..."
-                    className="relative border border-gray-300 focus:outline-none rounded-3xl p-1"
-                  />
-                  <div className="absolute top-90 left-[50%]">
-                    {eye == false ? (
-                      <EyeInvisibleOutlined onClick={() => setEye(true)} />
-                    ) : (
-                      <EyeOutlined onClick={() => setEye(false)} />
-                    )}
+                  <label className="pl-2">Mật khẩu(*)</label>
+
+                  <div className="relative">
+                    <input
+                      type={eye ? "text" : "password"}
+                      {...register("password")}
+                      className="w-full border border-gray-300 focus:outline-none rounded-3xl p-1 pr-10"
+                    />
+
+                    <span className="absolute inset-y-0 right-3 flex items-center cursor-pointer">
+                      {eye ? (
+                        <EyeOutlined onClick={() => setEye(false)} />
+                      ) : (
+                        <EyeInvisibleOutlined onClick={() => setEye(true)} />
+                      )}
+                    </span>
                   </div>
+
+                  {errors.password && (
+                    <p className="text-red-500 text-sm pl-2">
+                      {errors.password.message}
+                    </p>
+                  )}
                 </div>
+
                 <div className="flex flex-col gap-1">
-                  <label htmlFor="" className="pl-2">
-                    Nhập lại mật khẩu(*)
-                  </label>
-                  <input
-                    type={eyeConfirm === false ? "password" : "text"}
-                    {...register("confirm_password")}
-                    placeholder="Nhập email người dùng..."
-                    className="relative border border-gray-300 focus:outline-none rounded-3xl p-1"
-                  />
-                  <div className="absolute top-109 left-[50%]">
-                    {eyeConfirm == false ? (
-                      <EyeInvisibleOutlined
-                        onClick={() => setEyeConfirm(true)}
-                      />
-                    ) : (
-                      <EyeOutlined onClick={() => setEyeConfirm(false)} />
-                    )}
+                  <label className="pl-2">Nhập lại mật khẩu(*)</label>
+
+                  <div className="relative">
+                    <input
+                      type={eyeConfirm ? "text" : "password"}
+                      {...register("confirm_password")}
+                      className="w-full border border-gray-300 focus:outline-none rounded-3xl p-1 pr-10"
+                    />
+
+                    <span className="absolute inset-y-0 right-3 flex items-center cursor-pointer">
+                      {eyeConfirm ? (
+                        <EyeOutlined onClick={() => setEyeConfirm(false)} />
+                      ) : (
+                        <EyeInvisibleOutlined
+                          onClick={() => setEyeConfirm(true)}
+                        />
+                      )}
+                    </span>
                   </div>
+
+                  {errors.confirm_password && (
+                    <p className="text-red-500 text-sm pl-2">
+                      {errors.confirm_password.message}
+                    </p>
+                  )}
                 </div>
-                <div className="flex flex-col gap-1">
-                  <label htmlFor="" className="pl-2">
-                    Ngày sinh
-                  </label>
-                  <input
-                    type="date"
-                    {...register("birthday")}
-                    className="border border-gray-300 focus:outline-none rounded-3xl p-1"
-                  />
-                </div>
+
                 <div className="flex flex-col gap-1">
                   <label htmlFor="" className="pl-2">
                     Số điện thoại(*)
@@ -151,6 +179,11 @@ const Register = () => {
                     placeholder="0399001001"
                     className="border border-gray-300 focus:outline-none rounded-3xl p-1"
                   />
+                  {errors.numberPhone && (
+                    <p className="text-red-500 text-[14px]  pl-2">
+                      {errors?.numberPhone.message}
+                    </p>
+                  )}
                 </div>
                 <div className="flex flex-col gap-1">
                   <label htmlFor="" className="pl-2">
@@ -180,34 +213,11 @@ const Register = () => {
                     name=""
                     id=""
                   />
-                </div>
-                <div className="flex flex-col gap-1">
-                  <label htmlFor="" className="pl-2">
-                    Địa chỉ
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Nhập địa người dùng..."
-                    className="border border-gray-300 focus:outline-none rounded-3xl p-1"
-                  />
-                </div>
-                <div className="flex items-center gap-5">
-                  <label htmlFor="" className="pl-2">
-                    Giới tính:
-                  </label>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="radio"
-                      value="1"
-                      checked
-                      {...register("gender")}
-                    />
-                    <p>Nam</p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <input type="radio" value="2" {...register("gender")} />
-                    <p>Nữ</p>
-                  </div>
+                  {errors.image && (
+                    <p className="text-red-500 text-[14px] pl-2">
+                      {errors?.image.message}
+                    </p>
+                  )}
                 </div>
                 <div className="text-center">
                   <button

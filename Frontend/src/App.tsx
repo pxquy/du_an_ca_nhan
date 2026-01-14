@@ -11,20 +11,16 @@ import DateBorrow from "./Pages/admin/DateBorrows/DateBorrow";
 import BorrowItems from "./Pages/admin/BorrowItems/BorrowItems";
 import Comments from "./Pages/admin/Comments/Comments";
 import { jwtDecode } from "jwt-decode";
-import type { IUsers } from "./Types/user";
+import type { IToken, IUsers } from "./Types/user";
 import { message } from "antd";
 import Home from "./Pages/Client/Home";
 import Authorization from "./Components/Auth/Authorization";
 import Users from "./Pages/admin/Users/Users";
+import { useEffect } from "react";
 
 function App() {
   const token = localStorage.getItem("token");
-  if (!token) {
-    message.success("Bạn chưa đăng nhập");
-    return null;
-  }
-  const decode = jwtDecode<IUsers>(token);
-  const role = decode.role;
+  const role = token ? jwtDecode<IToken>(token).role : null;
 
   const router = useRoutes([
     {
@@ -39,7 +35,7 @@ function App() {
     {
       path: "admin",
       element: (
-        <Authorization role={role} allowRole={["0"]}>
+        <Authorization role={role || ""} allowRole={["0"]}>
           <LayoutAdmin />
         </Authorization>
       ),

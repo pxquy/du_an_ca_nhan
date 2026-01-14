@@ -1,6 +1,6 @@
 import React, { type ReactElement } from "react";
 import { useOpen } from "../../stores/openStore";
-import type { TGlobalProps } from "../../Types/React";
+import type { TGlobalProps } from "../../Types/storeType";
 import type { IDateBorrows } from "../../Types/dateBorrows";
 
 export const DateBorrowDetailModal = ({

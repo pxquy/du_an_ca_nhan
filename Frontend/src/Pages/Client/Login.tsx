@@ -1,17 +1,31 @@
 import { jwtDecode } from "jwt-decode";
 import { useForm } from "react-hook-form";
-import type { IUsers } from "../../Types/user";
+import type { IToken, IUsers } from "../../Types/user";
 import { Link, useNavigate } from "react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { QueryKey } from "../../constants/QueryKey";
 import { message } from "antd";
 import type { IErrorMessage } from "../../Types/data";
 import { Api } from "../../Api/api";
+import { useEyeStore } from "../../stores/eyeOpen";
+import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
+import {
+  validateLogin,
+  type LoginValidate,
+} from "../../libs/validations/validateAuth";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const Login = () => {
   const queryClient = useQueryClient();
+  const { eye, setEye } = useEyeStore();
   const navigate = useNavigate();
-  const { register, handleSubmit } = useForm<IUsers>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginValidate>({
+    resolver: zodResolver(validateLogin),
+  });
   const mutation = useMutation({
     mutationFn: async (dataLogin) => {
       const { data } = await Api.post(`auth/signin`, dataLogin, {
@@ -20,15 +34,19 @@ const Login = () => {
       localStorage.setItem("token", data.token);
       return data;
     },
-    onSuccess: (login) => {
+    onSuccess: () => {
       message.success("Đăng nhập thành công"),
-        queryClient.setQueryData([QueryKey.USERS], () => login);
+        queryClient.invalidateQueries({
+          queryKey: [QueryKey.USERS],
+        });
 
       const token = localStorage.getItem("token");
       if (!token) {
         return null;
       }
-      const user = jwtDecode<IUsers>(token);
+      const user = jwtDecode<IToken>(token);
+
+      console.log("user", user);
       if (user.role === "0") {
         return navigate("/admin");
       }
@@ -42,7 +60,7 @@ const Login = () => {
     },
   });
 
-  const onSubmit = (data: IUsers) => {
+  const onSubmit = (data: LoginValidate) => {
     mutation.mutate(data as any);
   };
   return (
@@ -65,19 +83,38 @@ const Login = () => {
                   autoComplete="current-email"
                   placeholder="Nhập email người dùng..."
                   className="border border-gray-300 focus:outline-none rounded-3xl p-1"
-                />
+                />{" "}
+                {errors.email && (
+                  <p className="w-full text-red-500 text-[14px]  pl-2">
+                    {errors?.email.message}
+                  </p>
+                )}
               </div>
               <div className="flex flex-col gap-1">
                 <label htmlFor="" className="pl-2">
                   Mật khẩu(*)
                 </label>
-                <input
-                  type="password"
-                  {...register("password")}
-                  autoComplete="current-password"
-                  placeholder="Nhập mật khẩu người dùng..."
-                  className="border border-gray-300 focus:outline-none rounded-3xl p-1"
-                />
+                <div className="relative">
+                  <input
+                    type={eye === false ? "password" : "text"}
+                    {...register("password")}
+                    autoComplete="current-password"
+                    placeholder="Nhập mật khẩu người dùng..."
+                    className="w-full border border-gray-300 focus:outline-none rounded-3xl p-1"
+                  />
+                  <span className="absolute inset-y-1 right-3">
+                    {eye == false ? (
+                      <EyeInvisibleOutlined onClick={() => setEye(true)} />
+                    ) : (
+                      <EyeOutlined onClick={() => setEye(false)} />
+                    )}
+                  </span>
+                </div>
+                {errors.password && (
+                  <p className="w-full text-red-500 text-[14px] pl-2">
+                    {errors?.password.message}
+                  </p>
+                )}
               </div>
               <div className="text-center">
                 <button
@@ -105,7 +142,7 @@ const Login = () => {
           <img
             src="/imageLogin.jpg"
             alt=""
-            className="w-100 h-90 object-cover rounded-3xl"
+            className="w-100 h-full object-cover rounded-3xl"
           />
         </div>
       </div>

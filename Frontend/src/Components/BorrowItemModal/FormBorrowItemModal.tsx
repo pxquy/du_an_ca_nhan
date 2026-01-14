@@ -1,5 +1,5 @@
 import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
-import type { TGlobalProps } from "../../Types/React";
+import type { TGlobalProps } from "../../Types/storeType";
 import { useForm } from "react-hook-form";
 import type { IBorrowItems } from "../../Types/borrowItems";
 import { QueryKey } from "../../constants/QueryKey";

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { IPageStore } from "../Types/page";
+import type { IPageStore } from "../Types/storeType";
 
 export const usePageStore = create<IPageStore>((set) => ({
   page: 1,

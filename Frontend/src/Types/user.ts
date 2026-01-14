@@ -11,3 +11,8 @@ export interface IUsers {
   image?: string;
   gender: string;
 }
+
+export interface IToken {
+  _id: string;
+  role: string | null;
+}

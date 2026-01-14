@@ -2,7 +2,7 @@ import { message } from "antd";
 import { useOpen } from "../../stores/openStore";
 import type { IApiResponse, IErrorMessage, IResponse } from "../../Types/data";
 import type { IDateBorrows } from "../../Types/dateBorrows";
-import type { TGlobalProps } from "../../Types/React";
+import type { TGlobalProps } from "../../Types/storeType";
 import { QueryKey } from "../../constants/QueryKey";
 import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";

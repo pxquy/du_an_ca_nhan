@@ -1,5 +1,5 @@
 import React, { type ReactElement } from "react";
-import type { TGlobalProps } from "../../Types/React";
+import type { TGlobalProps } from "../../Types/storeType";
 import { useOpen } from "../../stores/openStore";
 import type { IBorrowItems } from "../../Types/borrowItems";
 

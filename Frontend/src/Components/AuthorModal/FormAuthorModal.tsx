@@ -1,6 +1,6 @@
 import type { ReactElement } from "react";
 import { useOpen } from "../../stores/openStore";
-import type { TGlobalProps } from "../../Types/React";
+import type { TGlobalProps } from "../../Types/storeType";
 import React, { useEffect } from "react";
 import type { IAuthors } from "../../Types/authors";
 import { useForm } from "react-hook-form";
