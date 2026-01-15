@@ -7,7 +7,7 @@ import { Link, useNavigate } from "react-router";
 const Header = () => {
   const navigate = useNavigate();
   const { data: user } = useQuery({
-    queryKey: [QueryKey.USERS],
+    queryKey: [QueryKey.ME],
     queryFn: async () => {
       const { data } = await Api.get("users/information");
       // console.log("data", data.data);

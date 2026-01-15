@@ -26,7 +26,7 @@ const Sidebar = () => {
     <div
       className={`${
         eye === false ? "w-[17%] overflow-hidden" : "w-[5%] overflow-hidden"
-      }  relative border border-gray-100 shadow rounded-tl-lg rounded-bl-lg duration-500 ease-in-out bg-[url(/bg.jpg)] bg-cover bg-no-repeat`}
+      }  relative h-218 border border-gray-100 shadow rounded-tl-lg rounded-bl-lg duration-500 ease-in-out bg-[url(/bg.jpg)] bg-cover bg-no-repeat`}
     >
       <div className="text-blue-950">
         {eye == false ? (
@@ -89,45 +89,45 @@ const Sidebar = () => {
                   </h2>
                   {openMenu1 && (
                     <div>
-                      <li
-                        onClick={() => setActive("/admin/books")}
-                        className={
-                          active === "/admin/books"
-                            ? "bg-blue-500 text-white p-4 rounded-2xl"
-                            : "hover:bg-blue-200 text-black p-4 rounded-2xl"
-                        }
-                      >
-                        <Link to="/admin/books">
+                      <Link to="/admin/books">
+                        <li
+                          onClick={() => setActive("/admin/books")}
+                          className={
+                            active === "/admin/books"
+                              ? "bg-blue-500 text-white p-4 rounded-2xl"
+                              : "hover:bg-blue-200 text-black p-4 rounded-2xl"
+                          }
+                        >
                           <ReadOutlined className="pr-1" />
                           Quản lý sách
-                        </Link>
-                      </li>
-                      <li
-                        onClick={() => setActive("/admin/categories")}
-                        className={
-                          active === "/admin/categories"
-                            ? "bg-blue-500 text-white p-4 rounded-2xl"
-                            : "hover:bg-blue-200 text-black p-4 rounded-2xl"
-                        }
-                      >
-                        <Link to="/admin/categories">
+                        </li>
+                      </Link>
+                      <Link to="/admin/categories">
+                        <li
+                          onClick={() => setActive("/admin/categories")}
+                          className={
+                            active === "/admin/categories"
+                              ? "bg-blue-500 text-white p-4 rounded-2xl"
+                              : "hover:bg-blue-200 text-black p-4 rounded-2xl"
+                          }
+                        >
                           <GroupOutlined className="pr-1" />
                           Quản lý thể loại sách
-                        </Link>
-                      </li>
-                      <li
-                        onClick={() => setActive("/admin/authors")}
-                        className={
-                          active === "/admin/authors"
-                            ? "bg-blue-500 text-white p-4 rounded-2xl"
-                            : "hover:bg-blue-200 text-black p-4 rounded-2xl"
-                        }
-                      >
-                        <Link to="/admin/authors">
+                        </li>
+                      </Link>
+                      <Link to="/admin/authors">
+                        <li
+                          onClick={() => setActive("/admin/authors")}
+                          className={
+                            active === "/admin/authors"
+                              ? "bg-blue-500 text-white p-4 rounded-2xl"
+                              : "hover:bg-blue-200 text-black p-4 rounded-2xl"
+                          }
+                        >
                           <UsergroupDeleteOutlined className="pr-1" />
                           Quản lý tác giả sách
-                        </Link>
-                      </li>
+                        </li>
+                      </Link>
                     </div>
                   )}
                 </ul>
@@ -145,57 +145,57 @@ const Sidebar = () => {
                   </h2>
                   {openMenu2 && (
                     <div>
-                      <li
-                        onClick={() => setActive("/admin/users")}
-                        className={
-                          active === "/admin/users"
-                            ? "bg-blue-500 text-white p-4 rounded-2xl"
-                            : "hover:bg-blue-200 text-black p-4 rounded-2xl"
-                        }
-                      >
-                        <Link to="/admin/users">
+                      <Link to="/admin/users">
+                        <li
+                          onClick={() => setActive("/admin/users")}
+                          className={
+                            active === "/admin/users"
+                              ? "bg-blue-500 text-white p-4 rounded-2xl"
+                              : "hover:bg-blue-200 text-black p-4 rounded-2xl"
+                          }
+                        >
                           <UserSwitchOutlined className="pr-1" />
                           Quản lý tài khoản người dùng
-                        </Link>
-                      </li>
-                      <li
-                        onClick={() => setActive("/admin/dateBorrows")}
-                        className={
-                          active === "/admin/dateBorrows"
-                            ? "bg-blue-500 text-white p-4 rounded-2xl"
-                            : "hover:bg-blue-200 text-black p-4 rounded-2xl"
-                        }
-                      >
-                        <Link to="/admin/dateBorrows">
+                        </li>
+                      </Link>
+                      <Link to="/admin/dateBorrows">
+                        <li
+                          onClick={() => setActive("/admin/dateBorrows")}
+                          className={
+                            active === "/admin/dateBorrows"
+                              ? "bg-blue-500 text-white p-4 rounded-2xl"
+                              : "hover:bg-blue-200 text-black p-4 rounded-2xl"
+                          }
+                        >
                           <UsergroupDeleteOutlined className="pr-1" />
                           Quản lý người mượn trả sách
-                        </Link>
-                      </li>
-                      <li
-                        onClick={() => setActive("/admin/borrowItems")}
-                        className={
-                          active === "/admin/borrowItems"
-                            ? "bg-blue-500 text-white p-4 rounded-2xl"
-                            : "hover:bg-blue-200 text-black p-4 rounded-2xl"
-                        }
-                      >
-                        <Link to="/admin/borrowItems">
+                        </li>
+                      </Link>
+                      <Link to="/admin/borrowItems">
+                        <li
+                          onClick={() => setActive("/admin/borrowItems")}
+                          className={
+                            active === "/admin/borrowItems"
+                              ? "bg-blue-500 text-white p-4 rounded-2xl"
+                              : "hover:bg-blue-200 text-black p-4 rounded-2xl"
+                          }
+                        >
                           <SolutionOutlined className="pr-1" /> Quản lý sách
                           được mượn
-                        </Link>
-                      </li>
-                      <li
-                        onClick={() => setActive("/admin/comments")}
-                        className={
-                          active === "/admin/comments"
-                            ? "bg-blue-500 text-white p-4 rounded-2xl"
-                            : "hover:bg-blue-200 text-black p-4 rounded-2xl"
-                        }
-                      >
-                        <Link to="/admin/comments">
+                        </li>
+                      </Link>
+                      <Link to="/admin/comments">
+                        <li
+                          onClick={() => setActive("/admin/comments")}
+                          className={
+                            active === "/admin/comments"
+                              ? "bg-blue-500 text-white p-4 rounded-2xl"
+                              : "hover:bg-blue-200 text-black p-4 rounded-2xl"
+                          }
+                        >
                           <CommentOutlined className="pr-1" /> Quản lý bình luận
-                        </Link>
-                      </li>
+                        </li>
+                      </Link>
                     </div>
                   )}
                 </ul>

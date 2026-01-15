@@ -133,7 +133,7 @@ export const AddBookModal = ({ children }: TGlobalProps<{ open: boolean }>) => {
       ></div>
       {isLoading}
       {openAdd && (
-        <section className="fixed top-[15%] left-[35%] w-150 h-125 shadow border border-gray-300 rounded-2xl bg-white overflow-scroll z-30">
+        <section className="fixed top-[15%] left-[35%] w-150 h-125 shadow border border-gray-300 bg-white overflow-scroll z-30">
           <div>
             <h2 className="text-center p-2 text-2xl font-bold">
               Thêm sách mới
@@ -484,7 +484,7 @@ export const EditBookModal = ({
       {isOpen && (
         <>
           {isLoading}
-          <section className="fixed top-[15%] left-[35%] w-150 h-125 shadow border z-30 border-gray-300 rounded-2xl bg-white overflow-scroll">
+          <section className="fixed top-[15%] left-[35%] w-150 h-125 shadow border z-30 border-gray-300 bg-white overflow-scroll">
             <div>
               <h2 className="text-center p-2 text-2xl font-bold">
                 Cập nhật sách
@@ -608,7 +608,9 @@ export const EditBookModal = ({
                       }
                     }}
                   />
-                  {image != "" && <img src={image} width={120} />}
+                  {image != "" && (
+                    <img src={image} className="w-30 rounded-2xl" />
+                  )}
                   <input type="hidden" {...register("image")} />
                   {errors.image && (
                     <p className="w-45 text-red-500 font-semibold text-[14px] p-[2px] pl-2">

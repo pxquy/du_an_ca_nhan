@@ -75,7 +75,7 @@ export const AddAuthorModal = ({
       ></div>
 
       {openAdd && (
-        <section className="fixed top-[15%] left-[35%] w-150 h-125 z-30 shadow border border-gray-300 rounded-2xl bg-white overflow-scroll">
+        <section className="fixed top-[15%] left-[35%] w-150 z-30 shadow border border-gray-300 bg-white overflow-scroll">
           <div>
             <h2 className="text-center p-2 text-2xl font-bold">
               Thêm tác giả mới
@@ -248,7 +248,7 @@ export const EditAuthorModal = ({
       ></div>
 
       {isOpen && (
-        <section className="fixed top-[15%] left-[35%] w-150 h-125 z-30 shadow border border-gray-300 rounded-2xl bg-white overflow-scroll">
+        <section className="fixed top-[15%] left-[35%] w-150 z-30 shadow border border-gray-300 bg-white overflow-scroll">
           <div>
             <h2 className="text-center p-2 text-2xl font-bold">
               Cập nhật tác giả

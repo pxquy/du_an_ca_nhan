@@ -107,7 +107,7 @@ export const AddBorrowItem = ({
       {openAdd && (
         <>
           {isLoading ? <span>Đang tải dữ liệu...</span> : ""}
-          <section className="fixed top-[15%] left-[35%] w-150 h-125 shadow border border-gray-300 rounded-2xl bg-white overflow-scroll z-30">
+          <section className="fixed top-[15%] left-[35%] w-150 h-125 shadow border border-gray-300 bg-white overflow-scroll z-30">
             <div>
               <h2 className="text-center p-2 text-2xl font-bold">
                 Thêm sách mượn mới
@@ -357,7 +357,7 @@ export const EditBorrowItem = ({
       {isOpen && (
         <>
           {isLoading ? <span>Đang tải dữ liệu...</span> : ""}
-          <section className="fixed top-[15%] left-[35%] w-150 h-125 shadow border border-gray-300 rounded-2xl bg-white overflow-scroll z-30">
+          <section className="fixed top-[15%] left-[35%] w-150 h-125 shadow border border-gray-300 bg-white overflow-scroll z-30">
             <div>
               <h2 className="text-center p-2 text-2xl font-bold">
                 Cập nhật sách mượn
