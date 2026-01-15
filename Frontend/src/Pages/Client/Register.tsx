@@ -1,11 +1,10 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import { QueryKey } from "../../constants/QueryKey";
 import { message } from "antd";
 import type { IErrorMessage } from "../../Types/data";
-import type { IUsers } from "../../Types/user";
 import { useState } from "react";
 import { Api } from "../../Api/api";
 import { useEyeStore } from "../../stores/eyeOpen";
@@ -38,7 +37,7 @@ const Register = () => {
     onSuccess: (register) => {
       message.success("Đăng ký thành công"),
         queryClient.setQueryData([QueryKey.USERS], () => register);
-      navigate("/login");
+      navigate("/");
     },
     onError: (error: IErrorMessage) => {
       const err = error.response?.message as IErrorMessage;
@@ -74,55 +73,56 @@ const Register = () => {
 
   return (
     <>
-      <section>
-        <div className="w-250 mx-auto border border-gray-300 rounded-3xl flex justify-between">
+      <section className="pt-4 pb-4">
+        <div className="w-250 mx-auto border border-gray-300 rounded-3xl flex justify-between bg-white">
           <div className="shadow p-5 w-[55%] rounded-tl-3xl rounded-bl-3xl">
-            <h2 className="text-center font-bold text-2xl p-2">Đăng ký</h2>
+            <h2 className="text-center font-bold text-2xl p-4">Đăng ký</h2>
             <div>
               <form
                 onSubmit={handleSubmit(onSubmit)}
                 className="flex flex-col gap-3"
               >
                 <div className="flex flex-col gap-1">
-                  <label htmlFor="" className="pl-2">
+                  <label htmlFor="" className="pl-4">
                     Tên người dùng(*)
                   </label>
                   <input
                     type="text"
                     {...register("name")}
                     placeholder="Nhập tên người dùng..."
-                    className="border border-gray-300 focus:outline-none rounded-3xl p-1"
+                    className="border border-gray-300 focus:outline-none rounded-3xl p-1 pl-3"
                   />
                   {errors.name && (
-                    <p className="text-red-500  text-[14px] pl-2">
+                    <p className="text-red-500  text-[14px] pl-3">
                       {errors?.name.message}
                     </p>
                   )}
                 </div>
                 <div className="flex flex-col gap-1">
-                  <label htmlFor="" className="pl-2">
+                  <label htmlFor="" className="pl-4">
                     Email(*)
                   </label>
                   <input
                     type="email"
                     {...register("email")}
                     placeholder="Nhập email người dùng..."
-                    className="border border-gray-300 focus:outline-none rounded-3xl p-1"
+                    className="border border-gray-300 focus:outline-none rounded-3xl p-1 pl-3"
                   />
                   {errors.email && (
-                    <p className="text-red-500 text-[14px]  pl-2">
+                    <p className="text-red-500 text-[14px]  pl-3">
                       {errors?.email.message}
                     </p>
                   )}
                 </div>
                 <div className="flex flex-col gap-1">
-                  <label className="pl-2">Mật khẩu(*)</label>
+                  <label className="pl-4">Mật khẩu(*)</label>
 
                   <div className="relative">
                     <input
                       type={eye ? "text" : "password"}
                       {...register("password")}
-                      className="w-full border border-gray-300 focus:outline-none rounded-3xl p-1 pr-10"
+                      placeholder="Nhập mật khẩu..."
+                      className="w-full border border-gray-300 focus:outline-none rounded-3xl p-1 pr-10 pl-3"
                     />
 
                     <span className="absolute inset-y-0 right-3 flex items-center cursor-pointer">
@@ -135,20 +135,21 @@ const Register = () => {
                   </div>
 
                   {errors.password && (
-                    <p className="text-red-500 text-sm pl-2">
+                    <p className="text-red-500 text-sm pl-3">
                       {errors.password.message}
                     </p>
                   )}
                 </div>
 
                 <div className="flex flex-col gap-1">
-                  <label className="pl-2">Nhập lại mật khẩu(*)</label>
+                  <label className="pl-4">Nhập lại mật khẩu(*)</label>
 
                   <div className="relative">
                     <input
                       type={eyeConfirm ? "text" : "password"}
                       {...register("confirm_password")}
-                      className="w-full border border-gray-300 focus:outline-none rounded-3xl p-1 pr-10"
+                      placeholder="Nhập lại mật khẩu..."
+                      className="w-full border border-gray-300 focus:outline-none rounded-3xl p-1 pr-10 pl-3"
                     />
 
                     <span className="absolute inset-y-0 right-3 flex items-center cursor-pointer">
@@ -163,24 +164,24 @@ const Register = () => {
                   </div>
 
                   {errors.confirm_password && (
-                    <p className="text-red-500 text-sm pl-2">
+                    <p className="text-red-500 text-sm pl-3">
                       {errors.confirm_password.message}
                     </p>
                   )}
                 </div>
 
                 <div className="flex flex-col gap-1">
-                  <label htmlFor="" className="pl-2">
+                  <label htmlFor="" className="pl-4">
                     Số điện thoại(*)
                   </label>
                   <input
-                    type="number"
+                    type="text"
                     {...register("numberPhone")}
                     placeholder="0399001001"
-                    className="border border-gray-300 focus:outline-none rounded-3xl p-1"
+                    className="border border-gray-300 focus:outline-none rounded-3xl p-1 pl-3"
                   />
                   {errors.numberPhone && (
-                    <p className="text-red-500 text-[14px]  pl-2">
+                    <p className="text-red-500 text-[14px]  pl-3">
                       {errors?.numberPhone.message}
                     </p>
                   )}
@@ -219,7 +220,7 @@ const Register = () => {
                     </p>
                   )}
                 </div>
-                <div className="text-center">
+                <div className="text-center mt-5">
                   <button
                     type="submit"
                     className="w-50 p-2 text-white rounded-2xl font-bold bg-red-400 cursor-pointer hover:bg-red-500"
@@ -232,7 +233,7 @@ const Register = () => {
                 <p className="flex gap-2 items-center ml-25">
                   <span>Đăng nhập nếu có tài khoản?</span>
                   <Link
-                    to="/login"
+                    to="/"
                     className="text-blue-400 hover:text-blue-600 font-bold"
                   >
                     Tại đây!

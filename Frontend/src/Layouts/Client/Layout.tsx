@@ -1,16 +1,13 @@
-import React from "react";
-import Header from "./Header";
 import { Outlet } from "react-router";
-import Footer from "./Footer";
 
 const LayoutClient = () => {
   return (
     <>
-      <Header />
-      <main className="lg:max-w-7xl mx-auto mt-5 mb-5">
-        <Outlet />
-      </main>
-      <Footer />
+      <div className="bg-[url(/bg_lib.jpg)] bg-no-repeat bg-cover h-auto">
+        <main className="lg:max-w-7xl mx-auto">
+          <Outlet />
+        </main>
+      </div>
     </>
   );
 };

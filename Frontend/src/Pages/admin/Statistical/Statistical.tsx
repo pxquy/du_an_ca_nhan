@@ -38,7 +38,7 @@ const Statistical = () => {
       {isLoading}
       <div className="p-5 mt-5">
         <div className="flex items-center justify-between">
-          <div className="flex flex-col justify-between items-center border border-gray-300 w-65 bg-white rounded-2xl h-40">
+          <div className="flex flex-col justify-between items-center border border-gray-300 w-67 bg-white rounded-2xl h-40">
             <p className="text-[15px] text-gray-500 font-semibold p-2">
               Người dùng mới
             </p>

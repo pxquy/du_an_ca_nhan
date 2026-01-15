@@ -64,9 +64,9 @@ const Login = () => {
     mutation.mutate(data as any);
   };
   return (
-    <section>
-      <div className="w-230 mx-auto border border-gray-300 rounded-3xl flex justify-between">
-        <div className="shadow p-5 rounded-3xl w-[57%]">
+    <section className="pt-[13%] pb-[13%]">
+      <div className="w-140 mx-auto border border-gray-300 rounded-3xl flex justify-between bg-white">
+        <div className="shadow p-5 rounded-3xl w-full">
           <h2 className="text-center font-bold text-2xl p-2">Đăng nhập</h2>
           <div>
             <form
@@ -74,7 +74,7 @@ const Login = () => {
               className="flex flex-col gap-3"
             >
               <div className="flex flex-col gap-1">
-                <label htmlFor="" className="pl-2">
+                <label htmlFor="" className="pl-4 font-semibold">
                   Email(*)
                 </label>
                 <input
@@ -82,7 +82,7 @@ const Login = () => {
                   {...register("email")}
                   autoComplete="current-email"
                   placeholder="Nhập email người dùng..."
-                  className="border border-gray-300 focus:outline-none rounded-3xl p-1"
+                  className="border border-gray-300 focus:outline-none rounded-3xl p-3"
                 />{" "}
                 {errors.email && (
                   <p className="w-full text-red-500 text-[14px]  pl-2">
@@ -91,7 +91,7 @@ const Login = () => {
                 )}
               </div>
               <div className="flex flex-col gap-1">
-                <label htmlFor="" className="pl-2">
+                <label htmlFor="" className="pl-4 font-semibold">
                   Mật khẩu(*)
                 </label>
                 <div className="relative">
@@ -100,9 +100,9 @@ const Login = () => {
                     {...register("password")}
                     autoComplete="current-password"
                     placeholder="Nhập mật khẩu người dùng..."
-                    className="w-full border border-gray-300 focus:outline-none rounded-3xl p-1"
+                    className="w-full border border-gray-300 focus:outline-none rounded-3xl p-3"
                   />
-                  <span className="absolute inset-y-1 right-3">
+                  <span className="absolute inset-y-3 right-5">
                     {eye == false ? (
                       <EyeInvisibleOutlined onClick={() => setEye(true)} />
                     ) : (
@@ -138,13 +138,13 @@ const Login = () => {
             </div>
           </div>
         </div>
-        <div className="w-[40%]">
+        {/* <div className="w-[40%]">
           <img
             src="/imageLogin.jpg"
             alt=""
             className="w-100 h-full object-cover rounded-3xl"
           />
-        </div>
+        </div> */}
       </div>
     </section>
   );

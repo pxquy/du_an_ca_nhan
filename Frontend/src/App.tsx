@@ -13,7 +13,6 @@ import BorrowItems from "./Pages/admin/BorrowItems/BorrowItems";
 import Comments from "./Pages/admin/Comments/Comments";
 import { jwtDecode } from "jwt-decode";
 import type { IToken } from "./Types/user";
-import Home from "./Pages/Client/Home";
 import Authorization from "./Components/Auth/Authorization";
 import Users from "./Pages/admin/Users/Users";
 import Statistical from "./Pages/admin/Statistical/Statistical";
@@ -27,8 +26,7 @@ function App() {
       path: "/",
       Component: LayoutClient,
       children: [
-        { path: "/", Component: Home },
-        { path: "login", Component: Login },
+        { path: "/", Component: Login },
         { path: "register", Component: Register },
       ],
     },

@@ -88,7 +88,7 @@ const Sidebar = () => {
                     )}
                   </h2>
                   {openMenu1 && (
-                    <div>
+                    <div className="p-1 w-52 inset-shadow-sm bg-black/20 rounded-2xl">
                       <Link to="/admin/books">
                         <li
                           onClick={() => setActive("/admin/books")}
@@ -144,7 +144,7 @@ const Sidebar = () => {
                     )}
                   </h2>
                   {openMenu2 && (
-                    <div>
+                    <div className="p-1 w-52 inset-shadow-sm bg-black/20 rounded-2xl">
                       <Link to="/admin/users">
                         <li
                           onClick={() => setActive("/admin/users")}
@@ -212,120 +212,120 @@ const Sidebar = () => {
           <div className="flex flex-col h-screen">
             <div className="flex-1">
               <ul className="mt-26 pl-4 pr-4 flex flex-col gap-6">
-                <li
-                  onClick={() => setActive("admin")}
-                  className={`hover:bg-blue-100 hover:text-red-500 rounded-full w-10 h-10 text-center leading-11 ${
-                    active == "admin" ? "text-red-500" : ""
-                  }`}
-                >
-                  <Link to="/admin">
+                <Link to="/admin">
+                  <li
+                    onClick={() => setActive("admin")}
+                    className={`hover:bg-blue-100 hover:text-red-500 rounded-full w-10 h-10 text-center leading-11 ${
+                      active == "admin" ? "text-red-500" : ""
+                    }`}
+                  >
                     <QrcodeOutlined
                       className="text-[22px]"
                       title="Trang quản trị"
                     />
-                  </Link>
-                </li>
-                <li
-                  onClick={() => setActive("admin")}
-                  className={`hover:bg-blue-100 hover:text-red-500 rounded-full w-10 h-10 text-center leading-11 ${
-                    active == "admin" ? "text-red-500" : ""
-                  }`}
-                >
-                  <Link to="/admin">
+                  </li>
+                </Link>
+                <Link to="/admin/statistical">
+                  <li
+                    onClick={() => setActive("statistical")}
+                    className={`hover:bg-blue-100 hover:text-red-500 rounded-full w-10 h-10 text-center leading-11 ${
+                      active == "statistical" ? "text-red-500" : ""
+                    }`}
+                  >
                     <ProjectOutlined className="text-[22px]" title="Thống kê" />
-                  </Link>
-                </li>
-                <li
-                  onClick={() => setActive("books")}
-                  className={`hover:bg-blue-100 hover:text-red-500 rounded-full w-10 h-10 text-center leading-11 ${
-                    active == "books" ? "text-red-500" : ""
-                  }`}
-                >
-                  <Link to="/admin/books">
+                  </li>
+                </Link>
+                <Link to="/admin/books">
+                  <li
+                    onClick={() => setActive("books")}
+                    className={`hover:bg-blue-100 hover:text-red-500 rounded-full w-10 h-10 text-center leading-11 ${
+                      active == "books" ? "text-red-500" : ""
+                    }`}
+                  >
                     <ReadOutlined
                       className="text-[22px]"
                       title="Quản lý sách"
                     />
-                  </Link>
-                </li>
-                <li
-                  onClick={() => setActive("categories")}
-                  className={`hover:bg-blue-100 hover:text-red-500 rounded-full w-10 h-10 text-center leading-11 ${
-                    active == "categories" ? "text-red-500" : ""
-                  }`}
-                >
-                  <Link to="/admin/categories">
+                  </li>
+                </Link>
+                <Link to="/admin/categories">
+                  <li
+                    onClick={() => setActive("categories")}
+                    className={`hover:bg-blue-100 hover:text-red-500 rounded-full w-10 h-10 text-center leading-11 ${
+                      active == "categories" ? "text-red-500" : ""
+                    }`}
+                  >
                     <GroupOutlined
                       className="text-[22px]"
                       title="Quản lý thể loại sách"
                     />
-                  </Link>
-                </li>
-                <li
-                  onClick={() => setActive("authors")}
-                  className={`hover:bg-blue-100 hover:text-red-500 rounded-full w-10 h-10 text-center leading-11 ${
-                    active == "authors" ? "text-red-500" : ""
-                  }`}
-                >
-                  <Link to="/admin/authors">
+                  </li>
+                </Link>
+                <Link to="/admin/authors">
+                  <li
+                    onClick={() => setActive("authors")}
+                    className={`hover:bg-blue-100 hover:text-red-500 rounded-full w-10 h-10 text-center leading-11 ${
+                      active == "authors" ? "text-red-500" : ""
+                    }`}
+                  >
                     <UsergroupDeleteOutlined
                       className="text-[22px]"
                       title="Quản lý tác giả sách"
                     />
-                  </Link>
-                </li>
-                <li
-                  onClick={() => setActive("users")}
-                  className={`hover:bg-blue-100 hover:text-red-500 rounded-full w-10 h-10 text-center leading-11 ${
-                    active == "users" ? "text-red-500" : ""
-                  }`}
-                >
-                  <Link to="/admin/users">
+                  </li>
+                </Link>
+                <Link to="/admin/users">
+                  <li
+                    onClick={() => setActive("users")}
+                    className={`hover:bg-blue-100 hover:text-red-500 rounded-full w-10 h-10 text-center leading-11 ${
+                      active == "users" ? "text-red-500" : ""
+                    }`}
+                  >
                     <UserSwitchOutlined
                       className="text-[22px]"
                       title="Quản lý tài khoản người dùng"
                     />
-                  </Link>
-                </li>
-                <li
-                  onClick={() => setActive("dateBorrows")}
-                  className={`hover:bg-blue-100 hover:text-red-500 rounded-full w-10 h-10 text-center leading-11 ${
-                    active == "dateBorrows" ? "text-red-500" : ""
-                  }`}
-                >
-                  <Link to="/admin/dateBorrows">
+                  </li>
+                </Link>
+                <Link to="/admin/dateBorrows">
+                  <li
+                    onClick={() => setActive("dateBorrows")}
+                    className={`hover:bg-blue-100 hover:text-red-500 rounded-full w-10 h-10 text-center leading-11 ${
+                      active == "dateBorrows" ? "text-red-500" : ""
+                    }`}
+                  >
                     <UsergroupDeleteOutlined
                       className="text-[22px]"
                       title="Quản lý người mượn trả sách"
                     />
-                  </Link>
-                </li>
-                <li
-                  onClick={() => setActive("borrowItems")}
-                  className={`hover:bg-blue-100 hover:text-red-500 rounded-full w-10 h-10 text-center leading-11 ${
-                    active == "borrowItems" ? "text-red-500" : ""
-                  }`}
-                >
-                  <Link to="/admin/borrowItems">
+                  </li>
+                </Link>
+                <Link to="/admin/borrowItems">
+                  <li
+                    onClick={() => setActive("borrowItems")}
+                    className={`hover:bg-blue-100 hover:text-red-500 rounded-full w-10 h-10 text-center leading-11 ${
+                      active == "borrowItems" ? "text-red-500" : ""
+                    }`}
+                  >
                     <SolutionOutlined
                       className="text-[22px]"
                       title="Quản lý sách được mượn"
                     />
-                  </Link>
-                </li>
-                <li
-                  onClick={() => setActive("comments")}
-                  className={`hover:bg-blue-100 hover:text-red-500 rounded-full w-10 h-10 text-center leading-11 ${
-                    active == "comments" ? "text-red-500" : ""
-                  }`}
-                >
-                  <Link to="/admin/comments">
+                  </li>
+                </Link>
+                <Link to="/admin/comments">
+                  <li
+                    onClick={() => setActive("comments")}
+                    className={`hover:bg-blue-100 hover:text-red-500 rounded-full w-10 h-10 text-center leading-11 ${
+                      active == "comments" ? "text-red-500" : ""
+                    }`}
+                  >
                     <CommentOutlined
                       className="text-[20px]"
                       title="Quản lý bình luận"
                     />
-                  </Link>
-                </li>
+                  </li>
+                </Link>
               </ul>
             </div>
           </div>

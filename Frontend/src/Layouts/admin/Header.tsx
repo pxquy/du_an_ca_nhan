@@ -21,7 +21,7 @@ const Header = () => {
       await Api.post(`auth/logout`, {}, { withCredentials: true });
       message.success("Đăng Xuất thành công!");
       localStorage.removeItem("token");
-      navigate("/login");
+      navigate("/");
     } catch (error: any) {
       console.log(error.message);
     }

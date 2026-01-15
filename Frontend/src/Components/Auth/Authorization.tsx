@@ -10,7 +10,7 @@ const Authorization = ({
 }: TGlobalProps<{ role: string; allowRole: string[] }>) => {
   if (!allowRole.includes(role)) {
     message.error("Bạn ko có quyền vào trang quản trị!");
-    return <Navigate to={"/login"} replace />;
+    return <Navigate to={"/"} replace />;
   }
 
   return children;
