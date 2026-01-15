@@ -7,6 +7,7 @@ import routerBooks from "./books.router";
 import routerDateBorrow from "./dateBorrow.router";
 import routerBorrowItems from "./borrowItems.router";
 import routerComments from "./comments.router";
+import routerStatistical from "./statistical.router";
 
 const router = Router();
 
@@ -18,5 +19,6 @@ router.use("/books", routerBooks);
 router.use("/dateBorrows", routerDateBorrow);
 router.use("/borrowItems", routerBorrowItems);
 router.use("/comments", routerComments);
+router.use("/statistical", routerStatistical);
 
 export default router;
