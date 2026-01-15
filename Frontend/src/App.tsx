@@ -1,4 +1,5 @@
 import "./App.css";
+import "chart.js/auto";
 import { useRoutes } from "react-router";
 import LayoutAdmin from "./Layouts/admin/Layout";
 import LayoutClient from "./Layouts/Client/Layout";
@@ -11,12 +12,11 @@ import DateBorrow from "./Pages/admin/DateBorrows/DateBorrow";
 import BorrowItems from "./Pages/admin/BorrowItems/BorrowItems";
 import Comments from "./Pages/admin/Comments/Comments";
 import { jwtDecode } from "jwt-decode";
-import type { IToken, IUsers } from "./Types/user";
-import { message } from "antd";
+import type { IToken } from "./Types/user";
 import Home from "./Pages/Client/Home";
 import Authorization from "./Components/Auth/Authorization";
 import Users from "./Pages/admin/Users/Users";
-import { useEffect } from "react";
+import Statistical from "./Pages/admin/Statistical/Statistical";
 
 function App() {
   const token = localStorage.getItem("token");
@@ -40,6 +40,7 @@ function App() {
         </Authorization>
       ),
       children: [
+        { path: "statistical", Component: Statistical },
         {
           path: "books",
           Component: BooksPage,

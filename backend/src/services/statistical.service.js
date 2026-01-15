@@ -104,7 +104,10 @@ export const borrowItemTotalPriceMonths = async () => {
     },
     {
       $group: {
-        _id: { year: { $year: "$createdAt" }, month: { $month: "$createdAt" } },
+        _id: {
+          year: { $year: "$createdAt" },
+          month: { $month: "$createdAt" },
+        },
         totalPrice: { $sum: "$totalPrice" },
       },
     },

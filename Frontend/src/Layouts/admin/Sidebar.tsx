@@ -62,19 +62,19 @@ const Sidebar = () => {
                     Trang quản trị
                   </Link>
                 </li>
-                <li
-                  onClick={() => setActive("/admin")}
-                  className={
-                    active === "/admin"
-                      ? "bg-blue-500 text-white p-4 rounded-2xl"
-                      : "hover:bg-blue-200 text-black p-4 rounded-2xl"
-                  }
-                >
-                  <Link to="/admin">
+                <Link to="/admin/statistical">
+                  <li
+                    onClick={() => setActive("/statistical")}
+                    className={
+                      active === "/statistical"
+                        ? "bg-blue-500 text-white p-4 rounded-2xl"
+                        : "hover:bg-blue-200 text-black p-4 rounded-2xl"
+                    }
+                  >
                     <ProjectOutlined className="pr-1" />
                     Thống kê
-                  </Link>
-                </li>
+                  </li>
+                </Link>
                 <ul className="mt-2 mb-2">
                   <h2
                     className="pb-2 pr-2 flex items-center gap-3 text-center font-bold cursor-pointer"
