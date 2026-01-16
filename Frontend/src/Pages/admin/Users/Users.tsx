@@ -6,20 +6,23 @@ import type {
   IErrorMessage,
   IResponse,
 } from "../../../Types/data";
-import { DeleteOutlined, EyeOutlined, KeyOutlined } from "@ant-design/icons";
+import { EyeOutlined } from "@ant-design/icons";
 import { usePageStore } from "../../../stores/PageStore";
 import { Api } from "../../../Api/api";
 import type { IUsers } from "../../../Types/user";
+import { useOpen } from "../../../stores/openStore";
+import { DetailUserModal } from "../../../Components/UserModal/DetailUserModa";
 
 const Users = () => {
   const queryClient = useQueryClient();
   const { page, pageSize, setPage, setPageSize } = usePageStore();
+  const { openDetail, setOpenId, setOpenDetail } = useOpen();
 
   const { data, isLoading } = useQuery({
     queryKey: [QueryKey.USERS, page, pageSize],
     queryFn: async () => {
       const res = await Api.get<IApiResponse<IResponse<IUsers>>>(`users`);
-      console.log("data", res.data.data);
+      // console.log("data", res.data.data);
       return res.data.data;
     },
   });
@@ -118,13 +121,21 @@ const Users = () => {
       title: "Hành động",
       dataIndex: "_id",
       key: "_id",
-      render: () => {
+      render: (__: any, record: IUsers) => {
         return (
           <>
             <div className="flex gap-2">
-              <Button variant="solid" color="cyan" onClick={() => ""}>
-                <EyeOutlined />
-              </Button>
+              <DetailUserModal user={record} open={openDetail}>
+                <Button
+                  variant="solid"
+                  color="cyan"
+                  onClick={() => {
+                    setOpenId(record._id), setOpenDetail(true);
+                  }}
+                >
+                  <EyeOutlined />
+                </Button>
+              </DetailUserModal>
             </div>
           </>
         );

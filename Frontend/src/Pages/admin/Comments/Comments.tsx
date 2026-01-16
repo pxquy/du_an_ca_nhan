@@ -10,18 +10,20 @@ import { Button, message, Popconfirm } from "antd";
 import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
 import { CommentModal } from "../../../Components/CommentsModal/CommentModal";
 import { useOpen } from "../../../stores/openStore";
+import { CommentDetailModal } from "../../../Components/CommentModal/DetailCommentModal";
 
 const Comments = () => {
   const queryClient = useQueryClient();
   const { page, pageSize, setPage, setPageSize } = usePageStore();
-  const { openId, openEdit, setOpenId, setOpenEdit } = useOpen();
+  const { openEdit, openDetail, setOpenId, setOpenEdit, setOpenDetail } =
+    useOpen();
   const { data: comments, isLoading } = useQuery({
     queryKey: [QueryKey.COMMENTS, page, pageSize],
     queryFn: async () => {
       const { data } = await Api.get<IApiResponse<IResponse<IComments>>>(
         "comments"
       );
-      console.log("data", data.data);
+      // console.log("data", data.data);
       return data.data;
     },
   });
@@ -82,9 +84,17 @@ const Comments = () => {
       render: (_id: string, record: IComments) => {
         return (
           <div className="flex gap-2">
-            <Button variant="solid" color="cyan" onClick={() => {}}>
-              <EyeOutlined />
-            </Button>
+            <CommentDetailModal open={openDetail} comment={record}>
+              <Button
+                variant="solid"
+                color="cyan"
+                onClick={() => {
+                  setOpenId(record._id), setOpenDetail(true);
+                }}
+              >
+                <EyeOutlined />
+              </Button>
+            </CommentDetailModal>
             <CommentModal open={openEdit} comment={record}>
               <Button
                 type="primary"

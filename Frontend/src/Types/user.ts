@@ -10,6 +10,7 @@ export interface IUsers {
   role: "0" | "1";
   image?: string;
   gender: string;
+  status: string;
 }
 
 export interface IToken {

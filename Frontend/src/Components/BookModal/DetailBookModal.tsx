@@ -21,7 +21,7 @@ export const DetailBookModal = ({
       const { data } = await Api.get<IApiResponse<IResponse<IComments>>>(
         `comments`
       );
-      console.log(data.data.docs.map((c) => c.book_id === detailBook._id));
+      // console.log(data.data.docs.map((c) => c.book_id === detailBook._id));
       return data.data;
     },
     enabled: isOpen,

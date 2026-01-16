@@ -90,7 +90,7 @@ const BorrowItems = () => {
       dataIndex: "_id",
       key: "_id",
       render: (_id: string, record: IBorrowItems) => {
-        console.log("record", record);
+        // console.log("record", record);
         return (
           <div className="flex gap-2">
             <DetailBorrowItemModal borrow={record} open={openDetail}>

@@ -149,9 +149,12 @@ const Statistical = () => {
             </h2>
             <div>
               {borrowItems?.map(
-                (item) =>
+                (item, index) =>
                   item.status == "1" && (
-                    <div className="flex items-center gap-20 p-3 shadow rounded-3xl m-2">
+                    <div
+                      key={index}
+                      className="flex items-center gap-20 p-3 shadow rounded-3xl m-2"
+                    >
                       <p className="w-[50%] font-semibold">
                         {item?.dateBorrow_id.user_id.name}
                       </p>

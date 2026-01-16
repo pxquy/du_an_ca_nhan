@@ -22,6 +22,7 @@ import {
 import { useOpen } from "../../../stores/openStore";
 import { DetailBookModal } from "../../../Components/BookModal/DetailBookModal";
 import { Api } from "../../../Api/api";
+import { GetAllBookApi } from "../../../services/bookApis";
 
 const BooksPage = () => {
   const queryClient = useQueryClient();
@@ -40,11 +41,7 @@ const BooksPage = () => {
     queries: [
       {
         queryKey: [QueryKey.BOOKS, page, pageSize],
-        queryFn: async () => {
-          const res = await Api.get<IApiResponse<IResponse<IBooks>>>(`books`);
-          // console.log(res.data.data);
-          return res.data.data;
-        },
+        queryFn: GetAllBookApi,
       },
     ],
   });
@@ -242,13 +239,13 @@ const BooksPage = () => {
           </AddBookModal>
         </div>
         <Table
-          dataSource={books?.docs}
+          dataSource={books}
           columns={columns}
           rowKey="_id"
           pagination={{
             current: page,
             pageSize: pageSize,
-            total: books?.docs?.length,
+            total: books?.length,
             onChange(p: number, ps: number) {
               setPage(p);
               setPageSize(ps);
