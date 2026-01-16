@@ -1,28 +1,35 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQueries } from "@tanstack/react-query";
 import { QueryKey } from "../../../constants/QueryKey";
 import { StatisticalApi } from "../../../services/statisticalApi";
 import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
 import { Line } from "react-chartjs-2";
 import { options } from "../../../Types/chartjs";
+import { GetAllBorrowItems } from "../../../services/borrow_items";
 
 const Statistical = () => {
-  const { data: statistical, isLoading } = useQuery({
-    queryKey: [QueryKey.STATISTICAL],
-    queryFn: StatisticalApi,
+  const result = useQueries({
+    queries: [
+      { queryKey: [QueryKey.STATISTICAL], queryFn: StatisticalApi },
+      { queryKey: [QueryKey.BORROW_ITEMS], queryFn: GetAllBorrowItems },
+    ],
   });
 
-  if (isLoading) {
-    return <span>Đang tải dữu liệu...</span>;
-  }
+  const statistical = result[0].data;
+  const borrowItems = result[1].data;
+
+  const totalUserBorrowBooks = borrowItems?.reduce(
+    (total, curr) => (curr.status == "1" ? (total += 1) : total),
+    0
+  );
 
   const chartData = {
-    labels: statistical.borrowItemTotalPrice.map(
+    labels: statistical?.borrowItemTotalPrice.map(
       (item: { _id: { month: string } }) => `Tháng ${item._id.month}`
     ),
     datasets: [
       {
         label: "Doanh thu",
-        data: statistical.borrowItemTotalPrice.map(
+        data: statistical?.borrowItemTotalPrice.map(
           (item: { totalPrice: number }) => item.totalPrice
         ),
         fill: true,
@@ -35,19 +42,18 @@ const Statistical = () => {
 
   return (
     <>
-      {isLoading}
       <div className="p-5 mt-5">
         <div className="flex items-center justify-between">
           <div className="flex flex-col justify-between items-center border border-gray-300 w-67 bg-white rounded-2xl h-40">
             <p className="text-[15px] text-gray-500 font-semibold p-2">
               Người dùng mới
             </p>
-            <p className="text-3xl">{statistical.user.total}</p>
-            {statistical.user.percent < 0 ? (
+            <p className="text-3xl">{statistical?.user.total}</p>
+            {statistical?.user.percent < 0 ? (
               <p className="flex items-center gap-1 text-[12px] text-gray-500 pb-2">
                 <span className="text-red-500">
                   <ArrowDownOutlined />
-                  {statistical.user.percent}%
+                  {statistical?.user.percent}%
                 </span>{" "}
                 Người dùng mới so với tháng trước
               </p>
@@ -55,7 +61,7 @@ const Statistical = () => {
               <p className="flex items-center gap-1 text-[12px] text-gray-500 pb-2">
                 <span className="text-green-500">
                   <ArrowUpOutlined />
-                  {statistical.user.percent}%
+                  {statistical?.user.percent}%
                 </span>
                 Người dùng mới so với tháng trước
               </p>
@@ -65,12 +71,12 @@ const Statistical = () => {
             <p className="text-[15px] text-gray-500 font-semibold p-2">
               Sách mới
             </p>
-            <p className="text-3xl">{statistical.book.total}</p>
-            {statistical.book.percent < 0 ? (
+            <p className="text-3xl">{statistical?.book.total}</p>
+            {statistical?.book.percent < 0 ? (
               <p className="flex items-center gap-1 text-[12px] text-gray-500 pb-2">
                 <span className="text-red-500">
                   <ArrowDownOutlined />
-                  {statistical.book.percent}%
+                  {statistical?.book.percent}%
                 </span>{" "}
                 Sách mới so với tháng trước
               </p>
@@ -78,7 +84,7 @@ const Statistical = () => {
               <p className="flex items-center gap-1 text-[12px] text-gray-500 pb-2">
                 <span className="text-green-500">
                   <ArrowUpOutlined />
-                  {statistical.book.percent}%
+                  {statistical?.book.percent}%
                 </span>
                 Sách mới so với tháng trước
               </p>
@@ -88,12 +94,12 @@ const Statistical = () => {
             <p className="text-[15px] text-gray-500 font-semibold p-2">
               Người mượn sách mới
             </p>
-            <p className="text-3xl">{statistical.dateBorrow.total}</p>
-            {statistical.dateBorrow.percent < 0 ? (
+            <p className="text-3xl">{statistical?.dateBorrow.total}</p>
+            {statistical?.dateBorrow.percent < 0 ? (
               <p className="flex items-center gap-1 text-[12px] text-gray-500 pb-2">
                 <span className="text-red-500">
                   <ArrowDownOutlined />
-                  {statistical.dateBorrow.percent}%
+                  {statistical?.dateBorrow.percent}%
                 </span>{" "}
                 Người mượn sách mới so với tháng trước
               </p>
@@ -101,7 +107,7 @@ const Statistical = () => {
               <p className="flex items-center gap-1 text-[12px] text-gray-500 pb-2">
                 <span className="text-green-500">
                   <ArrowUpOutlined />
-                  {statistical.dateBorrow.percent}%
+                  {statistical?.dateBorrow.percent}%
                 </span>
                 Người mượn sách mới so với tháng trước
               </p>
@@ -111,12 +117,12 @@ const Statistical = () => {
             <p className="text-[15px] text-gray-500 font-semibold p-2">
               Người dùng mới
             </p>
-            <p className="text-3xl">{statistical.borrowItem.total}</p>
-            {statistical.borrowItem.percent < 0 ? (
+            <p className="text-3xl">{statistical?.borrowItem.total}</p>
+            {statistical?.borrowItem.percent < 0 ? (
               <p className="flex items-center gap-1 text-[12px] text-gray-500 pb-2">
                 <span className="text-red-500">
                   <ArrowDownOutlined />
-                  {statistical.borrowItem.percent}%
+                  {statistical?.borrowItem.percent}%
                 </span>{" "}
                 Sách mới được mượn so với tháng trước
               </p>
@@ -124,7 +130,7 @@ const Statistical = () => {
               <p className="flex items-center gap-1 text-[12px] text-gray-500 pb-2">
                 <span className="text-green-500">
                   <ArrowUpOutlined />
-                  {statistical.borrowItem.percent}%
+                  {statistical?.borrowItem.percent}%
                 </span>
                 Sách mới được mượn so với tháng trước
               </p>
@@ -138,7 +144,22 @@ const Statistical = () => {
             </div>
           </div>
           <div className="w-[40%] h-110 bg-white rounded-2xl">
-            <h2 className="text-center p-2">Người đang mượn sách</h2>
+            <h2 className="text-center p-2 font-semibold">
+              Người đang mượn sách ({totalUserBorrowBooks})
+            </h2>
+            <div>
+              {borrowItems?.map(
+                (item) =>
+                  item.status == "1" && (
+                    <div className="flex items-center gap-20 p-3 shadow rounded-3xl m-2">
+                      <p className="w-[50%] font-semibold">
+                        {item?.dateBorrow_id.user_id.name}
+                      </p>
+                      <p className="w-[50%]">{item.book_id.name}</p>
+                    </div>
+                  )
+              )}
+            </div>
           </div>
         </div>
       </div>
