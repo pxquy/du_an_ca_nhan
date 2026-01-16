@@ -1,6 +1,6 @@
 import { jwtDecode } from "jwt-decode";
 import { useForm } from "react-hook-form";
-import type { IToken, IUsers } from "../../Types/user";
+import type { IToken } from "../../Types/user";
 import { Link, useNavigate } from "react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { QueryKey } from "../../constants/QueryKey";
@@ -14,8 +14,10 @@ import {
   type LoginValidate,
 } from "../../libs/validations/validateAuth";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { tokenStore } from "../../stores/tokenStore";
 
 const Login = () => {
+  const { token, setToken } = tokenStore();
   const queryClient = useQueryClient();
   const { eye, setEye } = useEyeStore();
   const navigate = useNavigate();
@@ -28,19 +30,17 @@ const Login = () => {
   });
   const mutation = useMutation({
     mutationFn: async (dataLogin) => {
-      const { data } = await Api.post(`auth/signin`, dataLogin, {
-        withCredentials: true,
-      });
-      localStorage.setItem("token", data.token);
+      const { data } = await Api.post(`auth/signin`, dataLogin);
+      setToken(data.token);
       return data;
     },
     onSuccess: () => {
       message.success("Đăng nhập thành công"),
         queryClient.invalidateQueries({
-          queryKey: [QueryKey.USERS],
+          queryKey: [QueryKey.ME],
         });
 
-      const token = localStorage.getItem("token");
+      // const token = localStorage.getItem("token");
       if (!token) {
         return null;
       }

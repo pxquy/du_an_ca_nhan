@@ -32,3 +32,9 @@ export interface IPageStore {
 export type TGlobalProps<T = {}> = {
   children: ReactNode;
 } & T;
+
+export interface ITokenStore {
+  token: string | null;
+  setToken: (token: string | null) => void;
+  removeToken: (token: string | null) => void;
+}

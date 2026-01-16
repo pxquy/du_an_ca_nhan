@@ -1,31 +1,52 @@
 import { BellOutlined, SearchOutlined } from "@ant-design/icons";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { QueryKey } from "../../constants/QueryKey";
 import { Api } from "../../Api/api";
 import { message } from "antd";
 import { Link, useNavigate } from "react-router";
+import { tokenStore } from "../../stores/tokenStore";
+import { jwtDecode } from "jwt-decode";
+import type { IToken } from "../../Types/user";
+import { useEffect } from "react";
 const Header = () => {
+  const { token, removeToken } = tokenStore();
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { data: user } = useQuery({
     queryKey: [QueryKey.ME],
     queryFn: async () => {
       const { data } = await Api.get("users/information");
-      // console.log("data", data.data);
+      console.log("data", data.data);
       return data.data;
     },
 
-    enabled: !!localStorage.getItem("token"),
+    enabled: !!token,
   });
   const handleLogout = async () => {
     try {
-      await Api.post(`auth/logout`, {}, { withCredentials: true });
+      await Api.post(`auth/logout`, {});
       message.success("Đăng Xuất thành công!");
-      localStorage.removeItem("token");
+      removeToken(token);
+      queryClient.clear();
       navigate("/");
     } catch (error: any) {
       console.log(error.message);
     }
   };
+
+  useEffect(() => {
+    if (!token) return;
+
+    const { exp } = jwtDecode<IToken>(token);
+    const now = Date.now() / 1000;
+
+    if (exp < now) {
+      removeToken(token);
+      queryClient.removeQueries({ queryKey: [QueryKey.ME] });
+      navigate("/");
+    }
+  }, [token]);
+
   return (
     <div className="w-full h-18 border border-gray-100 shadow rounded-tr-lg flex items-center justify-between">
       <div className="ml-6">

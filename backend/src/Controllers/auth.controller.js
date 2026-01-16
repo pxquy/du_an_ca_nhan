@@ -54,7 +54,7 @@ export const signin = async (req, res) => {
         role: checkEmail.roles,
       },
       process.env.SecretKey,
-      { expiresIn: "5h" }
+      { expiresIn: "1h" }
     );
 
     const refreshToken = crypto.randomBytes(64).toString("hex");

@@ -15,7 +15,7 @@ import { jwtDecode } from "jwt-decode";
 import type { IToken } from "./Types/user";
 import Authorization from "./Components/Auth/Authorization";
 import Users from "./Pages/admin/Users/Users";
-import Statistical from "./Pages/admin/Statistical/Statistical";
+import Statistical from "./Pages/admin/Statisticals/Statistical";
 
 function App() {
   const token = localStorage.getItem("token");

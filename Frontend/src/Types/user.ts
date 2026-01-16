@@ -15,4 +15,5 @@ export interface IUsers {
 export interface IToken {
   _id: string;
   role: string | null;
+  exp: number;
 }

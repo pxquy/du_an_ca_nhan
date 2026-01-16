@@ -27,7 +27,7 @@ const CategoriesPage = () => {
       const res = await Api.get<IApiResponse<IResponse<ICategories>>>(
         `categories`
       );
-      console.log(res.data.data);
+      // console.log(res.data.data);
       return res.data.data;
     },
   });

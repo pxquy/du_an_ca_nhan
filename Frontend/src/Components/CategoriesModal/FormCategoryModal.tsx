@@ -154,7 +154,7 @@ export const EditCategoryModal = ({
   });
   const isOpen = openEdit && openId === category._id;
 
-  console.log(category);
+  // console.log(category);
 
   useEffect(() => {
     if (category) {
