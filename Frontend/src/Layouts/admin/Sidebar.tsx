@@ -53,7 +53,7 @@ const Sidebar = () => {
                   onClick={() => setActive("/admin")}
                   className={
                     active === "/admin"
-                      ? "bg-blue-500 text-white p-4 rounded-2xl"
+                      ? "bg-blue-500 text-white p-4 rounded-2xl inset-shadow-sm"
                       : "hover:bg-blue-200 text-black p-4 rounded-2xl"
                   }
                 >
@@ -67,7 +67,7 @@ const Sidebar = () => {
                     onClick={() => setActive("/statistical")}
                     className={
                       active === "/statistical"
-                        ? "bg-blue-500 text-white p-4 rounded-2xl"
+                        ? "bg-blue-500 text-white p-4 rounded-2xl inset-shadow-sm"
                         : "hover:bg-blue-200 text-black p-4 rounded-2xl"
                     }
                   >
@@ -94,7 +94,7 @@ const Sidebar = () => {
                           onClick={() => setActive("/admin/books")}
                           className={
                             active === "/admin/books"
-                              ? "bg-blue-500 text-white p-4 rounded-2xl"
+                              ? "bg-blue-500 text-white p-4 rounded-2xl inset-shadow-sm"
                               : "hover:bg-blue-200 text-black p-4 rounded-2xl"
                           }
                         >
@@ -107,7 +107,7 @@ const Sidebar = () => {
                           onClick={() => setActive("/admin/categories")}
                           className={
                             active === "/admin/categories"
-                              ? "bg-blue-500 text-white p-4 rounded-2xl"
+                              ? "bg-blue-500 text-white p-4 rounded-2xl inset-shadow-sm"
                               : "hover:bg-blue-200 text-black p-4 rounded-2xl"
                           }
                         >
@@ -120,7 +120,7 @@ const Sidebar = () => {
                           onClick={() => setActive("/admin/authors")}
                           className={
                             active === "/admin/authors"
-                              ? "bg-blue-500 text-white p-4 rounded-2xl"
+                              ? "bg-blue-500 text-white p-4 rounded-2xl inset-shadow-sm"
                               : "hover:bg-blue-200 text-black p-4 rounded-2xl"
                           }
                         >
@@ -150,7 +150,7 @@ const Sidebar = () => {
                           onClick={() => setActive("/admin/users")}
                           className={
                             active === "/admin/users"
-                              ? "bg-blue-500 text-white p-4 rounded-2xl"
+                              ? "bg-blue-500 text-white p-4 rounded-2xl inset-shadow-sm"
                               : "hover:bg-blue-200 text-black p-4 rounded-2xl"
                           }
                         >
@@ -163,7 +163,7 @@ const Sidebar = () => {
                           onClick={() => setActive("/admin/dateBorrows")}
                           className={
                             active === "/admin/dateBorrows"
-                              ? "bg-blue-500 text-white p-4 rounded-2xl"
+                              ? "bg-blue-500 text-white p-4 rounded-2xl inset-shadow-sm"
                               : "hover:bg-blue-200 text-black p-4 rounded-2xl"
                           }
                         >
@@ -176,7 +176,7 @@ const Sidebar = () => {
                           onClick={() => setActive("/admin/borrowItems")}
                           className={
                             active === "/admin/borrowItems"
-                              ? "bg-blue-500 text-white p-4 rounded-2xl"
+                              ? "bg-blue-500 text-white p-4 rounded-2xl inset-shadow-sm"
                               : "hover:bg-blue-200 text-black p-4 rounded-2xl"
                           }
                         >
@@ -189,7 +189,7 @@ const Sidebar = () => {
                           onClick={() => setActive("/admin/comments")}
                           className={
                             active === "/admin/comments"
-                              ? "bg-blue-500 text-white p-4 rounded-2xl"
+                              ? "bg-blue-500 text-white p-4 rounded-2xl inset-shadow-sm"
                               : "hover:bg-blue-200 text-black p-4 rounded-2xl"
                           }
                         >
